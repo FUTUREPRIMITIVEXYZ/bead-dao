@@ -3,10 +3,12 @@ interface Props {}
 export const Button: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
   className,
   children,
+  onClick = () => {},
 }) => {
   return (
     <div
-      className={`${className} py-2 px-4 bg-black text-white rounded-full border-4 border-solid shadow-2xl border-gradient from-red-500 via-yellow-500 to-green-500`}
+      className={`${className} box rounded-full py-2 px-4 bg-black shadow-3xl cursor-pointer hover:animate-bounce hover:duration-75`}
+      onClick={onClick}
     >
       {children}
     </div>

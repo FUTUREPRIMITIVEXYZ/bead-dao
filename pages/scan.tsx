@@ -7,7 +7,7 @@ import { useAccount } from "wagmi";
 import { Button } from "../components/button";
 
 const Home: NextPage = () => {
-  const { account, isConnected, isDisconnected } = useAccount();
+  // const { account, isConnected, isDisconnected } = useAccount();
 
   return (
     <div className="">
@@ -36,11 +36,11 @@ const Home: NextPage = () => {
             />
           </div>
           <div className="">
-            {isDisconnected && (
+            {/* {isDisconnected && (
               <ConnectButton
               // showBalance={{ smallScreen: false, largeScreen: true }}
               />
-            )}
+            )} */}
             {/* {isConnected && (
               <Button>
                 <div className="font-bold text-3xl p-4">Mint Lizards</div>

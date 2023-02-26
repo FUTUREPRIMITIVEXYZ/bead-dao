@@ -2,22 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-.border-gradient {
-  border-image: linear-gradient(to right, 
-    #ff0000, /* Red */
-    #ff7f00, /* Orange */
-    #ffff00, /* Yellow */
-    #00ff00, /* Green */
-    #0000ff, /* Blue */
-    #4b0082, /* Indigo */
-    #9400d3 /* Violet */
-  ) 1;
-  border-radius: 9999px;
+.box {
+  position: relative;
 }
-
-
-
-
+.box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50px; 
+  padding: 10px; 
+  background: linear-gradient(45deg, #ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3);
+  -webkit-mask: 
+     linear-gradient(#fff 0 0) content-box, 
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude; 
+}
 
 /* 
 html,
