@@ -1,6 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.border-gradient {
+  border-image: linear-gradient(to right, 
+    #ff0000, /* Red */
+    #ff7f00, /* Orange */
+    #ffff00, /* Yellow */
+    #00ff00, /* Green */
+    #0000ff, /* Blue */
+    #4b0082, /* Indigo */
+    #9400d3 /* Violet */
+  ) 1;
+  border-radius: 9999px;
+}
+
+
+
+
+
 /* 
 html,
 body {
