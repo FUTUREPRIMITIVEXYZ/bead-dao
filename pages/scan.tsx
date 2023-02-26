@@ -7,7 +7,7 @@ import { useAccount } from "wagmi";
 import { Button } from "../components/button";
 
 const Home: NextPage = () => {
-  const { account, isConnected, isDisconnected } = useAccount();
+  const { address, isConnected, isDisconnected } = useAccount();
 
   return (
     <div className="">
