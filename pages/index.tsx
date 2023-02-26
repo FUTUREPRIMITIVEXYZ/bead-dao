@@ -54,15 +54,15 @@ const Home: NextPage = () => {
             <Badge>bead DAO</Badge>
             <ConnectButton showBalance={false} chainStatus={"none"} />
           </div>
-          <div className="border-2 border-solid border-black rounded-2xl">
-            <Image
-              className="bg-contain"
-              height={348}
-              width={348}
-              alt="beaded lizard image"
-              src="/lizz.jpg"
-            />
-          </div>
+          {/* <div className="border-2 border-solid border-black rounded-2xl overflow-hidden"> */}
+          <Image
+            className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
+            height={348}
+            width={348}
+            alt="beaded lizard image"
+            src="/liz-nft.png"
+          />
+          {/* </div> */}
           {!displayMint && <div></div>}
           {displayMint && (
             <Button>

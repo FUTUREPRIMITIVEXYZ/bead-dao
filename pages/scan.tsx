@@ -32,7 +32,7 @@ const Home: NextPage = () => {
               height={348}
               width={348}
               alt="beaded lizard image"
-              src="/lizz.jpg"
+              src="/liz-nft.png"
             />
           </div>
           <div className="">
