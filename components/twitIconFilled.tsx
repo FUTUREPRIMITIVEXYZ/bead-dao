@@ -1,6 +1,6 @@
 interface Props {}
 
-export const TwitterIconFilled: React.FC<
+export const TwitIconFilled: React.FC<
   Props & React.HTMLAttributes<HTMLDivElement>
 > = ({ children, className }) => {
   return (

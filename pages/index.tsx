@@ -12,7 +12,7 @@ import { Modal } from "../components/modal";
 import { How } from "../components/how";
 import { TelegramIcon } from "../components/telegramIcon";
 import { IgIcon } from "../components/igIcon";
-import { TwitterIconFilled } from "../components/TwitterIconFilled";
+import { TwitIconFilled } from "../components/twitIconFilled";
 
 const Home: NextPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -105,7 +105,7 @@ const Home: NextPage = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <TwitterIconFilled />
+              <TwitIconFilled />
             </a>
             <a
               className="cursor-pointer"
