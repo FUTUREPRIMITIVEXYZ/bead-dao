@@ -10,7 +10,7 @@ import WalletIcon from "../components/walletIcon";
 import { OpenSeaIcon } from "../components/openseaIcon";
 import { EtherscanIcon } from "../components/etherscanIcon";
 import { TwitterIcon } from "../components/twitterIcon";
-import { GraphViewIcon } from "../components/GraphIcon";
+import { GraphViewIcon } from "../components/graphViewIcon";
 import { AddressBar } from "../components/addressBar";
 
 const contractAddress = "0x8ee9a60cb5c0e7db414031856cb9e0f1f05988d1";
