@@ -10,6 +10,9 @@ import { NavLink } from "../components/navLink";
 import Link from "next/link";
 import { Modal } from "../components/modal";
 import { How } from "../components/how";
+import { TelegramIcon } from "../components/telegramIcon";
+import { IgIcon } from "../components/igIcon";
+import { TwitterIconFilled } from "../components/TwitterIconFilled";
 
 const Home: NextPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -78,6 +81,32 @@ const Home: NextPage = () => {
               )}
             </div>
           ))}
+          <div className="flex justify-center items-center space-x-4">
+            <a
+              className="cursor-pointer"
+              href="https://t.me/beaddao"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <TelegramIcon />
+            </a>
+            <a
+              className="cursor-pointer"
+              href="https://twitter.com/ilovebeadz"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <TwitterIconFilled />
+            </a>
+            <a
+              className="cursor-pointer"
+              href="https://www.instagram.com/ar/1251248262474299/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <IgIcon />
+            </a>
+          </div>
         </div>
       </Background>
       {showModal && (
