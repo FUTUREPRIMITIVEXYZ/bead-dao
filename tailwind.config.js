@@ -15,11 +15,12 @@ module.exports = {
     extend: {
       colors: {
         badge: "rgba(252, 250, 250, 0.61)",
+        link: "rgba(255, 255, 255, 0.71)",
         address: "#F1F4FF",
         "address-text": "#8695AB",
       },
       backgroundImage: {
-        main: "url('/bg.jpg')",
+        main: "url('/lizzbg.png')",
         "footer-texture": "url('/img/footer-texture.png')",
       },
     },

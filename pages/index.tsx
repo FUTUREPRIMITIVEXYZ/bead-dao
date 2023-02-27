@@ -6,33 +6,24 @@ import { Button } from "../components/button";
 import { useEffect, useState } from "react";
 import { Alchemy, Network, Contract } from "alchemy-sdk";
 import { Background } from "../components/background";
-
-const contractAddress = "0x8ee9a60cb5c0e7db414031856cb9e0f1f05988d1";
-const alchemy = new Alchemy({
-  apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
-  network: Network.ETH_GOERLI,
-});
+import { NavLink } from "../components/navLink";
+import Link from "next/link";
 
 const Home: NextPage = () => {
-  // we have to do this for conditional render b/c of react hydration error
-  const [displayMint, setDisplayMint] = useState(false);
-
-  const { address } = useAccount();
-
-  useEffect(() => {
-    if (address) {
-      setDisplayMint(true);
-    }
-  }, [address]);
-
-  async function mint() {
-    const provider = await alchemy.config.getProvider();
-    const lizContract = new Contract(
-      contractAddress,
-      ["function mint(address, address)"],
-      provider
-    );
-  }
+  const links = [
+    {
+      link: "/scan",
+      text: "contact",
+    },
+    {
+      link: "/mint",
+      text: "mint",
+    },
+    {
+      link: "/account",
+      text: "your lounge",
+    },
+  ];
 
   return (
     <div className="">
@@ -45,21 +36,17 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background height="h-[100vh]">
-        <Image
-          className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
-          height={348}
-          width={348}
-          alt="beaded lizard image"
-          src="/liz-nft.png"
-        />
-        {!displayMint && <div></div>}
-        {displayMint && (
-          <Button>
-            <div className="font-bold text-3xl p-4 text-white">
-              Mint Lizards
-            </div>
-          </Button>
-        )}
+        <div className="h-[100%] flex flex-col justify-end items-center space-y-8">
+          {links.map((item) => (
+            <NavLink key={item.link} className="cursor-pointer">
+              <Link href={item.link}>
+                <div className="text-center text-xl font-bold first-letter:capitalize">
+                  {item.text}
+                </div>
+              </Link>
+            </NavLink>
+          ))}
+        </div>
       </Background>
     </div>
   );
