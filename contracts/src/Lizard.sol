@@ -10,6 +10,8 @@ import "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
 import "openzeppelin-contracts/utils/cryptography/MerkleProof.sol";
 
 contract Lizard is ERC721, ERC721Burnable, Ownable2Step {
+    using ECDSA for bytes32;
+
     string baseURI;
     bytes32 lizardRoot;
     uint256 timeLimit;
@@ -40,22 +42,26 @@ contract Lizard is ERC721, ERC721Burnable, Ownable2Step {
         timeLimit = _timeLimit;
     }
 
+    function getMessageHash(address recipient, uint256 blockNumber)
+        public
+        view
+        returns (bytes32)
+    {
+        return
+            keccak256(abi.encodePacked(recipient, blockhash(blockNumber)))
+                .toEthSignedMessageHash();
+    }
+
     function mint(
         address lizard,
-        bytes32 lizardHash,
+        uint256 signatureBlockNumber,
         bytes calldata lizardSignature,
         bytes32[] calldata lizardProof,
         address recipient
     ) public onlyOwner {
-        (address signer, ECDSA.RecoverError error) = ECDSA.tryRecover(
-            lizardHash,
-            lizardSignature
-        );
+        bytes32 messageHash = getMessageHash(recipient, signatureBlockNumber);
+        address signer = messageHash.recover(lizardSignature);
 
-        require(
-            error == ECDSA.RecoverError.NoError,
-            "Error validating signature"
-        );
         require(signer == lizard, "Signer not authorized");
 
         bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(lizard))));
