@@ -30,9 +30,9 @@ export const TwitIconFilled: React.FC<
             width="85.9091"
             height="85.9091"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feColorMatrix
               in="SourceAlpha"
               type="matrix"
@@ -66,8 +66,8 @@ export const TwitIconFilled: React.FC<
             y2="4737.59"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="white" />
-            <stop offset="1" stop-color="#229ED9" />
+            <stop stopColor="white" />
+            <stop offset="1" stopColor="#229ED9" />
           </linearGradient>
         </defs>
       </svg>

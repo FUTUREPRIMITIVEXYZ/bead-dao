@@ -30,9 +30,9 @@ export const TelegramIcon: React.FC<
             width="73.0227"
             height="73.0227"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feColorMatrix
               in="SourceAlpha"
               type="matrix"
@@ -66,8 +66,8 @@ export const TelegramIcon: React.FC<
             y2="5017.81"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2AABEE" />
-            <stop offset="1" stop-color="#229ED9" />
+            <stop stopColor="#2AABEE" />
+            <stop offset="1" stopColor="#229ED9" />
           </linearGradient>
         </defs>
       </svg>

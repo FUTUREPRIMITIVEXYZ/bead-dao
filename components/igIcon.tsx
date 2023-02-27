@@ -35,9 +35,9 @@ export const IgIcon: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
             width="88.1367"
             height="78.75"
             filterUnits="userSpaceOnUse"
-            color-interpolation-filters="sRGB"
+            colorInterpolationFilters="sRGB"
           >
-            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feFlood floodOpacity="0" result="BackgroundImageFix" />
             <feColorMatrix
               in="SourceAlpha"
               type="matrix"
