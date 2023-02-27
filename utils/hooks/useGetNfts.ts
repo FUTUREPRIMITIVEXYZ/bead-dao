@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import { Alchemy, Network } from "alchemy-sdk";
 import { alchemyProvider } from "wagmi/providers/alchemy";
+import { ethers } from "ethers";
 
 interface UseOwnerNftParam {
   address?: string;
@@ -20,11 +21,15 @@ function useGetNfts({ address }: UseOwnerNftParam) {
       // contractAddresses: contracts,
     });
 
-    return nfts.ownedNfts.map((nft) => ({
-      name: nft.title,
-      image: nft.media[0]?.gateway,
-      address: nft.contract.address,
-    }));
+    return nfts.ownedNfts.map((nft) => {
+      return {
+        name: nft.title,
+        image: nft.media[0]?.gateway,
+        address: nft.contract.address,
+
+        tokenId: nft.tokenId,
+      };
+    });
   });
 }
 

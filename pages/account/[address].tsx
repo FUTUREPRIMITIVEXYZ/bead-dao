@@ -3,43 +3,42 @@ import Head from "next/head";
 import Image from "next/image";
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
-import { Card } from "../components/card";
-import { Background } from "../components/background";
-import WalletIcon from "../components/walletIcon";
-import { OpenSeaIcon } from "../components/openseaIcon";
-import { EtherscanIcon } from "../components/etherscanIcon";
-import { TwitterIcon } from "../components/twitterIcon";
-// import { GraphViewIcon } from "../components/graphViewIcon";
-import { AddressBar } from "../components/addressBar";
-import useGetNfts from "../utils/hooks/useGetNfts";
+import { Card } from "../../components/card";
+import { Background } from "../../components/background";
+import WalletIcon from "../../components/walletIcon";
+import { OpenSeaIcon } from "../../components/openseaIcon";
+import { EtherscanIcon } from "../../components/etherscanIcon";
+import { TwitterIcon } from "../../components/twitterIcon";
+// import { GraphViewIcon } from "../../components/graphViewIcon";
+import { AddressBar } from "../../components/addressBar";
+import useGetNfts from "../../utils/hooks/useGetNfts";
 import { useRouter } from "next/router";
 import { fetchEnsName } from "@wagmi/core";
 
-const Account: NextPage = () => {
-  // we have to do this for conditional render b/c of react hydration error
-  // const [connectedAcc, setConnectedAcc] = useState("");
+const Address: NextPage = () => {
   const [addressToFetch, setAddressToFetch] = useState<string | undefined>("");
-  const [displayChildren, setDisplayChildren] = useState(false);
+  const [displayChildren, setDisplayChildren] = useState(true);
   const [ensName, setEnsName] = useState<string | undefined>();
+  const [displayedNft, setDisplayedNft] = useState({
+    image: "/liz-nft.png",
+    name: "default",
+    address: "",
+  });
   const { address } = useAccount();
 
   const router = useRouter();
   const { query } = router;
-  const { wallet } = query;
-
-  // useEffect(() => {
-  //   if (address) {
-  //     setConnectedAcc(`${address.slice(0, 4)}...${address.slice(-4)}`);
-  //   }
-  // }, [address]);
+  const { address: queryAddress, tokenId } = query;
 
   useEffect(() => {
-    if (wallet) {
-      setAddressToFetch(Array.isArray(wallet) ? wallet[0] : wallet);
+    if (queryAddress) {
+      setAddressToFetch(
+        Array.isArray(queryAddress) ? queryAddress[0] : queryAddress
+      );
     } else {
       setAddressToFetch(address);
     }
-  }, [address, wallet]);
+  }, [address, queryAddress]);
 
   useEffect(() => {
     async function getEnsName() {
@@ -59,6 +58,30 @@ const Account: NextPage = () => {
 
   const { data } = useGetNfts({ address: addressToFetch });
 
+  useEffect(() => {
+    if (!tokenId && data) {
+      setDisplayedNft({
+        image: data[0].image,
+        name: data[0].name,
+        address: data[0].address,
+      });
+
+      return;
+    }
+
+    if (data) {
+      const foundTokenId = data.find((item) => item.tokenId === tokenId);
+      if (foundTokenId)
+        setDisplayedNft({
+          image: foundTokenId.image,
+          name: foundTokenId.name,
+          address: foundTokenId.address,
+        });
+
+      return;
+    }
+  }, [data, tokenId]);
+
   return (
     <div className="">
       <Head>
@@ -69,7 +92,7 @@ const Account: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Background height="h-[100vh]">
+      <Background height={data && data.length ? "h-full" : "h-[100vh]"}>
         <div>
           <Card>
             <div className="flex flex-col space-y-4 items-start justify-center">
@@ -78,7 +101,7 @@ const Account: NextPage = () => {
                 height={348}
                 width={348}
                 alt="beaded lizard image"
-                src={data ? data[0].image : "/liz-nft.png"}
+                src={displayedNft.image}
               />
               <div className="mb-4 flex items-center space-x-2 justify-start font-bold text-address-color-secondary">
                 <WalletIcon height={25} width={24} />
@@ -94,7 +117,9 @@ const Account: NextPage = () => {
                   )}
                 </a>
               </div>
-              {data && <h1 className="text-3xl font-bold">{data[0].name}</h1>}
+              {data && (
+                <h1 className="text-3xl font-bold">{displayedNft.name}</h1>
+              )}
               {/* <AddressBar
                 text={
                   data
@@ -138,11 +163,7 @@ const Account: NextPage = () => {
                       width={154}
                     />
                     <div className="font-xm font-bold">{lizard.name}</div>
-                    <AddressBar
-                      text="lizzymcguire.beaddao.eth"
-                      link="https://google.com"
-                      size="sm"
-                    />
+                    <AddressBar text={lizard.name} link="/" size="sm" />
                   </div>
                 ))}
               </div>
@@ -154,4 +175,4 @@ const Account: NextPage = () => {
   );
 };
 
-export default Account;
+export default Address;
