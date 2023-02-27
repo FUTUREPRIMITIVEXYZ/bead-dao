@@ -9,9 +9,14 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      joker: ["Jokerman"],
+    },
     extend: {
       colors: {
         badge: "rgba(252, 250, 250, 0.61)",
+        address: "#F1F4FF",
+        "address-text": "#8695AB",
       },
       backgroundImage: {
         main: "url('/bg.jpg')",
