@@ -1,10 +1,5 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Badge } from "../components/badge";
-import Image from "next/image";
-import { useAccount } from "wagmi";
-import { Button } from "../components/button";
 import { Background } from "../components/background";
 
 const Scan: NextPage = () => {
@@ -31,13 +26,6 @@ const Scan: NextPage = () => {
             Join Telegram
           </a>
         </div>
-        {/* <Image
-          className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
-          height={348}
-          width={348}
-          alt="beaded lizard image"
-          src="/liz-nft.png"
-        /> */}
       </Background>
     </div>
   );
