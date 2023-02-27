@@ -11,7 +11,7 @@ export const Modal: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
   return (
     <div className="">
       <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-        <div className="relative w-auto my-6 mx-auto max-w-3xl">
+        <div className="h-full max-w-[400px] relative w-auto my-6 mx-auto top-[10%]">
           <div className="p-3 pt-2 md:p-4 md:pt-2 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             <div className="flex items-end justify-between p-1 rounded-t">
               <button
@@ -23,7 +23,7 @@ export const Modal: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
                 </span>
               </button>
             </div>
-            <div className="p-4 pt-0">{children}</div>
+            <div className="pt-0">{children}</div>
           </div>
         </div>
       </div>

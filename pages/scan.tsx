@@ -19,13 +19,12 @@ const Scan: NextPage = () => {
       </Head>
       <Background height="h-[100vh]">
         <div className="flex flex-col justify-center items-center h-full">
-          <div className="relative">
-            <Image
-              src="/liz.gif"
-              height={353}
-              width={367}
-              alt="lizard gif"
-              className="rounded-2xl"
+          <div className="relative ">
+            <video
+              className="object-cover h-[353px] w-[367px]"
+              src="/lizzlfying.webm"
+              autoPlay
+              loop
             />
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
               <a href="https://t.me/beaddao" target="_blank" rel="noreferrer">
