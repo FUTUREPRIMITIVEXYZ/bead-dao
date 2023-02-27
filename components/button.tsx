@@ -7,7 +7,7 @@ export const Button: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 }) => {
   return (
     <div
-      className={`${className} box rounded-full py-2 px-4 bg-black drop-shadow-2xl cursor-pointer hover:animate-bounce hover:duration-75`}
+      className={`${className} box inline-block rounded-full py-2 px-4 bg-black drop-shadow-2xl cursor-pointer`}
       onClick={onClick}
     >
       {children}

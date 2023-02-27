@@ -1,12 +1,14 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { Background } from "../components/background";
+import Image from "next/image";
+import { Button } from "../components/button";
 
 const Scan: NextPage = () => {
   // const { account, isConnected, isDisconnected } = useAccount();
 
   return (
-    <div className="">
+    <div className="font-[Inter]">
       <Head>
         <title>Bead DAO</title>
         <meta
@@ -17,14 +19,24 @@ const Scan: NextPage = () => {
       </Head>
       <Background height="h-[100vh]">
         <div className="flex flex-col justify-center items-center h-full">
-          <a
-            href="https://t.me/beaddao"
-            target="_blank"
-            rel="noreferrer"
-            className="bg-blue-500 text-white py-4 px-6 rounded-full cursor-pointer font-bold shadow-xl"
-          >
-            Join Telegram
-          </a>
+          <div className="relative">
+            <Image
+              src="/liz.gif"
+              height={353}
+              width={367}
+              alt="lizard gif"
+              className="rounded-2xl"
+            />
+            <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+              <a href="https://t.me/beaddao" target="_blank" rel="noreferrer">
+                <Button>
+                  <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
+                    Join Telegram
+                  </div>
+                </Button>
+              </a>
+            </div>
+          </div>
         </div>
       </Background>
     </div>
