@@ -5,7 +5,9 @@ export const Badge: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
   className,
 }) => {
   return (
-    <div className={`${className} py-2 px-4 bg-badge rounded-full`}>
+    <div
+      className={`${className} py-2 px-4 bg-white rounded-full border-4 border-black border-solid`}
+    >
       {children}
     </div>
   );

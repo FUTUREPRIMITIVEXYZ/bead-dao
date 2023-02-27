@@ -8,9 +8,24 @@ import { Alchemy, Network, Contract } from "alchemy-sdk";
 import { Background } from "../components/background";
 import { NavLink } from "../components/navLink";
 import Link from "next/link";
+import { Modal } from "../components/modal";
+import { How } from "../components/how";
 
 const Home: NextPage = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState<any>(null);
+
   const links = [
+    {
+      link: "/about",
+      text: "About",
+    },
+    {
+      link: "/how",
+      text: "How to Mint",
+      modal: true,
+      modalContent: <How />,
+    },
     {
       link: "/scan",
       text: "contact",
@@ -37,17 +52,44 @@ const Home: NextPage = () => {
       </Head>
       <Background height="h-[100vh]">
         <div className="h-[100%] flex flex-col justify-end items-center space-y-8">
-          {links.map((item) => (
-            <NavLink key={item.link} className="cursor-pointer">
-              <Link href={item.link}>
-                <div className="text-center text-xl font-bold first-letter:capitalize">
-                  {item.text}
-                </div>
-              </Link>
-            </NavLink>
+          {links.map((item, i) => (
+            <div key={i}>
+              {item.modal ? (
+                <NavLink
+                  key={item.link}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setModalContent(item.modalContent);
+                    setShowModal(true);
+                  }}
+                >
+                  <div className="text-center text-xl font-bold first-letter:capitalize">
+                    {item.text}
+                  </div>
+                </NavLink>
+              ) : (
+                <NavLink key={item.link} className="cursor-pointer">
+                  <Link href={item.link}>
+                    <div className="text-center text-xl font-bold first-letter:capitalize">
+                      {item.text}
+                    </div>
+                  </Link>
+                </NavLink>
+              )}
+            </div>
           ))}
         </div>
       </Background>
+      {showModal && (
+        <Modal
+          onClose={() => {
+            setModalContent(null);
+            setShowModal(false);
+          }}
+        >
+          {modalContent}
+        </Modal>
+      )}
     </div>
   );
 };

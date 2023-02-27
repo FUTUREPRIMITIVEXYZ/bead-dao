@@ -19,7 +19,9 @@ export const Background: React.FC<
           className={`w-full flex items-center justify-between px-4 md:px-4`}
         >
           <Badge className="cursor-pointer">
-            <Link href="/">bead DAO</Link>
+            <Link href="/">
+              <div className="font-medium font-xl">beadDAO®</div>
+            </Link>
           </Badge>
           <ConnectButton
             accountStatus="avatar"
