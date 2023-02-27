@@ -79,7 +79,7 @@ const Account: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Background justifyContent="justify-start" height="100%">
+      <Background height="100%">
         <div>
           <Card>
             <div className="flex flex-col space-y-4 items-start justify-center">

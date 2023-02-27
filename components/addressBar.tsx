@@ -33,11 +33,11 @@ export const AddressBar: React.FC<
         >
           {text}
         </div>
-        <div>
+        <div className="hidden lg:inline-block">
           <svg
-            width={size === "lg" ? "17" : "10"}
-            height={size === "lg" ? "17" : "10"}
-            viewBox={size === "lg" ? "0 0 17 17" : "0 0 10 10"}
+            width={17}
+            height={17}
+            viewBox={"0 0 17 17"}
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
