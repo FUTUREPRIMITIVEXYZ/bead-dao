@@ -3,9 +3,39 @@ import Head from "next/head";
 import { Background } from "../components/background";
 import Image from "next/image";
 import { Button } from "../components/button";
+import { ethers } from "ethers";
+import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
+
+import {
+  getPublicKeysFromScan,
+  getSignatureFromScan,
+} from "pbt-chip-client/kong";
 
 const Scan: NextPage = () => {
-  // const { account, isConnected, isDisconnected } = useAccount();
+  const scan = async () => {
+    const keys = await getPublicKeysFromScan();
+
+    const primaryKey = keys?.primaryPublicKeyRaw;
+
+    if (!primaryKey) {
+      return;
+    }
+
+    const keyAddress = ethers.utils.computeAddress(`0x${primaryKey}`);
+
+    const lizardTree = await fetch("/lizardTree.json").then((res) =>
+      res.json()
+    );
+
+    const tree = StandardMerkleTree.load(lizardTree);
+
+    const proof = tree.getProof([keyAddress]);
+
+    if (tree.verify([keyAddress], proof)) {
+      alert("Proof of Lizard verified! Redirecting to telegram...");
+      window.location.href = "https://t.me/beaddao";
+    }
+  };
 
   return (
     <div className="font-[Inter]">
@@ -27,13 +57,11 @@ const Scan: NextPage = () => {
               loop
             />
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-              <a href="https://t.me/beaddao" target="_blank" rel="noreferrer">
-                <Button>
-                  <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
-                    Join Telegram
-                  </div>
-                </Button>
-              </a>
+              <Button onClick={scan}>
+                <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
+                  Scan a Lizard to join the DAO!
+                </div>
+              </Button>
             </div>
           </div>
         </div>
