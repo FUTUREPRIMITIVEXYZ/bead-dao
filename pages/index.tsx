@@ -17,6 +17,7 @@ import { TwitIconFilled } from "../components/twitIconFilled";
 const Home: NextPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState<any>(null);
+  const { address } = useAccount();
 
   const links = [
     {
@@ -39,7 +40,7 @@ const Home: NextPage = () => {
       text: "mint",
     },
     {
-      link: "/account",
+      link: `/account/${address}`,
       text: "your lounge",
     },
   ];
