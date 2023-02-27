@@ -15,9 +15,7 @@ contract CounterTest is Test {
     function testMint() public {
         Lizard lizard = new Lizard(baseURI, lizardRoot, 1 hours);
 
-        bytes32 hash = ECDSA.toEthSignedMessageHash(
-            abi.encodePacked("hello world")
-        );
+        bytes32 hash = lizard.getMessageHash(vm.addr(10), block.number);
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, hash);
         bytes memory sig = abi.encodePacked(r, s, v);
 
@@ -25,7 +23,7 @@ contract CounterTest is Test {
         bytes memory proofJson = vm.parseJson(proofData);
         bytes32[] memory proof = abi.decode(proofJson, (bytes32[]));
 
-        lizard.mint(vm.addr(1), hash, sig, proof, vm.addr(10));
+        lizard.mint(vm.addr(1), block.number, sig, proof, vm.addr(10));
 
         assertEq(lizard.ownerOf(1), vm.addr(10));
         assertEq(lizard.balanceOf(vm.addr(10)), 1);
@@ -36,10 +34,10 @@ contract CounterTest is Test {
         );
 
         vm.expectRevert();
-        lizard.mint(vm.addr(1), hash, sig, proof, vm.addr(10));
+        lizard.mint(vm.addr(1), block.number, sig, proof, vm.addr(10));
 
         vm.warp(block.timestamp + 2 hours);
-        lizard.mint(vm.addr(1), hash, sig, proof, vm.addr(10));
+        lizard.mint(vm.addr(1), block.number, sig, proof, vm.addr(10));
 
         assertEq(lizard.ownerOf(2), vm.addr(10));
         assertEq(lizard.balanceOf(vm.addr(10)), 2);

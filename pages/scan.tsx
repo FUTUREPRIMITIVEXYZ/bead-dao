@@ -5,6 +5,9 @@ import Image from "next/image";
 import { Button } from "../components/button";
 import { ethers } from "ethers";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
+import { useAccount } from "wagmi";
+
+import { useEffect } from "react";
 
 import URL from "url-parse";
 import parseKeys from "../helpers/parseKeys";
@@ -13,45 +16,23 @@ import {
   getPublicKeysFromScan,
   getSignatureFromScan,
 } from "pbt-chip-client/kong";
-import { useEffect, useState } from "react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
+const provider = new ethers.providers.AlchemyProvider(
+  "homestead",
+  "ZlrIeucrcyJtYsCY9bnsfd3Yw5oM97PJ"
+);
 
 const Scan: NextPage = () => {
-  const [primaryKey, setPrimaryKey] = useState();
-
-  useEffect(() => {
-    const getKeysFromUrl = async () => {
-      const url = URL(window.location.href, true);
-      const keys = parseKeys(url.query.static);
-      if (!keys) return;
-
-      const primaryKey = keys?.primaryPublicKeyRaw;
-
-      if (!primaryKey) return;
-
-      const keyAddress = ethers.utils.computeAddress(`0x${primaryKey}`);
-
-      console.log(keyAddress);
-
-      const lizardTree = await fetch("/lizardTree.json").then((res) =>
-        res.json()
-      );
-
-      const tree = StandardMerkleTree.load(lizardTree);
-
-      const proof = tree.getProof([keyAddress]);
-
-      if (tree.verify([keyAddress], proof)) {
-        alert("Proof of Lizard verified! Redirecting to telegram...");
-        window.location.href = "https://t.me/beaddao";
-      }
-    };
-    getKeysFromUrl();
-  }, []);
+  const { address } = useAccount();
 
   const scan = async () => {
     const url = URL(window.location.href, true);
-    console.log(parseKeys(url.query.static));
-    const keys = await getPublicKeysFromScan();
+
+    let keys: any = parseKeys(url.query.static);
+    if (!keys) {
+      keys = await getPublicKeysFromScan();
+    }
 
     const primaryKey = keys?.primaryPublicKeyRaw;
 
@@ -61,8 +42,6 @@ const Scan: NextPage = () => {
 
     const keyAddress = ethers.utils.computeAddress(`0x${primaryKey}`);
 
-    console.log(keyAddress);
-
     const lizardTree = await fetch("/lizardTree.json").then((res) =>
       res.json()
     );
@@ -71,10 +50,23 @@ const Scan: NextPage = () => {
 
     const proof = tree.getProof([keyAddress]);
 
-    if (tree.verify([keyAddress], proof)) {
-      alert("Proof of Lizard verified! Redirecting to telegram...");
-      window.location.href = "https://t.me/beaddao";
-    }
+    if (!tree.verify([keyAddress], proof))
+      alert("Sorry, this chip is not a lizard");
+
+    window.location.href = "https://t.me/beaddao";
+    return;
+
+    // const { hash, number } = await provider.getBlock("latest");
+    //
+    // if (!address) alert("Please connect a wallet");
+    //
+    // const signature = await getSignatureFromScan({
+    //   chipPublicKey: keys.primaryPublicKeyRaw,
+    //   address: address!,
+    //   hash,
+    // });
+    //
+    // console.log(keyAddress, number, signature, proof, address);
   };
 
   return (
@@ -99,7 +91,7 @@ const Scan: NextPage = () => {
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
               <Button onClick={scan}>
                 <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
-                  Scan a Lizard to join the DAO!
+                  Join BEAD DAO
                 </div>
               </Button>
             </div>
