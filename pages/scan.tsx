@@ -6,13 +6,51 @@ import { Button } from "../components/button";
 import { ethers } from "ethers";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 
+import URL from "url-parse";
+import parseKeys from "../helpers/parseKeys";
+
 import {
   getPublicKeysFromScan,
   getSignatureFromScan,
 } from "pbt-chip-client/kong";
+import { useEffect, useState } from "react";
 
 const Scan: NextPage = () => {
+  const [primaryKey, setPrimaryKey] = useState();
+
+  useEffect(() => {
+    const getKeysFromUrl = async () => {
+      const url = URL(window.location.href, true);
+      const keys = parseKeys(url.query.static);
+      if (!keys) return;
+
+      const primaryKey = keys?.primaryPublicKeyRaw;
+
+      if (!primaryKey) return;
+
+      const keyAddress = ethers.utils.computeAddress(`0x${primaryKey}`);
+
+      console.log(keyAddress);
+
+      const lizardTree = await fetch("/lizardTree.json").then((res) =>
+        res.json()
+      );
+
+      const tree = StandardMerkleTree.load(lizardTree);
+
+      const proof = tree.getProof([keyAddress]);
+
+      if (tree.verify([keyAddress], proof)) {
+        alert("Proof of Lizard verified! Redirecting to telegram...");
+        window.location.href = "https://t.me/beaddao";
+      }
+    };
+    getKeysFromUrl();
+  }, []);
+
   const scan = async () => {
+    const url = URL(window.location.href, true);
+    console.log(parseKeys(url.query.static));
     const keys = await getPublicKeysFromScan();
 
     const primaryKey = keys?.primaryPublicKeyRaw;
@@ -22,6 +60,8 @@ const Scan: NextPage = () => {
     }
 
     const keyAddress = ethers.utils.computeAddress(`0x${primaryKey}`);
+
+    console.log(keyAddress);
 
     const lizardTree = await fetch("/lizardTree.json").then((res) =>
       res.json()
