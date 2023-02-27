@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@openzeppelin/merkle-tree": "^1.0.2",
     "@rainbow-me/rainbowkit": "^0.11.0",
     "alchemy-sdk": "^2.4.3",
     "ethers": "^5.0.7",
