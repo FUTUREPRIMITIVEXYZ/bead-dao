@@ -107,7 +107,7 @@ const Address: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Background height={data && data.length ? "h-full" : "h-[100vh]"}>
+      <Background>
         <div>
           <Card>
             <div className="flex flex-col space-y-4 items-start justify-center">

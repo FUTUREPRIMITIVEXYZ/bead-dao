@@ -44,7 +44,7 @@ const Mint: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Background height="h-[100vh]">
+      <Background>
         <div className="h-full flex flex-col justify-around items-center">
           <Image
             className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"

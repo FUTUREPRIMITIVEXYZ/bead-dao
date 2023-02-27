@@ -55,7 +55,7 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Background height="h-[100vh]">
+      <Background>
         <div className="h-[100%] flex flex-col justify-end items-center space-y-8">
           {links.map((item, i) => (
             <div key={i}>

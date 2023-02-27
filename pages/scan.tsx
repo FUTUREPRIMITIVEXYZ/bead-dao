@@ -79,7 +79,7 @@ const Scan: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Background height="h-[100vh]">
+      <Background>
         <div className="flex flex-col justify-center items-center h-full">
           <div className="relative ">
             <video
