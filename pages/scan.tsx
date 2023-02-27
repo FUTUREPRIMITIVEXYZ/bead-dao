@@ -7,6 +7,8 @@ import { ethers } from "ethers";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 import { useAccount } from "wagmi";
 
+import { useEffect } from "react";
+
 import URL from "url-parse";
 import parseKeys from "../helpers/parseKeys";
 
@@ -51,7 +53,6 @@ const Scan: NextPage = () => {
     if (!tree.verify([keyAddress], proof))
       alert("Sorry, this chip is not a lizard");
 
-    alert("Proof of Lizard verified! Redirecting to telegram...");
     window.location.href = "https://t.me/beaddao";
     return;
 
@@ -88,15 +89,11 @@ const Scan: NextPage = () => {
               loop
             />
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-              {!address ? (
-                <ConnectButton />
-              ) : (
-                <Button onClick={scan}>
-                  <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
-                    Scan a Lizard to join the DAO!
-                  </div>
-                </Button>
-              )}
+              <Button onClick={scan}>
+                <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
+                  Join BEAD DAO
+                </div>
+              </Button>
             </div>
           </div>
         </div>
