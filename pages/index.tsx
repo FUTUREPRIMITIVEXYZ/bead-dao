@@ -20,8 +20,9 @@ const Home: NextPage = () => {
 
   const links = [
     {
-      link: "/about",
+      link: "https://eips.ethereum.org/EIPS/eip-6551",
       text: "About",
+      external: true,
     },
     {
       link: "/how",
@@ -72,11 +73,19 @@ const Home: NextPage = () => {
                 </NavLink>
               ) : (
                 <NavLink key={item.link} className="cursor-pointer">
-                  <Link href={item.link}>
-                    <div className="text-center text-xl font-bold first-letter:capitalize">
-                      {item.text}
-                    </div>
-                  </Link>
+                  {item.external ? (
+                    <a href={item.link} target="_blank" rel="noreferrer">
+                      <div className="text-center text-xl font-bold first-letter:capitalize">
+                        {item.text}
+                      </div>
+                    </a>
+                  ) : (
+                    <Link href={item.link}>
+                      <div className="text-center text-xl font-bold first-letter:capitalize">
+                        {item.text}
+                      </div>
+                    </Link>
+                  )}
                 </NavLink>
               )}
             </div>
