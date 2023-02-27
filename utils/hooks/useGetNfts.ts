@@ -15,7 +15,6 @@ const alchemy = new Alchemy({
 });
 
 function useGetNfts({ address }: UseOwnerNftParam) {
-  console.log({ address });
   return useSWR(!address ? null : `${address}/nfts`, async () => {
     const nfts = await alchemy.nft.getNftsForOwner(address as string, {
       // contractAddresses: contracts,
@@ -26,7 +25,7 @@ function useGetNfts({ address }: UseOwnerNftParam) {
         name: nft.title,
         image: nft.media[0]?.gateway,
         address: nft.contract.address,
-
+        format: nft.media[0]?.format || "jpeg",
         tokenId: nft.tokenId,
       };
     });

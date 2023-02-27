@@ -19,10 +19,19 @@ const Address: NextPage = () => {
   const [addressToFetch, setAddressToFetch] = useState<string | undefined>("");
   const [displayChildren, setDisplayChildren] = useState(true);
   const [ensName, setEnsName] = useState<string | undefined>();
-  const [displayedNft, setDisplayedNft] = useState({
+
+  interface DisplayedNft {
+    image: string;
+    name: string;
+    address: string;
+    format?: string;
+  }
+
+  const [displayedNft, setDisplayedNft] = useState<DisplayedNft>({
     image: "/liz-nft.png",
     name: "default",
     address: "",
+    format: "jpeg",
   });
   const { address } = useAccount();
 
@@ -64,6 +73,7 @@ const Address: NextPage = () => {
         image: data[0].image,
         name: data[0].name,
         address: data[0].address,
+        format: data[0].format,
       });
 
       return;
@@ -76,11 +86,16 @@ const Address: NextPage = () => {
           image: foundTokenId.image,
           name: foundTokenId.name,
           address: foundTokenId.address,
+          format: foundTokenId.format,
         });
 
       return;
     }
-  }, [data, tokenId]);
+  }, [data, tokenId, addressToFetch]);
+
+  const handleClick = (tokenId: string) => {
+    router.push(`/account/${addressToFetch}/?tokenId=${tokenId}`);
+  };
 
   return (
     <div className="">
@@ -96,13 +111,37 @@ const Address: NextPage = () => {
         <div>
           <Card>
             <div className="flex flex-col space-y-4 items-start justify-center">
-              <Image
-                className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
-                height={348}
-                width={348}
-                alt="beaded lizard image"
-                src={displayedNft.image}
-              />
+              {!displayedNft.format ? (
+                <Image
+                  className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
+                  height={348}
+                  width={348}
+                  alt="beaded lizard image"
+                  src={"/liz-nft.png"}
+                />
+              ) : (
+                <>
+                  {displayedNft.format === "mp4" ||
+                  displayedNft.format === "webm" ? (
+                    <div className="h-[348px] w-[348px]">
+                      <video
+                        className="object-cover"
+                        src={displayedNft.image}
+                        autoPlay
+                        loop
+                      />
+                    </div>
+                  ) : (
+                    <Image
+                      className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
+                      height={348}
+                      width={348}
+                      alt="beaded lizard image"
+                      src={displayedNft.image || "/liz-nft.png"}
+                    />
+                  )}
+                </>
+              )}
               <div className="mb-4 flex items-center space-x-2 justify-start font-bold text-address-color-secondary">
                 <WalletIcon height={25} width={24} />
                 <span className="whitespace-nowrap">Owned by</span>
@@ -155,13 +194,44 @@ const Address: NextPage = () => {
             <Card>
               <div className="grid grid-cols-2 gap-4 place-content-between">
                 {(data || []).map((lizard, i) => (
-                  <div key={i} className="w-full overflow-hidden">
-                    <Image
-                      src={lizard.image || "/liz-nft.png"}
-                      alt="lizard image"
-                      height={154}
-                      width={154}
-                    />
+                  <div
+                    key={i}
+                    className="w-full overflow-hidden"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleClick(lizard.tokenId);
+                    }}
+                  >
+                    {!lizard.format ? (
+                      <Image
+                        className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
+                        height={154}
+                        width={154}
+                        alt="beaded lizard image"
+                        src={"/liz-nft.png"}
+                      />
+                    ) : (
+                      <>
+                        {lizard.format === "mp4" || lizard.format === "webm" ? (
+                          <div className="h-[154px] w-[154px]">
+                            <video
+                              className="object-cover"
+                              src={lizard.image}
+                              autoPlay
+                              loop
+                            />
+                          </div>
+                        ) : (
+                          <Image
+                            className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
+                            height={154}
+                            width={154}
+                            alt="beaded lizard imaged"
+                            src={lizard.image || "/liz-nft.png"}
+                          />
+                        )}
+                      </>
+                    )}
                     <div className="font-xm font-bold">{lizard.name}</div>
                     <AddressBar text={lizard.name} link="/" size="sm" />
                   </div>
