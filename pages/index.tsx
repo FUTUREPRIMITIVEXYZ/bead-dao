@@ -33,11 +33,7 @@ const Home: NextPage = () => {
     },
     {
       link: "/scan",
-      text: "contact",
-    },
-    {
-      link: "/mint",
-      text: "mint",
+      text: "scan",
     },
     {
       link: `/account/${address}`,
