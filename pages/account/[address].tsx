@@ -25,6 +25,8 @@ const Address: NextPage = () => {
     name: string;
     address: string;
     format?: string;
+    contract: string;
+    tokenId: string;
   }
 
   const [displayedNft, setDisplayedNft] = useState<DisplayedNft>({
@@ -32,6 +34,8 @@ const Address: NextPage = () => {
     name: "default",
     address: "",
     format: "jpeg",
+    contract: "",
+    tokenId: "",
   });
   const { address } = useAccount();
 
@@ -74,6 +78,8 @@ const Address: NextPage = () => {
         name: data[0].name,
         address: data[0].address,
         format: data[0].format,
+        contract: data[0].contract,
+        tokenId: data[0].tokenId,
       });
 
       return;
@@ -87,6 +93,8 @@ const Address: NextPage = () => {
           name: foundTokenId.name,
           address: foundTokenId.address,
           format: foundTokenId.format,
+          contract: foundTokenId.contract,
+          tokenId: foundTokenId.tokenId,
         });
 
       return;
@@ -170,7 +178,11 @@ const Address: NextPage = () => {
                 link={`https://etherscan.io/address/${addressToFetch}`}
               /> */}
               <div className="flex items-center justify-start space-x-4">
-                <a href="https://opensea.io" target="_blank" rel="noreferrer">
+                <a
+                  href={`https://opensea.io/assets/ethereum/${displayedNft.contract}/${displayedNft.tokenId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <OpenSeaIcon />
                 </a>
                 <a
