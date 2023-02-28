@@ -196,7 +196,7 @@ const Address: NextPage = () => {
                 {(data || []).map((lizard, i) => (
                   <div
                     key={i}
-                    className="w-full overflow-hidden"
+                    className="w-full overflow-hidden cursor-pointer"
                     onClick={(e) => {
                       e.preventDefault();
                       handleClick(lizard.tokenId);
