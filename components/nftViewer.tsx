@@ -5,6 +5,14 @@ import { OpenSeaIcon } from "./openseaIcon";
 import { EtherscanIcon } from "./etherscanIcon";
 import { TwitterIcon } from "./twitterIcon";
 
+const Balance = ({ balance }: { balance: number }) => {
+  return (
+    <div className="absolute z-50 top-[10px] right-[10px] bg-address-text/[0.2] px-2 py-2 rounded-lg font-bold">
+      x{balance}
+    </div>
+  );
+};
+
 export interface Nft {
   image: string;
   name: string;
@@ -17,14 +25,16 @@ export interface Nft {
 interface Props {
   nft: Nft;
   ownedBy: string;
+  balance: number;
 }
 
 export const NftViewer: React.FC<
   Props & React.HTMLAttributes<HTMLDivElement>
-> = ({ className, nft, ownedBy }) => {
+> = ({ className, nft, ownedBy, balance }) => {
   return (
     <Card className={className}>
       <div className="flex flex-col space-y-4 items-start justify-center">
+        <Balance balance={balance} />
         {!nft.format ? (
           <Image
             className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"

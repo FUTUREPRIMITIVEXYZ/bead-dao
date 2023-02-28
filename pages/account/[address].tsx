@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { fetchEnsName } from "@wagmi/core";
 import { NftViewer, Nft } from "../../components/nftViewer";
 import { RefreshIcon } from "../../components/refreshIcon";
+import useGetBeads from "../../utils/hooks/useGetBeads";
 
 const Address: NextPage = () => {
   const [addressToFetch, setAddressToFetch] = useState<string | undefined>("");
@@ -91,6 +92,11 @@ const Address: NextPage = () => {
     }
   }, [data, data?.length, router]);
 
+  const { data: beadData } = useGetBeads(
+    displayedNft.contract,
+    displayedNft.tokenId
+  );
+
   useEffect(() => {
     if (!tokenId && data && data.length) {
       setDisplayedNft({
@@ -155,7 +161,11 @@ const Address: NextPage = () => {
                 <div className="flex justify-end items-center w-full p-5">
                   <RefreshIcon handleClick={() => refetch()} />
                 </div>
-                <NftViewer nft={displayedNft} ownedBy={ownedBy} />
+                <NftViewer
+                  nft={displayedNft}
+                  ownedBy={ownedBy}
+                  balance={beadData.balance}
+                />
               </>
             )}
             {/* {displayChildren && (
