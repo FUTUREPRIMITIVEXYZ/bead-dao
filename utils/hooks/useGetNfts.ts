@@ -2,6 +2,7 @@ import useSWR from "swr";
 import { Alchemy, Network } from "alchemy-sdk";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { ethers } from "ethers";
+import { isNil } from 'lodash'
 
 interface UseOwnerNftParam {
   address?: string;
@@ -15,7 +16,7 @@ const alchemy = new Alchemy({
 });
 
 function useGetNfts({ address }: UseOwnerNftParam) {
-  return useSWR(!address ? null : `${address}/nfts`, async () => {
+  return useSWR(isNil(address) ? null : `${address}/nfts`, async () => {
     const nfts = await alchemy.nft.getNftsForOwner(address as string, {
       contractAddresses: contracts,
     });

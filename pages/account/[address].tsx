@@ -1,16 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
-import { Card } from "../../components/card";
 import { Background } from "../../components/background";
-import WalletIcon from "../../components/walletIcon";
-import { OpenSeaIcon } from "../../components/openseaIcon";
-import { EtherscanIcon } from "../../components/etherscanIcon";
-import { TwitterIcon } from "../../components/twitterIcon";
-// import { GraphViewIcon } from "../../components/graphViewIcon";
-import { AddressBar } from "../../components/addressBar";
 import useGetNfts from "../../utils/hooks/useGetNfts";
 import { useRouter } from "next/router";
 import { fetchEnsName } from "@wagmi/core";
@@ -19,9 +11,7 @@ import { RefreshIcon } from "../../components/refreshIcon";
 import useGetBeads from "../../utils/hooks/useGetBeads";
 
 const Address: NextPage = () => {
-  const [addressToFetch, setAddressToFetch] = useState<string | undefined>("");
   const [ensName, setEnsName] = useState<string | undefined>();
-  const [ownedBy, setOwnedBy] = useState("");
 
   const [displayedNft, setDisplayedNft] = useState<Nft>({
     image: "/liz-nft.png",
@@ -35,23 +25,19 @@ const Address: NextPage = () => {
 
   const router = useRouter();
   const { query } = router;
-  const { address: queryAddress, tokenId } = query;
+  const { address: queryAddress } = query;
 
-  useEffect(() => {
-    if (queryAddress) {
-      setAddressToFetch(
-        Array.isArray(queryAddress) ? queryAddress[0] : queryAddress
-      );
-    } else {
-      setAddressToFetch(address);
-    }
-  }, [address, queryAddress]);
+  const addressFromUrl = Array.isArray(queryAddress)
+    ? queryAddress[0]
+    : queryAddress;
+
+  console.log({ query, queryAddress });
 
   useEffect(() => {
     async function getEnsName() {
-      if (addressToFetch) {
+      if (queryAddress) {
         const ensName = await fetchEnsName({
-          address: addressToFetch as `0x${string}`,
+          address: queryAddress as `0x${string}`,
         });
 
         if (ensName) {
@@ -61,36 +47,20 @@ const Address: NextPage = () => {
     }
 
     getEnsName();
-  }, [addressToFetch]);
-
-  useEffect(() => {
-    if (address) {
-      if (address?.toLowerCase() === addressToFetch?.toLowerCase()) {
-        setOwnedBy(ensName || `${address.slice(0, 4)}...${address.slice(-4)}`);
-        return;
-      }
-
-      if (addressToFetch) {
-        setOwnedBy(
-          `${addressToFetch.slice(0, 4)}...${addressToFetch.slice(-4)}`
-        );
-        return;
-      }
-    }
-  }, [address, addressToFetch, ensName]);
+  }, [queryAddress]);
 
   const {
     data,
     mutate: refetch,
     isValidating,
     isLoading,
-  } = useGetNfts({ address: addressToFetch });
+  } = useGetNfts({ address: addressFromUrl });
 
   useEffect(() => {
-    if (data && data.length === 0) {
+    if (!isValidating && !isLoading && data && data.length === 0) {
       router.push("/scan");
     }
-  }, [data, data?.length, router]);
+  }, [isValidating, isLoading, data, data?.length, router]);
 
   const { data: beadData } = useGetBeads(
     displayedNft.contract,
@@ -98,9 +68,10 @@ const Address: NextPage = () => {
   );
 
   useEffect(() => {
-    if (!tokenId && data && data.length) {
+    if (data && data.length) {
       setDisplayedNft({
-        image: data[0].image,
+        // image: data[0].image,
+        image: "https://media.giphy.com/media/NKrCnXI49QmrEe5FhK/giphy.gif",
         name: data[0].name,
         address: data[0].address,
         format: data[0].format,
@@ -110,22 +81,7 @@ const Address: NextPage = () => {
 
       return;
     }
-
-    if (data) {
-      const foundTokenId = data.find((item) => item.tokenId === tokenId);
-      if (foundTokenId)
-        setDisplayedNft({
-          image: foundTokenId.image,
-          name: foundTokenId.name,
-          address: foundTokenId.address,
-          format: foundTokenId.format,
-          contract: foundTokenId.contract,
-          tokenId: foundTokenId.tokenId,
-        });
-
-      return;
-    }
-  }, [data, tokenId, addressToFetch]);
+  }, [data]);
 
   return (
     <div>
@@ -156,14 +112,21 @@ const Address: NextPage = () => {
           </div>
         ) : (
           <div>
-            {data && data.length !== 0 && (
+            {addressFromUrl && data && data.length !== 0 && (
               <>
                 <div className="flex justify-end items-center w-full p-5">
                   <RefreshIcon handleClick={() => refetch()} />
                 </div>
                 <NftViewer
                   nft={displayedNft}
-                  ownedBy={ownedBy}
+                  ownedBy={
+                    ensName ||
+                    (addressFromUrl
+                      ? `${addressFromUrl.slice(0, 4)}...${addressFromUrl.slice(
+                          -4
+                        )}`
+                      : "")
+                  }
                   balance={beadData.balance}
                 />
               </>
