@@ -1,33 +1,33 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "forge-std/console.sol";
-
 import "openzeppelin-contracts/token/ERC721/ERC721.sol";
 import "openzeppelin-contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "openzeppelin-contracts/access/Ownable2Step.sol";
+import "openzeppelin-contracts/metatx/ERC2771Context.sol";
 import "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
 import "openzeppelin-contracts/utils/cryptography/MerkleProof.sol";
 
-contract Lizard is ERC721, ERC721Burnable, Ownable2Step {
+contract Lizard is ERC721, ERC721Burnable, ERC2771Context, Ownable2Step {
     using ECDSA for bytes32;
 
     string baseURI;
     bytes32 lizardRoot;
-    uint256 timeLimit;
+    uint256 rateLimit;
     uint256 counter;
 
-    // lizard => sender => timstamp
-    mapping(address => mapping(address => uint256)) public lastMintTimestamp;
+    // lizard => sender => block number
+    mapping(address => mapping(address => uint256)) public lastMintBlockNumber;
 
     constructor(
         string memory baseURI_,
         bytes32 _root,
-        uint256 _timeLimit
-    ) ERC721("Lizard", "LIZ") {
+        uint256 _rateLimit,
+        address trustedForwarder
+    ) ERC721("Lizard", "LIZ") ERC2771Context(trustedForwarder) {
         baseURI = baseURI_;
         lizardRoot = _root;
-        timeLimit = _timeLimit;
+        rateLimit = _rateLimit;
     }
 
     function setBaseURI(string memory baseURI_) external onlyOwner {
@@ -38,8 +38,8 @@ contract Lizard is ERC721, ERC721Burnable, Ownable2Step {
         lizardRoot = _root;
     }
 
-    function setTimeLimit(uint256 _timeLimit) external onlyOwner {
-        timeLimit = _timeLimit;
+    function setRateLimit(uint256 _rateLimit) external onlyOwner {
+        rateLimit = _rateLimit;
     }
 
     function getMessageHash(address recipient, uint256 blockNumber)
@@ -58,7 +58,7 @@ contract Lizard is ERC721, ERC721Burnable, Ownable2Step {
         bytes calldata lizardSignature,
         bytes32[] calldata lizardProof,
         address recipient
-    ) public onlyOwner {
+    ) public {
         bytes32 messageHash = getMessageHash(recipient, signatureBlockNumber);
         address signer = messageHash.recover(lizardSignature);
 
@@ -76,20 +76,40 @@ contract Lizard is ERC721, ERC721Burnable, Ownable2Step {
 
         address sender = _msgSender();
 
-        uint256 lastMint = lastMintTimestamp[lizard][sender];
+        uint256 lastMint = lastMintBlockNumber[lizard][sender];
         if (lastMint != 0) {
             require(
-                block.timestamp > lastMint + timeLimit,
+                block.number > lastMint + rateLimit,
                 "Exceeded mint rate limit"
             );
         }
 
-        lastMintTimestamp[lizard][sender] = block.timestamp;
+        lastMintBlockNumber[lizard][sender] = block.number;
 
         _safeMint(recipient, ++counter);
     }
 
     function _baseURI() internal view override returns (string memory) {
         return baseURI;
+    }
+
+    function _msgSender()
+        internal
+        view
+        virtual
+        override(Context, ERC2771Context)
+        returns (address sender)
+    {
+        return ERC2771Context._msgSender();
+    }
+
+    function _msgData()
+        internal
+        view
+        virtual
+        override(Context, ERC2771Context)
+        returns (bytes calldata)
+    {
+        return ERC2771Context._msgData();
     }
 }
