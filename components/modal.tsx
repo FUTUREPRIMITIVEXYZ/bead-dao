@@ -15,7 +15,7 @@ export const Modal: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           <div className="p-3 pt-2 md:p-4 md:pt-2 border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             <div className="">
               <button
-                className="float-right inline-flex justify-center items-center p-1 ml-auto border-0 text-black"
+                className="absolute translate-y-[-60px] translate-x-[-10px] h-[40px] w-[40px] drop-shadow-xl p-2 bg-white rounded-full inline-flex justify-center items-center ml-auto border-0 text-black"
                 onClick={() => onClose && onClose()}
               >
                 <div className="text-black text-2xl block outline-none focus:outline-none">
@@ -23,7 +23,7 @@ export const Modal: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
                 </div>
               </button>
             </div>
-            <div className="p-4 pt-0">{children}</div>
+            <div className="p-4 pt-4">{children}</div>
           </div>
         </div>
       </div>
