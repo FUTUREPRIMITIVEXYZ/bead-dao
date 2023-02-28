@@ -19,6 +19,7 @@ const Address: NextPage = () => {
   const [addressToFetch, setAddressToFetch] = useState<string | undefined>("");
   const [displayChildren, setDisplayChildren] = useState(true);
   const [ensName, setEnsName] = useState<string | undefined>();
+  const [ownedBy, setOwnedBy] = useState("");
 
   interface DisplayedNft {
     image: string;
@@ -68,6 +69,22 @@ const Address: NextPage = () => {
 
     getEnsName();
   }, [addressToFetch]);
+
+  useEffect(() => {
+    if (address) {
+      if (address?.toLowerCase() === addressToFetch?.toLowerCase()) {
+        setOwnedBy(ensName || `${address.slice(0, 4)}...${address.slice(-4)}`);
+        return;
+      }
+
+      if (addressToFetch) {
+        setOwnedBy(
+          `${addressToFetch.slice(0, 4)}...${addressToFetch.slice(-4)}`
+        );
+        return;
+      }
+    }
+  }, [address, addressToFetch, ensName]);
 
   const {
     data,
@@ -206,15 +223,11 @@ const Address: NextPage = () => {
                   <WalletIcon height={25} width={24} />
                   <span className="whitespace-nowrap">Owned by</span>
                   <a href={"/"} className="cursor-pointer">
-                    {addressToFetch && (
-                      <span className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
-                        {ensName ||
-                          `${addressToFetch.slice(
-                            0,
-                            4
-                          )}...${addressToFetch.slice(-4)}`}
-                      </span>
-                    )}
+                    {/* {addressToFetch && ( */}
+                    <span className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
+                      {ownedBy}
+                    </span>
+                    {/* )} */}
                   </a>
                 </div>
                 {data && (
