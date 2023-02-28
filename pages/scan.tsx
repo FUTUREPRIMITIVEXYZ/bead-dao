@@ -82,21 +82,14 @@ const Scan: NextPage = () => {
       <Background>
         <div className="flex flex-col justify-center items-center h-full">
           <div className="relative ">
-            <Image
-              height={353}
-              width={367}
-              alt="liz gif"
-              src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODM0Y2U4OWYxOWYwYzFjMDZjMGMzODA3YWM2NjcwMTE2ZjFkNDMwYyZjdD1n/1evRUodu486GKealQp/giphy-downsized-large.gif"
-              objectFit="cover"
-            />
-            {/* <video
+            <video
               className="object-cover h-[353px] w-[367px]"
               src="/lizzlfying.webm"
               autoPlay={true}
               loop={true}
               muted={true}
               playsInline={true}
-            /> */}
+            />
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
               <Button onClick={scan}>
                 <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">

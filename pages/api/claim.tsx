@@ -10,10 +10,13 @@ import { add } from "date-fns";
 
 type ClaimRequest = {
   recipient: string;
+  keyAddress: string;
 };
 
 const claimHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { recipient } = req.body as ClaimRequest;
+  const { recipient, keyAddress } = req.body as ClaimRequest;
+
+  console.log(req.body);
 
   const relayerCredentials = {
     apiKey: process.env.RELAYER_API_KEY!,
@@ -39,21 +42,24 @@ const claimHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     .single();
 
   if (!data) return res.status(404).json({ error: "Lizard not found" });
-  if (
-    new Date() <
-    add(Date.parse(data.lastClaim), {
-      minutes: parseInt(process.env.BEAD_CLAIM_RATE_LIMIT_MINUTES!),
-    })
-  ) {
-    console.log("rate limited");
-    return res.status(400).json({ error: "Cannot claim more beads yet" });
+
+  if (data.lastClaim[keyAddress] != undefined) {
+    if (
+      new Date() <
+      add(Date.parse(data.lastClaim[keyAddress]), {
+        minutes: parseInt(process.env.BEAD_CLAIM_RATE_LIMIT_MINUTES!),
+      })
+    ) {
+      console.log("rate limited");
+      return res.status(400).json({ error: "Cannot claim more beads yet" });
+    }
   }
 
   const { data: updatedData, error } = await supabase
     .from("lizards")
     .update({
       beadCount: data.beadCount + process.env.BEAD_COUNT_PER_CLAIM!,
-      lastClaim: new Date(),
+      lastClaim: { ...data.lastClaim, [keyAddress]: new Date() },
     })
     .eq("tokenContract", ethers.utils.getAddress(lizard.contract.address))
     .eq("tokenId", lizard.tokenId)
