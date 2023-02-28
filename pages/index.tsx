@@ -31,13 +31,18 @@ const Home: NextPage = () => {
       modal: true,
       modalContent: <How />,
     },
-    {
-      link: "/scan",
-      text: "scan",
-    },
+    // commenting out for now as leader board is not finished and mint can only be accessed via scan
+    // {
+    //   link: "/leaderBoard",
+    //   text: "Leader Board",
+    // },
+    // {
+    //   link: "/scan",
+    //   text: "Mint",
+    // },
     {
       link: `/account/${address}`,
-      text: "your lounge",
+      text: "My wallet",
     },
   ];
 
