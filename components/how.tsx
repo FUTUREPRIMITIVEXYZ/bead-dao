@@ -13,7 +13,7 @@ export const How: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           height={322}
           width={322}
           objectFit="cover"
-          src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTlmM2VjMDY5NGMzYjI0M2NhOTRkZjIwNTE5MzZhNzg0M2I4YzRkMCZjdD1n/eXGdPytWhNARxFCXrD/giphy.gif"
+          src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGY3ZGRmNTU1YjAxNjM2ODQzY2Y2MzU4YmZhMjEwOGFlYzNhZTE3NCZjdD1z/QtX9VvsqoJ9nNpRVGF/giphy.gif"
         />
         {/* <video
           className="object-cover"
