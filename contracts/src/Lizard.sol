@@ -1,45 +1,42 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "forge-std/console.sol";
-
 import "openzeppelin-contracts/token/ERC721/ERC721.sol";
 import "openzeppelin-contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "openzeppelin-contracts/access/Ownable2Step.sol";
+import "openzeppelin-contracts/access/AccessControl.sol";
 import "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
 import "openzeppelin-contracts/utils/cryptography/MerkleProof.sol";
 
-contract Lizard is ERC721, ERC721Burnable, Ownable2Step {
+contract Lizard is ERC721, ERC721Burnable, Ownable2Step, AccessControl {
     using ECDSA for bytes32;
+
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     string baseURI;
     bytes32 lizardRoot;
-    uint256 timeLimit;
     uint256 counter;
 
-    // lizard => sender => timstamp
-    mapping(address => mapping(address => uint256)) public lastMintTimestamp;
+    mapping(address => bool) public minted;
 
-    constructor(
-        string memory baseURI_,
-        bytes32 _root,
-        uint256 _timeLimit
-    ) ERC721("Lizard", "LIZ") {
+    constructor(string memory baseURI_, bytes32 _root) ERC721("Lizard", "LIZ") {
         baseURI = baseURI_;
         lizardRoot = _root;
-        timeLimit = _timeLimit;
+        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
-    function setBaseURI(string memory baseURI_) external onlyOwner {
+    function setBaseURI(string memory baseURI_)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         baseURI = baseURI_;
     }
 
-    function setLizardRoot(bytes32 _root) external onlyOwner {
+    function setLizardRoot(bytes32 _root)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         lizardRoot = _root;
-    }
-
-    function setTimeLimit(uint256 _timeLimit) external onlyOwner {
-        timeLimit = _timeLimit;
     }
 
     function getMessageHash(address recipient, uint256 blockNumber)
@@ -58,7 +55,7 @@ contract Lizard is ERC721, ERC721Burnable, Ownable2Step {
         bytes calldata lizardSignature,
         bytes32[] calldata lizardProof,
         address recipient
-    ) public onlyOwner {
+    ) public onlyRole(MINTER_ROLE) {
         bytes32 messageHash = getMessageHash(recipient, signatureBlockNumber);
         address signer = messageHash.recover(lizardSignature);
 
@@ -74,22 +71,23 @@ contract Lizard is ERC721, ERC721Burnable, Ownable2Step {
 
         require(proofValid, "Signer is not a lizard");
 
-        address sender = _msgSender();
+        require(!minted[recipient], "Already minted");
 
-        uint256 lastMint = lastMintTimestamp[lizard][sender];
-        if (lastMint != 0) {
-            require(
-                block.timestamp > lastMint + timeLimit,
-                "Exceeded mint rate limit"
-            );
-        }
-
-        lastMintTimestamp[lizard][sender] = block.timestamp;
+        minted[recipient] = true;
 
         _safeMint(recipient, ++counter);
     }
 
     function _baseURI() internal view override returns (string memory) {
         return baseURI;
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, AccessControl)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }

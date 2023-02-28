@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
+import "openzeppelin-contracts/metatx/MinimalForwarder.sol";
 import "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
 
 import "../src/Lizard.sol";
@@ -13,33 +14,28 @@ contract CounterTest is Test {
         0x6516e9023c69d23b0e7acfe325d6ac80d903995bfa8e6c21cfd69c29641dcb88;
 
     function testMint() public {
-        Lizard lizard = new Lizard(baseURI, lizardRoot, 1 hours);
+        Lizard lizard = new Lizard(baseURI, lizardRoot);
+
+        lizard.grantRole(lizard.MINTER_ROLE(), address(this));
+
+        bytes memory sig;
+        bytes32[] memory proof;
 
         bytes32 hash = lizard.getMessageHash(vm.addr(10), block.number);
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, hash);
-        bytes memory sig = abi.encodePacked(r, s, v);
+        sig = abi.encodePacked(r, s, v);
 
         string memory proofData = vm.readFile("./test/proofs/proof-1.json");
         bytes memory proofJson = vm.parseJson(proofData);
-        bytes32[] memory proof = abi.decode(proofJson, (bytes32[]));
+        proof = abi.decode(proofJson, (bytes32[]));
 
         lizard.mint(vm.addr(1), block.number, sig, proof, vm.addr(10));
 
+        assertEq(lizard.minted(vm.addr(10)), true);
         assertEq(lizard.ownerOf(1), vm.addr(10));
         assertEq(lizard.balanceOf(vm.addr(10)), 1);
 
-        assertEq(
-            lizard.lastMintTimestamp(vm.addr(1), address(this)),
-            block.timestamp
-        );
-
         vm.expectRevert();
         lizard.mint(vm.addr(1), block.number, sig, proof, vm.addr(10));
-
-        vm.warp(block.timestamp + 2 hours);
-        lizard.mint(vm.addr(1), block.number, sig, proof, vm.addr(10));
-
-        assertEq(lizard.ownerOf(2), vm.addr(10));
-        assertEq(lizard.balanceOf(vm.addr(10)), 2);
     }
 }

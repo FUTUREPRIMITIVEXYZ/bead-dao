@@ -5,20 +5,13 @@ import { RainbowKitProvider, getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [
-    goerli,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? [goerli] : []),
-  ],
+  [goerli],
   [
     alchemyProvider({
-      // This is Alchemy's default API key.
-      // You can get your own at https://dashboard.alchemyapi.io
-      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "",
+      apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!,
     }),
-    publicProvider(),
   ]
 );
 
