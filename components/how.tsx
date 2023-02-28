@@ -13,7 +13,7 @@ export const How: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
         <div
           className="object-cover"
           dangerouslySetInnerHTML={{
-            __html: `<video className="app__backgroundVideo" autoplay loop muted playsinline>
+            __html: `<video className="app__backgroundVideo" autoPlay loop muted playsinline>
       <source src=/taplizz.webm type="video/mp4" />
       Your browser does not support the video tag.
 </video>`,
