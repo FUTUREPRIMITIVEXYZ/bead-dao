@@ -82,19 +82,13 @@ const Scan: NextPage = () => {
       <Background>
         <div className="flex flex-col justify-center items-center h-full">
           <div className="relative ">
-            {/* <video
+            <video
               className="object-cover h-[353px] w-[367px]"
               src="/lizzlfying.webm"
-              autoPlay
-              loop
-            /> */}
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `<video className="app__backgroundVideo" autoplay loop muted playsinline>
-      <source src=/lizzlfying.webm type="video/mp4" />
-      Your browser does not support the video tag.
-</video>`,
-              }}
+              autoPlay={true}
+              loop={true}
+              muted={true}
+              playsInline={true}
             />
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
               <Button onClick={scan}>
