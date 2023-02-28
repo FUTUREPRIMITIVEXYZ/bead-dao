@@ -31,8 +31,6 @@ const Address: NextPage = () => {
     ? queryAddress[0]
     : queryAddress;
 
-  console.log({ query, queryAddress });
-
   useEffect(() => {
     async function getEnsName() {
       if (queryAddress) {
@@ -113,7 +111,7 @@ const Address: NextPage = () => {
         ) : (
           <div>
             {addressFromUrl && data && data.length !== 0 && (
-              <>
+              <div className="flex flex-col justify-center items-center">
                 <div className="flex justify-end items-center w-full p-5">
                   <RefreshIcon handleClick={() => refetch()} />
                 </div>
@@ -129,7 +127,7 @@ const Address: NextPage = () => {
                   }
                   balance={beadData.balance}
                 />
-              </>
+              </div>
             )}
             {/* {displayChildren && (
               <Card>

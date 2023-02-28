@@ -4,11 +4,13 @@ import WalletIcon from "./walletIcon";
 import { OpenSeaIcon } from "./openseaIcon";
 import { EtherscanIcon } from "./etherscanIcon";
 import { TwitterIcon } from "./twitterIcon";
+import { Bead } from "./bead";
 
 const Balance = ({ balance }: { balance: number }) => {
   return (
-    <div className="absolute z-50 top-[10px] right-[10px] bg-address-text/[0.2] px-2 py-2 rounded-lg font-bold">
-      x{balance}
+    <div className="absolute z-50 flex justify-center items-center space-x-1 top-[10px] right-[10px] bg-white/[0.5] px-2 py-2 rounded-lg font-bold">
+      <div>{balance}</div>
+      <Bead />
     </div>
   );
 };
@@ -96,13 +98,6 @@ export const NftViewer: React.FC<
             rel="noreferrer"
           >
             <EtherscanIcon />
-          </a>
-          <a
-            href={`https://twitter.com/ilovebeadz`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <TwitterIcon />
           </a>
         </div>
       </div>
