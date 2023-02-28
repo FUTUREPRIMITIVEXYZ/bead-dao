@@ -27,6 +27,7 @@ function useGetNfts({ address }: UseOwnerNftParam) {
         address: nft.contract.address,
         format: nft.media[0]?.format || "jpeg",
         tokenId: nft.tokenId,
+        contract: nft.contract.address,
       };
     });
   });
