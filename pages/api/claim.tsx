@@ -55,10 +55,11 @@ const claimHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   }
 
-  const { data: updatedData, error } = await supabase
+  const { error } = await supabase
     .from("lizards")
     .update({
-      beadCount: data.beadCount + process.env.BEAD_COUNT_PER_CLAIM!,
+      beadCount:
+        parseInt(data.beadCount) + parseInt(process.env.BEAD_COUNT_PER_CLAIM!),
       lastClaim: { ...data.lastClaim, [keyAddress]: new Date() },
     })
     .eq("tokenContract", ethers.utils.getAddress(lizard.contract.address))
@@ -69,7 +70,7 @@ const claimHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   console.log(data);
 
-  return res.json(updatedData);
+  return res.json({});
 };
 
 export default claimHandler;
