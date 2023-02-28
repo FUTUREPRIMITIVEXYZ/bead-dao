@@ -153,7 +153,12 @@ const Scan: NextPage = () => {
       loading: (
         <div>
           Waiting for signature... (
-          <a href={deeplink} target="_blank" className="underline">
+          <a
+            href={deeplink}
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
             Open Wallet
           </a>
           )
