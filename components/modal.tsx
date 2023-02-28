@@ -38,7 +38,7 @@ export const Modal: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           </div>
         </div>
       </div>
-      <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+      <div className="opacity-80 fixed inset-0 z-40 bg-black"></div>
     </div>
   );
 };

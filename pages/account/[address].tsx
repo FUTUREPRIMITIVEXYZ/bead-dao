@@ -12,6 +12,7 @@ import useGetBeads from "../../utils/hooks/useGetBeads";
 import { Modal } from "../../components/modal";
 import { MintSuccess } from "../../components/mintSuccess";
 import { BeadSuccess } from "../../components/beadSuccess";
+import { BeadLoading } from "../../components/beadLoading";
 
 const Address: NextPage = () => {
   const [ensName, setEnsName] = useState<string | undefined>();
@@ -30,7 +31,7 @@ const Address: NextPage = () => {
 
   const router = useRouter();
   const { query } = router;
-  const { address: queryAddress, beadClaim, minted } = query;
+  const { address: queryAddress, beadClaim, minted, beadLoading } = query;
 
   const addressFromUrl = Array.isArray(queryAddress)
     ? queryAddress[0]
@@ -165,6 +166,7 @@ const Address: NextPage = () => {
           {modalContent}
         </Modal>
       )}
+      {beadLoading === "true" && <BeadLoading />}
     </div>
   );
 };

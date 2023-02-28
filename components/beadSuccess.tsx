@@ -19,7 +19,7 @@ export const BeadSuccess: React.FC<
         />
       </div>
 
-      <h1 className="font-bold">Congratulations on minting a bead!</h1>
+      <h1 className="font-bold text-xl">{"You've minted a bead!"}</h1>
     </div>
   );
 };

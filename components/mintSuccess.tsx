@@ -26,7 +26,7 @@ export const MintSuccess: React.FC<
         Collect BEADZ, grow your governance stake and meet fellow lizard people!
       </p>
       <Link href="/">
-        <div className="py-3 px-8 font-bold text-xl text-white bg-black rounded-full cursor-pointer">
+        <div className="py-3 px-8 my-7 font-bold text-xl text-white bg-black rounded-full cursor-pointer">
           How to Play
         </div>
       </Link>
