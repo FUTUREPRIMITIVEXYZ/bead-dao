@@ -8,8 +8,13 @@ const votingWeightsHandler = async (
   res: NextApiResponse
 ) => {
   const { account } = req.query;
+  if (!account) {
+    return res.status(400).json({ error: "account is required" });
+  }
 
-  const nfts = await alchemy.nft.getNftsForOwner(account, {
+  const accountToFetch = Array.isArray(account) ? account[0] : account;
+
+  const nfts = await alchemy.nft.getNftsForOwner(accountToFetch, {
     contractAddresses: [process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!],
   });
 
