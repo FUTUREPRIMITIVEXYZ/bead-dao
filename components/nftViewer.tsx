@@ -5,6 +5,7 @@ import { OpenSeaIcon } from "./openseaIcon";
 import { EtherscanIcon } from "./etherscanIcon";
 import { TwitterIcon } from "./twitterIcon";
 import { Balance } from "./balance";
+import Link from "next/link";
 
 export interface Nft {
   image: string;
@@ -55,7 +56,6 @@ export const NftViewer: React.FC<
         <div className="mb-4 flex items-center space-x-2 justify-start font-bold text-address-color-secondary">
           <WalletIcon height={25} width={24} />
           <span className="whitespace-nowrap">Owned by</span>
-          <Balance balance={balance} />
           <a href={"/"} className="cursor-pointer">
             {/* {addressToFetch && ( */}
             <span className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
@@ -65,6 +65,17 @@ export const NftViewer: React.FC<
           </a>
         </div>
         <h1 className="text-3xl font-bold">{nft.name}</h1>
+        <div className="flex justify-between items-end w-full">
+          <div>
+            <div className="font-bold text-sm">My Bead power</div>
+            <Balance balance={balance} />
+          </div>
+          <Link href="/governanceBoard">
+            <div className="cursor-pointer text-medium text-white font-bold bg-black py-2 px-4 rounded-full">
+              Governance Board
+            </div>
+          </Link>
+        </div>
         {/* <AddressBar
                 text={
                   data
