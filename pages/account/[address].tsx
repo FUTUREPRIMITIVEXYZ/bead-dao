@@ -13,6 +13,9 @@ import { Modal } from "../../components/modal";
 import { MintSuccess } from "../../components/mintSuccess";
 import { BeadSuccess } from "../../components/beadSuccess";
 import { BeadLoading } from "../../components/beadLoading";
+import { GetServerSideProps } from "next";
+
+import useSWR from "swr";
 
 const Address: NextPage = () => {
   const [ensName, setEnsName] = useState<string | undefined>();
@@ -36,6 +39,13 @@ const Address: NextPage = () => {
   const addressFromUrl = Array.isArray(queryAddress)
     ? queryAddress[0]
     : queryAddress;
+
+  const { data: beadData, error: beadError } = useSWR(
+    `/api/${addressFromUrl}/lizard`,
+    async (url) => fetch(url).then((res) => res.json())
+  );
+
+  console.log(beadData, beadError);
 
   useEffect(() => {
     async function getEnsName() {
@@ -65,11 +75,6 @@ const Address: NextPage = () => {
       router.push("/scan");
     }
   }, [isValidating, isLoading, data, data?.length, router]);
-
-  const { data: beadData } = useGetBeads(
-    displayedNft.contract,
-    displayedNft.tokenId
-  );
 
   useEffect(() => {
     if (data && data.length) {
@@ -149,7 +154,7 @@ const Address: NextPage = () => {
                         )}`
                       : "")
                   }
-                  balance={beadData.balance}
+                  balance={beadData?.beadCount}
                 />
               </div>
             )}
