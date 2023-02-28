@@ -31,7 +31,7 @@ const Address: NextPage = () => {
 
   const [displayedNft, setDisplayedNft] = useState<DisplayedNft>({
     image: "/liz-nft.png",
-    name: "default",
+    name: "No lizards. Go mint",
     address: "",
     format: "jpeg",
     contract: "",
@@ -77,7 +77,7 @@ const Address: NextPage = () => {
   } = useGetNfts({ address: addressToFetch });
 
   useEffect(() => {
-    if (!tokenId && data) {
+    if (!tokenId && data && data.length) {
       setDisplayedNft({
         image: data[0].image,
         name: data[0].name,
@@ -105,6 +105,12 @@ const Address: NextPage = () => {
       return;
     }
   }, [data, tokenId, addressToFetch]);
+
+  useEffect(() => {
+    if ((data && !data.length) || data?.length === 1) {
+      setDisplayChildren(false);
+    }
+  }, [data]);
 
   const handleClick = (tokenId: string) => {
     router.push(`/account/${addressToFetch}/?tokenId=${tokenId}`);
