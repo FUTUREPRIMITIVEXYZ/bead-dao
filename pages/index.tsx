@@ -33,7 +33,7 @@ const Home: NextPage = () => {
     },
     // commenting out for now as leader board is not finished and mint can only be accessed via scan
     {
-      link: "/governanceBoard",
+      link: "/governance",
       text: "Governance Board",
     },
     // {
