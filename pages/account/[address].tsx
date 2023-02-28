@@ -245,14 +245,16 @@ const Address: NextPage = () => {
               /> */}
                 <div className="flex items-center justify-start space-x-4">
                   <a
-                    href={`https://opensea.io/assets/ethereum/${displayedNft.contract}/${displayedNft.tokenId}`}
+                    href={`https://https://testnets.opensea.io/assets/ethereum/${displayedNft.contract}/${displayedNft.tokenId}`}
                     target="_blank"
                     rel="noreferrer"
                   >
                     <OpenSeaIcon />
                   </a>
                   <a
-                    href={`https://etherscan.io/address/${address || ""}`}
+                    href={`https://goerli.etherscan.io/address/${
+                      displayedNft.contract || ""
+                    }`}
                     target="_blank"
                     rel="noreferrer"
                   >
