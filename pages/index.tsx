@@ -32,10 +32,10 @@ const Home: NextPage = () => {
       modalContent: <How />,
     },
     // commenting out for now as leader board is not finished and mint can only be accessed via scan
-    // {
-    //   link: "/leaderBoard",
-    //   text: "Leader Board",
-    // },
+    {
+      link: "/governanceBoard",
+      text: "Governance Board",
+    },
     // {
     //   link: "/scan",
     //   text: "Mint",

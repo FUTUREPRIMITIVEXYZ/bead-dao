@@ -4,16 +4,7 @@ import WalletIcon from "./walletIcon";
 import { OpenSeaIcon } from "./openseaIcon";
 import { EtherscanIcon } from "./etherscanIcon";
 import { TwitterIcon } from "./twitterIcon";
-import { Bead } from "./bead";
-
-const Balance = ({ balance }: { balance: number }) => {
-  return (
-    <div className="absolute z-50 flex justify-center items-center space-x-1 top-[10px] right-[10px] bg-white/[0.5] px-2 py-2 rounded-lg font-bold">
-      <div>{balance}</div>
-      <Bead />
-    </div>
-  );
-};
+import { Balance } from "./balance";
 
 export interface Nft {
   image: string;
@@ -36,7 +27,6 @@ export const NftViewer: React.FC<
   return (
     <Card className={className}>
       <div className="flex flex-col space-y-4 items-start justify-center">
-        <Balance balance={balance} />
         {!nft.format ? (
           <Image
             className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
@@ -65,6 +55,7 @@ export const NftViewer: React.FC<
         <div className="mb-4 flex items-center space-x-2 justify-start font-bold text-address-color-secondary">
           <WalletIcon height={25} width={24} />
           <span className="whitespace-nowrap">Owned by</span>
+          <Balance balance={balance} />
           <a href={"/"} className="cursor-pointer">
             {/* {addressToFetch && ( */}
             <span className="rounded-3xl bg-address py-1 px-4 cursor-pointer">

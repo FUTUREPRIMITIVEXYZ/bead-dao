@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { fetchEnsName } from "@wagmi/core";
 import { Board } from "../components/board";
 
-const Address: NextPage = () => {
+const GovernanceBoard: NextPage = () => {
   const [ensName, setEnsName] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const { address } = useAccount();
@@ -38,7 +38,7 @@ const Address: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Background>
+      <Background display="block">
         {isLoading ? (
           <div className="flex flex-col justify-center items-center h-full">
             <div className="relative ">
@@ -56,11 +56,13 @@ const Address: NextPage = () => {
             </div>
           </div>
         ) : (
-          <Board address={address} />
+          <div className="my-o mx-auto">
+            <Board address={address} />
+          </div>
         )}
       </Background>
     </div>
   );
 };
 
-export default Address;
+export default GovernanceBoard;

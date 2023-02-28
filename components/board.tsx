@@ -1,22 +1,27 @@
 import Image from "next/image";
 import { Card } from "./card";
+import { Balance } from "./balance";
 
 interface RowProps {
   name: string;
   balance: number;
+  isUser: boolean;
 }
 
 const Row: React.FC<RowProps & React.HTMLAttributes<HTMLDivElement>> = ({
   className,
   name,
   balance,
+  isUser,
 }) => {
   return (
     <div
-      className={`${className} flex justify-between items-center w-full max-w-[286px] p-3 rounded-xl bg-white border-[1px] border-solid border-address-text`}
+      className={`${className} flex justify-between items-center w-full p-3 rounded-xl bg-white border-solid ${
+        isUser ? "border-black border-4" : "border-address-text border-[1px]"
+      }`}
     >
       <div>{name}</div>
-      <div>balance</div>
+      <Balance balance={balance} />
     </div>
   );
 };
@@ -33,40 +38,74 @@ export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
     {
       name: "megaliz.eth",
       balance: 93,
+      address: "0x1234",
     },
     {
       name: "gammaray.eth",
       balance: 88,
+      address: "0xF897f6250Ea36e3D9b87Bc9728d6e6Bf3136B079",
     },
     {
       name: "0x123...325",
       balance: 47,
+      address: "0x1234",
     },
     {
       name: "0x123...325",
       balance: 30,
+      address: "0x1234",
     },
     {
       name: "0x123...325",
       balance: 30,
+      address: "0x1234",
     },
     {
       name: "0x123...325",
       balance: 15,
+      address: "0x1234",
+    },
+    {
+      name: "0x123...325",
+      balance: 15,
+      address: "0x1234",
+    },
+    {
+      name: "0x123...325",
+      balance: 15,
+      address: "0x1234",
+    },
+    {
+      name: "0x123...325",
+      balance: 15,
+      address: "0x1234",
+    },
+    {
+      name: "0x123...325",
+      balance: 15,
+      address: "0x1234",
     },
   ];
 
   return (
-    <Card className={className}>
-      <div className="flex flex-col space-y-4 items-start justify-center">
+    <Card className={`${className} my-0 mx-auto `}>
+      <div className="flex flex-col space-y-4 items-start justify-center h-full">
         <h1 className="w-full text-center font-bold text-2xl">
           Lizard Leader Board
         </h1>
-        <div>
+        <div className="flex flex-col space-y-2 items-center justify-center w-full overflow-scroll h-full">
           {leaderBoard.map((row, i) => (
-            <Row key={i} name={row.name} balance={row.balance} />
+            <Row
+              key={i}
+              name={row.name}
+              balance={row.balance}
+              isUser={row.address === address}
+            />
           ))}
         </div>
+      </div>
+      <div className="bottom-8 mx-auto fixed py-3 px-6 bg-black text-white font-2xl font-bold rounded-full">
+        View Proposal
       </div>
     </Card>
   );
