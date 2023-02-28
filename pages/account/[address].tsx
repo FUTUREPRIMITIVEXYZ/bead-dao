@@ -69,7 +69,12 @@ const Address: NextPage = () => {
     getEnsName();
   }, [addressToFetch]);
 
-  const { data } = useGetNfts({ address: addressToFetch });
+  const {
+    data,
+    mutate: refetch,
+    isValidating,
+    isLoading,
+  } = useGetNfts({ address: addressToFetch });
 
   useEffect(() => {
     if (!tokenId && data) {
@@ -116,58 +121,100 @@ const Address: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background>
-        <div>
-          <Card>
-            <div className="flex flex-col space-y-4 items-start justify-center">
-              {!displayedNft.format ? (
-                <Image
-                  className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
-                  height={348}
-                  width={348}
-                  alt="beaded lizard image"
-                  src={"/liz-nft.png"}
-                />
-              ) : (
-                <>
-                  {displayedNft.format === "mp4" ||
-                  displayedNft.format === "webm" ? (
-                    <div className="h-[348px] w-[348px]">
-                      <video
-                        className="object-cover"
-                        src={displayedNft.image}
-                        autoPlay
-                        loop
-                      />
-                    </div>
-                  ) : (
-                    <Image
-                      className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
-                      height={348}
-                      width={348}
-                      alt="beaded lizard image"
-                      src={displayedNft.image || "/liz-nft.png"}
-                    />
-                  )}
-                </>
-              )}
-              <div className="mb-4 flex items-center space-x-2 justify-start font-bold text-address-color-secondary">
-                <WalletIcon height={25} width={24} />
-                <span className="whitespace-nowrap">Owned by</span>
-                <a href={"/"} className="cursor-pointer">
-                  {addressToFetch && (
-                    <span className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
-                      {ensName ||
-                        `${addressToFetch.slice(0, 4)}...${addressToFetch.slice(
-                          -4
-                        )}`}
-                    </span>
-                  )}
-                </a>
+        {isValidating || isLoading ? (
+          <div className="flex flex-col justify-center items-center h-full">
+            <div className="relative ">
+              <video
+                className="object-cover h-[353px] w-[367px]"
+                src="/lizzlfying.webm"
+                autoPlay
+                loop
+              />
+              <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                <div className="py-3 px-4 text-3xl whitespace-nowrap text-white rounded-full cursor-pointer font-bold">
+                  LOADING....
+                </div>
               </div>
-              {data && (
-                <h1 className="text-3xl font-bold">{displayedNft.name}</h1>
-              )}
-              {/* <AddressBar
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="flex justify-end items-center w-full p-5">
+              <div
+                className="inline-block cursor-pointer bg-white rounded-md shadow-lg p-2 border-[1px] border-solid border-link-box-text md:border-none"
+                onClick={() => {
+                  console.log("getting clicked");
+                  refetch();
+                }}
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M15.3185 7.25873V3.5589C15.3185 3.24417 14.9408 3.0903 14.724 3.31411L13.479 4.55904C12.2131 3.29313 10.4087 2.56575 8.43634 2.7406C5.50585 3.00637 3.09292 5.36335 2.77119 8.29384C2.35155 12.0846 5.31002 15.3018 9.02384 15.3018C12.2341 15.3018 14.8848 12.8959 15.2695 9.79056C15.3185 9.37092 14.9897 9.00723 14.5701 9.00723C14.2204 9.00723 13.9266 9.26601 13.8847 9.60872C13.5839 12.0496 11.4787 13.938 8.9539 13.903C6.35912 13.8681 4.17 11.6789 4.12803 9.07717C4.08607 6.34951 6.30317 4.11143 9.02384 4.11143C10.3737 4.11143 11.5976 4.66395 12.4859 5.5452L11.0241 7.00695C10.8003 7.23075 10.9542 7.60843 11.2689 7.60843H14.9688C15.1646 7.60843 15.3185 7.45456 15.3185 7.25873Z"
+                    fill="#5F6368"
+                  />
+                </svg>
+              </div>
+            </div>
+            <Card>
+              <div className="flex flex-col space-y-4 items-start justify-center">
+                {!displayedNft.format ? (
+                  <Image
+                    className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
+                    height={348}
+                    width={348}
+                    alt="beaded lizard image"
+                    src={"/liz-nft.png"}
+                  />
+                ) : (
+                  <>
+                    {displayedNft.format === "mp4" ||
+                    displayedNft.format === "webm" ? (
+                      <div className="h-[348px] w-[348px]">
+                        <video
+                          className="object-cover"
+                          src={displayedNft.image}
+                          autoPlay
+                          loop
+                        />
+                      </div>
+                    ) : (
+                      <Image
+                        className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
+                        height={348}
+                        width={348}
+                        alt="beaded lizard image"
+                        src={displayedNft.image || "/liz-nft.png"}
+                      />
+                    )}
+                  </>
+                )}
+                <div className="mb-4 flex items-center space-x-2 justify-start font-bold text-address-color-secondary">
+                  <WalletIcon height={25} width={24} />
+                  <span className="whitespace-nowrap">Owned by</span>
+                  <a href={"/"} className="cursor-pointer">
+                    {addressToFetch && (
+                      <span className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
+                        {ensName ||
+                          `${addressToFetch.slice(
+                            0,
+                            4
+                          )}...${addressToFetch.slice(-4)}`}
+                      </span>
+                    )}
+                  </a>
+                </div>
+                {data && (
+                  <h1 className="text-3xl font-bold">{displayedNft.name}</h1>
+                )}
+                {/* <AddressBar
                 text={
                   data
                     ? `${data[0].address.slice(0, 4)}...${data[0].address.slice(
@@ -177,81 +224,83 @@ const Address: NextPage = () => {
                 }
                 link={`https://etherscan.io/address/${addressToFetch}`}
               /> */}
-              <div className="flex items-center justify-start space-x-4">
-                <a
-                  href={`https://opensea.io/assets/ethereum/${displayedNft.contract}/${displayedNft.tokenId}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <OpenSeaIcon />
-                </a>
-                <a
-                  href={`https://etherscan.io/address/${address || ""}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <EtherscanIcon />
-                </a>
-                <a
-                  href={`https://twitter.com/ilovebeadz`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <TwitterIcon />
-                </a>
-              </div>
-            </div>
-          </Card>
-          {displayChildren && (
-            <Card>
-              <div className="grid grid-cols-2 gap-4 place-content-between">
-                {(data || []).map((lizard, i) => (
-                  <div
-                    key={i}
-                    className="w-full overflow-hidden cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleClick(lizard.tokenId);
-                    }}
+                <div className="flex items-center justify-start space-x-4">
+                  <a
+                    href={`https://opensea.io/assets/ethereum/${displayedNft.contract}/${displayedNft.tokenId}`}
+                    target="_blank"
+                    rel="noreferrer"
                   >
-                    {!lizard.format ? (
-                      <Image
-                        className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
-                        height={154}
-                        width={154}
-                        alt="beaded lizard image"
-                        src={"/liz-nft.png"}
-                      />
-                    ) : (
-                      <>
-                        {lizard.format === "mp4" || lizard.format === "webm" ? (
-                          <div className="h-[154px] w-[154px]">
-                            <video
-                              className="object-cover"
-                              src={lizard.image}
-                              autoPlay
-                              loop
-                            />
-                          </div>
-                        ) : (
-                          <Image
-                            className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
-                            height={154}
-                            width={154}
-                            alt="beaded lizard imaged"
-                            src={lizard.image || "/liz-nft.png"}
-                          />
-                        )}
-                      </>
-                    )}
-                    <div className="font-xm font-bold">{lizard.name}</div>
-                    <AddressBar text={lizard.name} link="/" size="sm" />
-                  </div>
-                ))}
+                    <OpenSeaIcon />
+                  </a>
+                  <a
+                    href={`https://etherscan.io/address/${address || ""}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <EtherscanIcon />
+                  </a>
+                  <a
+                    href={`https://twitter.com/ilovebeadz`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <TwitterIcon />
+                  </a>
+                </div>
               </div>
             </Card>
-          )}
-        </div>
+            {displayChildren && (
+              <Card>
+                <div className="grid grid-cols-2 gap-4 place-content-between">
+                  {(data || []).map((lizard, i) => (
+                    <div
+                      key={i}
+                      className="w-full overflow-hidden cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleClick(lizard.tokenId);
+                      }}
+                    >
+                      {!lizard.format ? (
+                        <Image
+                          className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
+                          height={154}
+                          width={154}
+                          alt="beaded lizard image"
+                          src={"/liz-nft.png"}
+                        />
+                      ) : (
+                        <>
+                          {lizard.format === "mp4" ||
+                          lizard.format === "webm" ? (
+                            <div className="h-[154px] w-[154px]">
+                              <video
+                                className="object-cover"
+                                src={lizard.image}
+                                autoPlay
+                                loop
+                              />
+                            </div>
+                          ) : (
+                            <Image
+                              className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
+                              height={154}
+                              width={154}
+                              alt="beaded lizard imaged"
+                              src={lizard.image || "/liz-nft.png"}
+                            />
+                          )}
+                        </>
+                      )}
+                      <div className="font-xm font-bold">{lizard.name}</div>
+                      <AddressBar text={lizard.name} link="/" size="sm" />
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            )}
+          </div>
+        )}
       </Background>
     </div>
   );
