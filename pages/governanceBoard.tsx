@@ -56,7 +56,7 @@ const GovernanceBoard: NextPage = () => {
             </div>
           </div>
         ) : (
-          <div className="my-o mx-auto">
+          <div className="my-o mx-auto p-2">
             <Board address={address} />
           </div>
         )}

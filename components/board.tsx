@@ -91,7 +91,7 @@ export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
     <Card className={`${className} my-0 mx-auto `}>
       <div className="flex flex-col space-y-4 items-start justify-center h-full">
         <h1 className="w-full text-center font-bold text-2xl">
-          Lizard Leader Board
+          Governance Board
         </h1>
         <div className="flex flex-col space-y-2 items-center justify-center w-full overflow-scroll h-full">
           {leaderBoard.map((row, i) => (
@@ -104,7 +104,7 @@ export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           ))}
         </div>
       </div>
-      <div className="bottom-8 mx-auto fixed py-3 px-6 bg-black text-white font-2xl font-bold rounded-full">
+      <div className="bottom-10 mx-auto left-[50%] translate-x-[-50%] fixed py-3 px-6 bg-black text-white text-xl font-bold rounded-full">
         View Proposal
       </div>
     </Card>
