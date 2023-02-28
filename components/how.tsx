@@ -7,15 +7,22 @@ export const How: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
 }) => {
   return (
     <div className="max-w-[344px] flex flex-col justify-center items-center">
-      <div className="border-4 border-solid border-black rounded-2xl h-[322px] w-[322px] m-0">
-        <video
+      <div className="border-4 border-solid border-black rounded-2xl h-[322px] w-[322px] m-0 overflow-hidden">
+        <Image
+          alt="how to mint gif."
+          height={322}
+          width={322}
+          objectFit="cover"
+          src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNTlmM2VjMDY5NGMzYjI0M2NhOTRkZjIwNTE5MzZhNzg0M2I4YzRkMCZjdD1n/eXGdPytWhNARxFCXrD/giphy.gif"
+        />
+        {/* <video
           className="object-cover"
           src="/taplizz.webm"
           autoPlay={true}
           loop={true}
           muted={true}
           playsInline={true}
-        />
+        /> */}
       </div>
       <div className="flex flex-col justify-center items-start max-w-[322px] space-y-4 my-4">
         <h1 className="font-bold text-2xl">Tap Lizards to Mint!</h1>
