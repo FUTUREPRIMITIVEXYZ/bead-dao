@@ -8,7 +8,17 @@ export const How: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
   return (
     <div className="max-w-[344px] flex flex-col justify-center items-center">
       <div className="border-4 border-solid border-black rounded-2xl h-[322px] w-[322px] m-0">
-        <video className="object-cover" src="/taplizz.webm" autoPlay loop />
+        {/* <video className="object-cover" src="/taplizz.webm" autoPlay loop /> */}
+
+        <div
+          className="object-cover"
+          dangerouslySetInnerHTML={{
+            __html: `<video className="app__backgroundVideo" autoplay loop muted playsinline>
+      <source src=/taplizz.webm type="video/mp4" />
+      Your browser does not support the video tag.
+</video>`,
+          }}
+        />
       </div>
       <div className="flex flex-col justify-center items-start max-w-[322px] space-y-4 my-4">
         <h1 className="font-bold text-2xl">Tap Lizards to Mint!</h1>
