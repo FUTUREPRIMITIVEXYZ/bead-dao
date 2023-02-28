@@ -9,9 +9,14 @@ import { fetchEnsName } from "@wagmi/core";
 import { NftViewer, Nft } from "../../components/nftViewer";
 import { RefreshIcon } from "../../components/refreshIcon";
 import useGetBeads from "../../utils/hooks/useGetBeads";
+import { Modal } from "../../components/modal";
+import { MintSuccess } from "../../components/mintSuccess";
+import { BeadSuccess } from "../../components/beadSuccess";
 
 const Address: NextPage = () => {
   const [ensName, setEnsName] = useState<string | undefined>();
+  const [showModal, setShowModal] = useState(false);
+  const [modalContent, setModalContent] = useState<any>(null);
 
   const [displayedNft, setDisplayedNft] = useState<Nft>({
     image: "/liz-nft.png",
@@ -25,7 +30,7 @@ const Address: NextPage = () => {
 
   const router = useRouter();
   const { query } = router;
-  const { address: queryAddress } = query;
+  const { address: queryAddress, beadClaim, minted } = query;
 
   const addressFromUrl = Array.isArray(queryAddress)
     ? queryAddress[0]
@@ -81,6 +86,24 @@ const Address: NextPage = () => {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (minted === "true") {
+      setModalContent(<MintSuccess />);
+      setShowModal(true);
+
+      return;
+    }
+
+    if (beadClaim === "true") {
+      setModalContent(<BeadSuccess />);
+      setShowModal(true);
+
+      return;
+    }
+  }, [minted, beadClaim]);
+
+  console.log({ showModal, modalContent });
+
   return (
     <div>
       <Head>
@@ -129,59 +152,19 @@ const Address: NextPage = () => {
                 />
               </div>
             )}
-            {/* {displayChildren && (
-              <Card>
-                <div className="grid grid-cols-2 gap-4 place-content-between">
-                  {(data || []).map((lizard, i) => (
-                    <div
-                      key={i}
-                      className="w-full overflow-hidden cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleClick(lizard.tokenId);
-                      }}
-                    >
-                      {!lizard.format ? (
-                        <Image
-                          className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
-                          height={154}
-                          width={154}
-                          alt="beaded lizard image"
-                          src={"/liz-nft.png"}
-                        />
-                      ) : (
-                        <>
-                          {lizard.format === "mp4" ||
-                          lizard.format === "webm" ? (
-                            <div className="h-[154px] w-[154px]">
-                              <video
-                                className="object-cover"
-                                src={lizard.image}
-                                autoPlay
-                                loop
-                              />
-                            </div>
-                          ) : (
-                            <Image
-                              className="bg-contain h-full w-full border-2 border-solid border-black rounded-2xl overflow-hidden"
-                              height={154}
-                              width={154}
-                              alt="beaded lizard imaged"
-                              src={lizard.image || "/liz-nft.png"}
-                            />
-                          )}
-                        </>
-                      )}
-                      <div className="font-xm font-bold">{lizard.name}</div>
-                      <AddressBar text={lizard.name} link="/" size="sm" />
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            )} */}
           </div>
         )}
       </Background>
+      {showModal && (
+        <Modal
+          onClose={() => {
+            setModalContent(null);
+            setShowModal(false);
+          }}
+        >
+          {modalContent}
+        </Modal>
+      )}
     </div>
   );
 };
