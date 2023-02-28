@@ -70,7 +70,7 @@ export const NftViewer: React.FC<
             <div className="font-bold text-sm">My Bead power</div>
             <Balance balance={balance} />
           </div>
-          <Link href="/governanceBoard">
+          <Link href="/governance">
             <div className="cursor-pointer text-medium text-white font-bold bg-black py-2 px-4 rounded-full">
               Governance Board
             </div>

@@ -82,7 +82,7 @@ export const How: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           people you meet, the more impact you can have.
         </p>
       </div>
-      <Link href="/">
+      <Link href="/governance">
         <div className="rounded-full text-white bg-black font-bold text-xl py-3 px-6 my-4 mx-auto">
           Governance Board
         </div>
