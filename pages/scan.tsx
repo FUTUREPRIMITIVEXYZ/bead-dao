@@ -199,9 +199,6 @@ const Scan: NextPage = () => {
 
       const { txHash } = response;
 
-      // const txHash =
-      //   "0x45de18eb8bb2cf4cfbf801452581b5821aabc047c7e36436699502d0c0ac67a9";
-
       const getTokenId = async (hash: string): Promise<string> => {
         const tx = await provider.getTransaction(txHash);
         const txPromise = tx.wait();
@@ -219,7 +216,13 @@ const Scan: NextPage = () => {
         success: (tokenId) => (
           <div>
             Lizard minted! (
-            <Link href={`/account/${address}?tokenId=${tokenId}`}>View</Link>)
+            <Link
+              className="underline"
+              href={`/account/${address}?tokenId=${tokenId}`}
+            >
+              View
+            </Link>
+            )
           </div>
         ),
         error: "Error minting lizard",
