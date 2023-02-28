@@ -3,9 +3,8 @@ import {
   DefenderRelaySigner,
   DefenderRelayProvider,
 } from "defender-relay-client/lib/ethers";
-import { ethers } from "ethers";
-
-import LizardForwarder from "../../public/LizardForwarder.json";
+import { BigNumber, ethers } from "ethers";
+import supabase from "../../utils/supabase";
 
 type MintRequest = {
   lizard: string;
@@ -44,13 +43,31 @@ const mintHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   );
 
   try {
-    const tx = await lizardContract.mint(
-      lizard,
-      signatureBlockNumber,
-      lizardSignature,
-      lizardProof,
-      recipient
+    // const tx = await lizardContract.mint(
+    //   lizard,
+    //   signatureBlockNumber,
+    //   lizardSignature,
+    //   lizardProof,
+    //   recipient
+    // );
+    //
+    // const result = tx.wait();
+
+    const tx = await provider.getTransaction(
+      "0x4b4218bdcf449a57611c1773bd7297646011f804b8ea99d25860a69463a10607"
     );
+
+    const result = await tx.wait();
+
+    const mintLog = result.logs[0];
+
+    const mintedTokenId = BigNumber.from(mintLog.topics[3]).toString();
+
+    await supabase.from("lizards").upsert({
+      tokenId: mintedTokenId,
+      tokenContract: process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
+      lastClaim: new Date(),
+    });
 
     return res.json({
       txHash: tx.hash,

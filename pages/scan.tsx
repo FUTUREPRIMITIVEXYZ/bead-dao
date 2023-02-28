@@ -1,34 +1,30 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { Background } from "../components/background";
+import Image from "next/image";
 import { Button } from "../components/button";
 import { ethers } from "ethers";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
-import { useAccount, useSigner } from "wagmi";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { toast, Toaster } from "react-hot-toast";
-import Link from "next/link";
-import { useState } from "react";
+import { useAccount } from "wagmi";
+
+import { useEffect } from "react";
+
 import URL from "url-parse";
+import parseKeys from "../helpers/parseKeys";
+
 import {
   getPublicKeysFromScan,
   getSignatureFromScan,
 } from "pbt-chip-client/kong";
-
-import parseKeys from "../helpers/parseKeys";
-import LizardForwarder from "../public/LizardForwarder.json";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const provider = new ethers.providers.AlchemyProvider(
-  "goerli",
-  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!
+  "homestead",
+  "ZlrIeucrcyJtYsCY9bnsfd3Yw5oM97PJ"
 );
 
 const Scan: NextPage = () => {
-  const { openConnectModal } = useConnectModal();
   const { address } = useAccount();
-  const { data: signer } = useSigner();
-
-  const [mintData, setMintData] = useState<any>(null);
 
   const scan = async () => {
     const url = URL(window.location.href, true);
@@ -57,99 +53,20 @@ const Scan: NextPage = () => {
     if (!tree.verify([keyAddress], proof))
       alert("Sorry, this chip is not a lizard");
 
-    if (!address) {
-      openConnectModal?.();
-      return;
-    }
+    window.location.href = "https://t.me/beaddao";
+    return;
 
-    const { hash, number } = await provider.getBlock("latest");
-
-    if (!address || !signer) alert("Please connect a wallet");
-
-    const signature = await getSignatureFromScan({
-      chipPublicKey: keys.primaryPublicKeyRaw,
-      address: address!,
-      hash,
-    });
-
-    console.log(keyAddress, number, signature, proof, address);
-
-    const mintRequestPayload = {
-      lizard: keyAddress,
-      signatureBlockNumber: number,
-      lizardSignature: signature,
-      lizardProof: proof,
-      recipient: address,
-    };
-
-    const mintRequestPromise = fetch("/api/mint", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(mintRequestPayload),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) throw Error();
-        return res;
-      });
-
-    toast.promise(mintRequestPromise, {
-      loading: "Submitting transaction...",
-      success: "Transaction submitted!",
-      error: "Uh oh, bork",
-    });
-
-    try {
-      const response = await mintRequestPromise;
-      if (response.error) return;
-
-      const { txHash } = response;
-
-      const getTokenId = async (hash: string): Promise<string> => {
-        const tx = await provider.getTransaction(txHash);
-        const txPromise = tx.wait();
-
-        const txResult = await txPromise;
-        const { logs } = txResult;
-        const tokenId = logs[0].topics.at(-1);
-        return ethers.BigNumber.from(tokenId).toString();
-      };
-
-      const tokenIdPromise = getTokenId(txHash);
-
-      toast.promise(tokenIdPromise, {
-        loading: (
-          <div>
-            Waiting for transaction... (
-            <a
-              className="underline"
-              href={`https://goerli.etherscan.io/tx/${txHash}`}
-            >
-              Etherscan
-            </a>
-            )
-          </div>
-        ),
-        success: (tokenId) => (
-          <div>
-            Lizard minted! (
-            <Link
-              className="underline"
-              href={`/account/${address}?tokenId=${tokenId}`}
-            >
-              View
-            </Link>
-            )
-          </div>
-        ),
-        error: "Error minting lizard",
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    // const { hash, number } = await provider.getBlock("latest");
+    //
+    // if (!address) alert("Please connect a wallet");
+    //
+    // const signature = await getSignatureFromScan({
+    //   chipPublicKey: keys.primaryPublicKeyRaw,
+    //   address: address!,
+    //   hash,
+    // });
+    //
+    // console.log(keyAddress, number, signature, proof, address);
   };
 
   return (
@@ -181,16 +98,15 @@ const Scan: NextPage = () => {
               playsInline={true}
             /> */}
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-              <Button onClick={scan} className="mb-4">
+              <Button onClick={scan}>
                 <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
-                  Mint a Lizard!
+                  Join BEAD DAO
                 </div>
               </Button>
             </div>
           </div>
         </div>
       </Background>
-      <Toaster position="bottom-right" />
     </div>
   );
 };
