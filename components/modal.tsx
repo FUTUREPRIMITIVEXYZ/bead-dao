@@ -2,11 +2,13 @@ import React from "react";
 
 interface Props {
   onClose?: () => void;
+  title?: string;
 }
 
 export const Modal: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
   children,
   onClose,
+  title,
 }) => {
   return (
     <div className="">
@@ -33,6 +35,11 @@ export const Modal: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
                   </svg>
                 </div>
               </button>
+              {title && (
+                <div className="absolute translate-y-[-145%] left-[25%] translate-x-[-25%] drop-shadow-xl py-2 px-4 bg-white rounded-full inline-flex justify-center items-center ml-auto border-0 text-black font-bold text-xl">
+                  {title}
+                </div>
+              )}
             </div>
             <div className="p-4 pt-4">{children}</div>
           </div>

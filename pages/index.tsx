@@ -122,6 +122,7 @@ const Home: NextPage = () => {
       </Background>
       {showModal && (
         <Modal
+          title={"How to Play"}
           onClose={() => {
             setModalContent(null);
             setShowModal(false);
