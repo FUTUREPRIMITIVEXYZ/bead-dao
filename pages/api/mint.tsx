@@ -23,8 +23,6 @@ const mintHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     recipient,
   } = req.body as MintRequest;
 
-  console.log(req.body, process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS);
-
   const relayerCredentials = {
     apiKey: process.env.RELAYER_API_KEY!,
     apiSecret: process.env.RELAYER_API_SECRET!,
@@ -43,21 +41,15 @@ const mintHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   );
 
   try {
-    // const tx = await lizardContract.mint(
-    //   lizard,
-    //   signatureBlockNumber,
-    //   lizardSignature,
-    //   lizardProof,
-    //   recipient
-    // );
-    //
-    // const result = tx.wait();
-
-    const tx = await provider.getTransaction(
-      "0x4b4218bdcf449a57611c1773bd7297646011f804b8ea99d25860a69463a10607"
+    const tx = await lizardContract.mint(
+      lizard,
+      signatureBlockNumber,
+      lizardSignature,
+      lizardProof,
+      recipient
     );
 
-    const result = await tx.wait();
+    const result = tx.wait();
 
     const mintLog = result.logs[0];
 
