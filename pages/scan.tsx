@@ -72,107 +72,16 @@ const Scan: NextPage = () => {
       hash,
     });
 
-    const forwarder = new ethers.Contract(
-      process.env.NEXT_PUBLIC_LIZARD_FORWARDER_ADDRESS!,
-      LizardForwarder.abi,
-      provider
-    );
+    console.log(keyAddress, number, signature, proof, address);
 
-    const lizard = new ethers.Contract(
-      process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
-      [
-        "function mint(address lizard, uint256 signatureBlockNumber, bytes lizardSignature, bytes32[] lizardProof, address recipient)",
-      ]
-    );
-
-    const populatedTx = await lizard.populateTransaction.mint(
-      keyAddress,
-      number,
-      signature,
-      proof,
-      address
-    );
-
-    const calldata = populatedTx.data;
-
-    const nonce = await forwarder.callStatic.getNonce(address);
-
-    const messageHash = await forwarder.callStatic.getMessageHash({
-      from: address,
-      to: lizard.address,
-      nonce,
-      data: calldata,
-    });
-
-    const domain = {
-      name: "LizardForwarder",
-      version: "0.0.1",
-      chainId: 5,
-      verifyingContract: forwarder.address,
+    const mintRequestPayload = {
+      lizard: keyAddress,
+      signatureBlockNumber: number,
+      lizardSignature: signature,
+      lizardProof: proof,
+      recipient: address,
     };
 
-    // The named list of all type definitions
-    const types = {
-      ForwardRequest: [
-        { name: "from", type: "address" },
-        { name: "to", type: "address" },
-        { name: "nonce", type: "uint256" },
-        { name: "data", type: "bytes" },
-      ],
-    };
-
-    // The data to sign
-    const mintData = {
-      from: address,
-      to: lizard.address,
-      nonce: nonce.toNumber(),
-      data: calldata,
-    };
-
-    if (!signer) return;
-
-    const deepLinkStorageValue = window.localStorage.getItem(
-      "WALLETCONNECT_DEEPLINK_CHOICE"
-    );
-    if (deepLinkStorageValue) {
-      window.localStorage.setItem(
-        "WALLETCONNECT_DEEPLINK_CHOICE_CACHED",
-        deepLinkStorageValue
-      );
-      window.localStorage.removeItem("WALLETCONNECT_DEEPLINK_CHOICE");
-    }
-
-    const deeplink = JSON.parse(
-      window.localStorage.getItem("WALLETCONNECT_DEEPLINK_CHOICE_CACHED") ??
-        "{}"
-    ).href;
-
-    const mintPromise = (signer as any)._signTypedData(domain, types, mintData);
-
-    toast.promise(mintPromise, {
-      loading: (
-        <div>
-          Waiting for signature... (
-          <a
-            href={deeplink}
-            target="_blank"
-            rel="noreferrer"
-            className="underline"
-          >
-            Open Wallet
-          </a>
-          )
-        </div>
-      ),
-      success: "Message signed",
-      error: "Error signing message",
-    });
-
-    const mintSignature = await mintPromise;
-
-    if (!mintSignature) return;
-
-    const mintRequestPayload = { ...mintData, signature: mintSignature };
     const mintRequestPromise = fetch("/api/mint", {
       method: "POST",
       headers: {
@@ -189,8 +98,8 @@ const Scan: NextPage = () => {
 
     toast.promise(mintRequestPromise, {
       loading: "Submitting transaction...",
-      success: "Transaction submitted",
-      error: "You've exceeded the rate limit, max 1 liz per hour",
+      success: "Transaction submitted!",
+      error: "Uh oh, bork",
     });
 
     try {
@@ -212,7 +121,18 @@ const Scan: NextPage = () => {
       const tokenIdPromise = getTokenId(txHash);
 
       toast.promise(tokenIdPromise, {
-        loading: "Waiting for transaction...",
+        loading: (
+          <div>
+            Waiting for transaction... (
+            <a
+              className="underline"
+              href={`https://goerli.etherscan.io/tx/${txHash}`}
+            >
+              Etherscan
+            </a>
+            )
+          </div>
+        ),
         success: (tokenId) => (
           <div>
             Lizard minted! (

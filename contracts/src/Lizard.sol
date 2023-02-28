@@ -4,42 +4,39 @@ pragma solidity ^0.8.13;
 import "openzeppelin-contracts/token/ERC721/ERC721.sol";
 import "openzeppelin-contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "openzeppelin-contracts/access/Ownable2Step.sol";
-import "openzeppelin-contracts/metatx/ERC2771Context.sol";
+import "openzeppelin-contracts/access/AccessControl.sol";
 import "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
 import "openzeppelin-contracts/utils/cryptography/MerkleProof.sol";
 
-contract Lizard is ERC721, ERC721Burnable, ERC2771Context, Ownable2Step {
+contract Lizard is ERC721, ERC721Burnable, Ownable2Step, AccessControl {
     using ECDSA for bytes32;
+
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     string baseURI;
     bytes32 lizardRoot;
-    uint256 rateLimit;
     uint256 counter;
 
-    // lizard => sender => block number
-    mapping(address => mapping(address => uint256)) public lastMintBlockNumber;
+    mapping(address => bool) public minted;
 
-    constructor(
-        string memory baseURI_,
-        bytes32 _root,
-        uint256 _rateLimit,
-        address trustedForwarder
-    ) ERC721("Lizard", "LIZ") ERC2771Context(trustedForwarder) {
+    constructor(string memory baseURI_, bytes32 _root) ERC721("Lizard", "LIZ") {
         baseURI = baseURI_;
         lizardRoot = _root;
-        rateLimit = _rateLimit;
+        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
     }
 
-    function setBaseURI(string memory baseURI_) external onlyOwner {
+    function setBaseURI(string memory baseURI_)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         baseURI = baseURI_;
     }
 
-    function setLizardRoot(bytes32 _root) external onlyOwner {
+    function setLizardRoot(bytes32 _root)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+    {
         lizardRoot = _root;
-    }
-
-    function setRateLimit(uint256 _rateLimit) external onlyOwner {
-        rateLimit = _rateLimit;
     }
 
     function getMessageHash(address recipient, uint256 blockNumber)
@@ -58,7 +55,7 @@ contract Lizard is ERC721, ERC721Burnable, ERC2771Context, Ownable2Step {
         bytes calldata lizardSignature,
         bytes32[] calldata lizardProof,
         address recipient
-    ) public {
+    ) public onlyRole(MINTER_ROLE) {
         bytes32 messageHash = getMessageHash(recipient, signatureBlockNumber);
         address signer = messageHash.recover(lizardSignature);
 
@@ -74,17 +71,9 @@ contract Lizard is ERC721, ERC721Burnable, ERC2771Context, Ownable2Step {
 
         require(proofValid, "Signer is not a lizard");
 
-        address sender = _msgSender();
+        require(!minted[recipient], "Already minted");
 
-        uint256 lastMint = lastMintBlockNumber[lizard][sender];
-        if (lastMint != 0) {
-            require(
-                block.number > lastMint + rateLimit,
-                "Exceeded mint rate limit"
-            );
-        }
-
-        lastMintBlockNumber[lizard][sender] = block.number;
+        minted[recipient] = true;
 
         _safeMint(recipient, ++counter);
     }
@@ -93,23 +82,12 @@ contract Lizard is ERC721, ERC721Burnable, ERC2771Context, Ownable2Step {
         return baseURI;
     }
 
-    function _msgSender()
-        internal
+    function supportsInterface(bytes4 interfaceId)
+        public
         view
-        virtual
-        override(Context, ERC2771Context)
-        returns (address sender)
+        override(ERC721, AccessControl)
+        returns (bool)
     {
-        return ERC2771Context._msgSender();
-    }
-
-    function _msgData()
-        internal
-        view
-        virtual
-        override(Context, ERC2771Context)
-        returns (bytes calldata)
-    {
-        return ERC2771Context._msgData();
+        return super.supportsInterface(interfaceId);
     }
 }

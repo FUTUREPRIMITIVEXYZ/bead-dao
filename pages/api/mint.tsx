@@ -8,15 +8,23 @@ import { ethers } from "ethers";
 import LizardForwarder from "../../public/LizardForwarder.json";
 
 type MintRequest = {
-  from: string;
-  to: string;
-  nonce: string;
-  data: string;
-  signature: string;
+  lizard: string;
+  signatureBlockNumber: number;
+  lizardSignature: string;
+  lizardProof: string[];
+  recipient: string;
 };
 
 const mintHandler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { from, to, nonce, data, signature } = req.body as MintRequest;
+  const {
+    lizard,
+    signatureBlockNumber,
+    lizardSignature,
+    lizardProof,
+    recipient,
+  } = req.body as MintRequest;
+
+  console.log(req.body, process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS);
 
   const relayerCredentials = {
     apiKey: process.env.RELAYER_API_KEY!,
@@ -27,25 +35,29 @@ const mintHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     speed: "fast",
   });
 
-  const forwarder = new ethers.Contract(
-    process.env.NEXT_PUBLIC_LIZARD_FORWARDER_ADDRESS!,
-    LizardForwarder.abi,
+  const lizardContract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
+    [
+      "function mint(address lizard, uint256 signatureBlockNumber, bytes lizardSignature, bytes32[] lizardProof, address recipient)",
+    ],
     signer
   );
 
-  console.log(LizardForwarder);
-
-  console.log(from, to, nonce, data, signature);
-
   try {
-    const tx = await forwarder.execute({ from, to, nonce, data }, signature);
+    const tx = await lizardContract.mint(
+      lizard,
+      signatureBlockNumber,
+      lizardSignature,
+      lizardProof,
+      recipient
+    );
 
     return res.json({
       txHash: tx.hash,
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Bork" });
+    return res.status(500).json({ error });
   }
 };
 
