@@ -104,9 +104,11 @@ export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           ))}
         </div>
       </div>
-      <div className="bottom-10 mx-auto left-[50%] translate-x-[-50%] fixed py-3 px-6 bg-black text-white text-xl font-bold rounded-full">
-        View Proposal
-      </div>
+      <a href="https://demo.snapshot.org/#/ilovebeadz.eth/proposal/0xca2b10ef47bf1589958db8be6eafd7ae936f33b9ae4df7e0eea4387f64be636d">
+        <div className="bottom-10 mx-auto left-[50%] translate-x-[-50%] fixed py-3 px-6 bg-black text-white text-xl font-bold rounded-full">
+          View Proposal
+        </div>
+      </a>
     </Card>
   );
 };
