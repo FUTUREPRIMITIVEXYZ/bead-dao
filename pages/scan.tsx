@@ -86,7 +86,7 @@ const Scan: NextPage = () => {
               height={353}
               width={367}
               alt="liz gif"
-              src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZTMyZTNiMGU5NWU0Mjc0OWMzYmMwMGI2OThjOWI5M2VkNzYwNTc1NiZjdD1n/NKrCnXI49QmrEe5FhK/giphy-downsized-large.gif"
+              src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODM0Y2U4OWYxOWYwYzFjMDZjMGMzODA3YWM2NjcwMTE2ZjFkNDMwYyZjdD1n/1evRUodu486GKealQp/giphy-downsized-large.gif"
               objectFit="cover"
             />
             {/* <video
