@@ -41,7 +41,6 @@ const Scan: NextPage = () => {
 
   const [tapLoading, setTapLoading] = useState(false);
   const [mintLoading, setMintLoading] = useState(false);
-  const [claimLoading, setClaimLoading] = useState(false);
 
   const { address } = useAccount();
 
@@ -104,21 +103,15 @@ const Scan: NextPage = () => {
         provider
       );
 
-      const balance = await lizardContract.callStatic.balanceOf(address);
-
       setTapLoading(false);
 
-      if (balance > 0) {
-        claim({ address, keyAddress });
-      } else {
-        mint({
-          lizard: keyAddress,
-          signatureBlockNumber: number,
-          lizardSignature: signature,
-          lizardProof: proof,
-          recipient: address,
-        });
-      }
+      mint({
+        lizard: keyAddress,
+        signatureBlockNumber: number,
+        lizardSignature: signature,
+        lizardProof: proof,
+        recipient: address,
+      });
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.toString());
@@ -160,7 +153,11 @@ const Scan: NextPage = () => {
       const tx = await provider.getTransaction(txHash);
       tx.wait();
 
-      router.push(`/account/${address}?minted=true`);
+      if (response.firstLizard) {
+        router.push(`/account/${address}?minted=true`);
+      } else {
+        router.push(`/account/${address}?beadClaim=true`);
+      }
 
       setMintLoading(false);
     } catch (error) {
@@ -173,45 +170,7 @@ const Scan: NextPage = () => {
       setMintLoading(false);
     }
   };
-
-  const claim = async ({
-    address,
-    keyAddress,
-  }: {
-    address: string;
-    keyAddress: string;
-  }) => {
-    try {
-      setMintLoading(true);
-      await fetch("/api/claim", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ recipient: address, keyAddress }),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          if (res.error) throw Error(res.error);
-          return res;
-        });
-
-      router.push(`/account/${address}?beadClaim=true`);
-
-      setMintLoading(false);
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.toString());
-      }
-      console.error(error);
-      setMintLoading(false);
-    } finally {
-      setMintLoading(false);
-    }
-  };
-
-  const isLoading = mintLoading || claimLoading;
+  const isLoading = mintLoading;
 
   return (
     <div className="font-[Inter]">

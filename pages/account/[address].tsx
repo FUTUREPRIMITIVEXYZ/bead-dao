@@ -41,7 +41,7 @@ const Address: NextPage = () => {
     : queryAddress;
 
   const { data: beadData, error: beadError } = useSWR(
-    `/api/${addressFromUrl}/lizard`,
+    addressFromUrl ? `/api/${addressFromUrl}/lizard` : "",
     async (url) => fetch(url).then((res) => res.json())
   );
 

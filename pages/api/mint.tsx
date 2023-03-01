@@ -5,6 +5,7 @@ import {
 } from "defender-relay-client/lib/ethers";
 import { BigNumber, ethers } from "ethers";
 import supabase from "../../utils/supabase";
+import alchemy from "../../utils/alchemy";
 
 type MintRequest = {
   lizard: string;
@@ -12,6 +13,7 @@ type MintRequest = {
   lizardSignature: string;
   lizardProof: string[];
   recipient: string;
+  recipientToken: string;
 };
 
 const mintHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -35,10 +37,22 @@ const mintHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const lizardContract = new ethers.Contract(
     process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
     [
-      "function mint(address lizard, uint256 signatureBlockNumber, bytes lizardSignature, bytes32[] lizardProof, address recipient)",
+      "function balanceOf(address owner) returns (uint256)",
+      "function mint(address lizard, uint256 signatureBlockNumber, bytes lizardSignature, bytes32[] lizardProof, address recipient, uint256 recipientToken)",
     ],
     signer
   );
+
+  const balance = await lizardContract.callStatic.balanceOf(recipient);
+  let recipientToken = "0";
+
+  if (balance > 0) {
+    const nfts = await alchemy.nft.getNftsForOwner(recipient, {
+      contractAddresses: [lizardContract.address],
+    });
+    const lizard = nfts.ownedNfts[0];
+    recipientToken = lizard.tokenId;
+  }
 
   try {
     const tx = await lizardContract.mint(
@@ -46,23 +60,13 @@ const mintHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       signatureBlockNumber,
       lizardSignature,
       lizardProof,
-      recipient
+      recipient,
+      recipientToken
     );
-
-    const result = tx.wait();
-
-    const mintLog = result.logs[0];
-
-    const mintedTokenId = BigNumber.from(mintLog.topics[3]).toString();
-
-    await supabase.from("lizards").upsert({
-      tokenId: mintedTokenId,
-      tokenContract: process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
-      lastClaim: new Date(),
-    });
 
     return res.json({
       txHash: tx.hash,
+      firstLizard: balance === "0",
     });
   } catch (error) {
     console.error(error);
