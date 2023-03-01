@@ -119,7 +119,7 @@ contract Lizardz is
         uint256 lastMint = lastMintBlockNumber[signer][recipient];
 
         require(
-            lastMint == 0 || lastMint + 300 < block.number,
+            lastMint == 0 || lastMint + blockRateLimit < block.number,
             "Exceeded rate limit"
         );
 
