@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Card } from "./card";
 import { Balance } from "./balance";
+import { useEffect, useState } from "react";
+import { fetchEnsName } from "@wagmi/core";
 
 interface RowProps {
   name: string;
@@ -14,13 +16,33 @@ const Row: React.FC<RowProps & React.HTMLAttributes<HTMLDivElement>> = ({
   balance,
   isUser,
 }) => {
+  const [displayName, setDisplayName] = useState("");
+
+  useEffect(() => {
+    async function getEnsName() {
+      if (name) {
+        const ensName = await fetchEnsName({
+          address: name as `0x${string}`,
+        });
+
+        if (ensName) {
+          setDisplayName(name);
+        } else {
+          setDisplayName(`${name.slice(0, 4)}...${name.slice(-4)}`);
+        }
+      }
+    }
+
+    getEnsName();
+  }, [name]);
+
   return (
     <div
       className={`${className} flex justify-between items-center w-full p-3 rounded-xl bg-white border-solid ${
         isUser ? "border-black border-4" : "border-address-text border-[1px]"
       }`}
     >
-      <div>{`${name.slice(0, 4)}...${name.slice(-4)}`}</div>
+      <div>{displayName}</div>
       <Balance balance={balance} />
     </div>
   );
