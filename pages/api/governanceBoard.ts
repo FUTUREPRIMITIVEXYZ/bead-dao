@@ -20,12 +20,14 @@ const governanceBoardHandler = async (
     }
 
     const response = await Promise.all(
-      data.map((row) => alchemy.nft.getOwnersForNft(contractAddress, 1))
+      (data || []).map((row) =>
+        alchemy.nft.getOwnersForNft(contractAddress, row.tokenId)
+      )
     );
 
     response[0].owners[0];
 
-    const output = data.map((row, i) => ({
+    const output = (data || []).map((row, i) => ({
       account: response[i].owners[0],
       balance: row.beadCount,
       tokenId: row.tokenId,

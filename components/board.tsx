@@ -71,7 +71,7 @@ export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           Governance Board
         </h1>
         <div className="flex flex-col space-y-2 items-center justify-center w-full overflow-scroll h-full">
-          {data.map((row, i) => (
+          {(data || []).map((row, i) => (
             <Row
               key={i}
               name={row.account}
