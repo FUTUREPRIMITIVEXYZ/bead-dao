@@ -1,21 +1,35 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import supabase from "../../utils/supabase";
 
+import alchemy from "../../utils/alchemy";
+
 const votingWeightsHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { data, error } = await supabase.from("lizards").select();
+  const { nfts } = await alchemy.nft.getNftsForContract(
+    "0x07F884bFBB6B8e440e746543b4BE87737121A085",
+    {
+      limit: 10000,
+    }
+  );
 
-  const weights = data?.map((token) => ({ [token.tokenId]: token.beadCount }));
+  const votingWeightsDummy = nfts.map((nft) => ({ [nft.tokenId]: 1 }));
 
-  if (!weights) {
-    return res.status(500).json([]);
-  }
+  console.log(nfts);
+  console.log(votingWeightsDummy);
 
-  console.log(weights);
+  // const { data, error } = await supabase.from("lizards").select();
+  //
+  // const weights = data?.map((token) => ({ [token.tokenId]: token.beadCount }));
+  //
+  // if (!weights) {
+  //   return res.status(500).json([]);
+  // }
+  //
+  // console.log(weights);
 
-  return res.json(weights);
+  return res.json(votingWeightsDummy);
 };
 
 export default votingWeightsHandler;
