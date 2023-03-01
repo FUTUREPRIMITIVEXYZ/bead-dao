@@ -20,73 +20,28 @@ const Row: React.FC<RowProps & React.HTMLAttributes<HTMLDivElement>> = ({
         isUser ? "border-black border-4" : "border-address-text border-[1px]"
       }`}
     >
-      <div>{name}</div>
+      <div>{`${name.slice(0, 4)}...${name.slice(-4)}`}</div>
       <Balance balance={balance} />
     </div>
   );
 };
 
+interface Member {
+  account: string;
+  balance: number;
+  tokenId: string;
+}
+
 interface Props {
   address?: `0x${string}`;
+  data: Member[];
 }
 
 export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
   className,
   address,
+  data,
 }) => {
-  const leaderBoard = [
-    {
-      name: "megaliz.eth",
-      balance: 93,
-      address: "0x1234",
-    },
-    {
-      name: "gammaray.eth",
-      balance: 88,
-      address: "0xF897f6250Ea36e3D9b87Bc9728d6e6Bf3136B079",
-    },
-    {
-      name: "0x123...325",
-      balance: 47,
-      address: "0x1234",
-    },
-    {
-      name: "0x123...325",
-      balance: 30,
-      address: "0x1234",
-    },
-    {
-      name: "0x123...325",
-      balance: 30,
-      address: "0x1234",
-    },
-    {
-      name: "0x123...325",
-      balance: 15,
-      address: "0x1234",
-    },
-    {
-      name: "0x123...325",
-      balance: 15,
-      address: "0x1234",
-    },
-    {
-      name: "0x123...325",
-      balance: 15,
-      address: "0x1234",
-    },
-    {
-      name: "0x123...325",
-      balance: 15,
-      address: "0x1234",
-    },
-    {
-      name: "0x123...325",
-      balance: 15,
-      address: "0x1234",
-    },
-  ];
-
   return (
     <Card className={`${className} my-0 mx-auto `}>
       <div className="flex flex-col space-y-4 items-start justify-center h-full">
@@ -94,12 +49,12 @@ export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           Governance Board
         </h1>
         <div className="flex flex-col space-y-2 items-center justify-center w-full overflow-scroll h-full">
-          {leaderBoard.map((row, i) => (
+          {data.map((row, i) => (
             <Row
               key={i}
-              name={row.name}
+              name={row.account}
               balance={row.balance}
-              isUser={row.address === address}
+              isUser={row.account === address}
             />
           ))}
         </div>

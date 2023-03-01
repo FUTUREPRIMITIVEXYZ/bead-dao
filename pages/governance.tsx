@@ -6,11 +6,20 @@ import { Background } from "../components/background";
 import { useRouter } from "next/router";
 import { fetchEnsName } from "@wagmi/core";
 import { Board } from "../components/board";
+import useSWR from "swr";
 
 const GovernanceBoard: NextPage = () => {
   const [ensName, setEnsName] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const { address } = useAccount();
+
+  // const { data } = useSWR("/api/governance", async (url) =>
+  //   fetch(url).then((res) => res.json())
+  // );
+
+  const { data, error } = useSWR("api/governanceBoard", async (url: string) =>
+    fetch(url).then((res) => res.json())
+  );
 
   useEffect(() => {
     async function getEnsName() {
@@ -57,7 +66,7 @@ const GovernanceBoard: NextPage = () => {
           </div>
         ) : (
           <div className="my-o mx-auto p-2">
-            <Board address={address} />
+            <Board address={address} data={data} />
           </div>
         )}
       </Background>
