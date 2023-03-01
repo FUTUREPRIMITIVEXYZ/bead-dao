@@ -140,8 +140,13 @@ const Scan: NextPage = () => {
 
       const { txHash } = response;
 
+      console.log(txHash);
+
       const tx = await provider.getTransaction(txHash);
+      console.log(tx);
       tx.wait();
+
+      console.log(response);
 
       if (response.firstLizard) {
         router.push(`/account/${address}?minted=true`);
