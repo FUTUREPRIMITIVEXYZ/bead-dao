@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { GetNftsForContractOptions } from "alchemy-sdk";
 import supabase from "../../utils/supabase";
 
 import alchemy from "../../utils/alchemy";
@@ -10,7 +11,7 @@ const votingWeightsHandler = async (
   const { nfts } = await alchemy.nft.getNftsForContract(
     "0x07F884bFBB6B8e440e746543b4BE87737121A085",
     {
-      limit: 10000,
+      pageSize: 10000,
     }
   );
 
