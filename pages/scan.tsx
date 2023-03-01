@@ -143,9 +143,8 @@ const Scan: NextPage = () => {
 
       console.log(txHash);
 
-      const tx = await provider.getTransaction(txHash);
+      const tx = await provider.waitForTransaction(txHash);
       console.log(tx);
-      tx.wait();
 
       console.log(response);
 
