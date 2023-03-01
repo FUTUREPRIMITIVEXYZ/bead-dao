@@ -71,12 +71,6 @@ const Address: NextPage = () => {
   } = useGetNfts({ address: addressFromUrl });
 
   useEffect(() => {
-    if (!isValidating && !isLoading && data && data.length === 0) {
-      router.push("/scan");
-    }
-  }, [isValidating, isLoading, data, data?.length, router]);
-
-  useEffect(() => {
     if (data && data.length) {
       setDisplayedNft({
         // image: data[0].image,
