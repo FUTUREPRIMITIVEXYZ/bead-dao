@@ -4,16 +4,12 @@ import { Background } from "../components/background";
 import { Button } from "../components/button";
 import { ethers } from "ethers";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
-import { useAccount, useSigner, useConnect } from "wagmi";
-import { ConnectButton, useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount } from "wagmi";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { toast, Toaster } from "react-hot-toast";
-import Link from "next/link";
-import Image from "next/image";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import URL from "url-parse";
-import useSWRMutation from "swr/mutation";
 import {
   getPublicKeysFromScan,
   getSignatureFromScan,
@@ -96,12 +92,6 @@ const Scan: NextPage = () => {
       if (!signature) {
         throw Error("No signature returned");
       }
-
-      const lizardContract = new ethers.Contract(
-        process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
-        ["function balanceOf(address owner) returns (uint256)"],
-        provider
-      );
 
       setTapLoading(false);
 

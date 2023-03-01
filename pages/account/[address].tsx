@@ -42,7 +42,7 @@ const Address: NextPage = () => {
 
   const { data: beadData, error: beadError } = useSWR(
     addressFromUrl ? `/api/${addressFromUrl}/lizard` : "",
-    async (url) => fetch(url).then((res) => res.json())
+    async (url: string) => fetch(url).then((res) => res.json())
   );
 
   console.log(beadData, beadError);
