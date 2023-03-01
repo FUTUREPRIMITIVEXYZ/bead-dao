@@ -125,6 +125,7 @@ const Scan: NextPage = () => {
       })
         .then((res) => res.json())
         .then((res) => {
+          console.log(res.error);
           if (res.error) throw Error(res.error);
           return res;
         });
@@ -156,9 +157,9 @@ const Scan: NextPage = () => {
 
       setMintLoading(false);
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.toString());
-      }
+      // if (error instanceof Error) {
+      //   toast.error(error.toString());
+      // }
       console.error(error);
       setMintLoading(false);
     } finally {

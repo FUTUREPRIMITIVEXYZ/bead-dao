@@ -1,0 +1,35 @@
+{
+  "transactions": [
+    {
+      "hash": "0xbe302c57f3612f196127c1fa59a03c8dafbcdae5aafc574c4bf2ffedce8c57f8",
+      "transactionType": "CALL",
+      "contractName": null,
+      "contractAddress": "0x0a357ac2bD496f26e4Ed53543Ce287B8C02DDe9A",
+      "function": null,
+      "arguments": null,
+      "rpc": "https://eth-goerli.g.alchemy.com/v2/ZlrIeucrcyJtYsCY9bnsfd3Yw5oM97PJ",
+      "transaction": {
+        "type": "0x02",
+        "from": "0x9f620a5309c667ab772bfc4d20c7b7aa3e0ea5d6",
+        "to": "0x0a357ac2bd496f26e4ed53543ce287b8c02dde9a",
+        "gas": "0x899f",
+        "value": "0x0",
+        "data": "0x986d5f1e0000000000000000000000000000000000000000000000000000000000000000",
+        "nonce": "0xe",
+        "accessList": []
+      },
+      "additionalContracts": []
+    }
+  ],
+  "receipts": [],
+  "libraries": [],
+  "pending": [
+    "0xbe302c57f3612f196127c1fa59a03c8dafbcdae5aafc574c4bf2ffedce8c57f8"
+  ],
+  "path": "/Users/jaydenwindle/Documents/FuturePrimitive/bead-dao/contracts/broadcast/SetProperty.s.sol/5/run-latest.json",
+  "returns": {},
+  "timestamp": 1677687192,
+  "chain": 5,
+  "multi": false,
+  "commit": "8de1023"
+}

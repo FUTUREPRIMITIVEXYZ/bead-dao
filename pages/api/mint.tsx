@@ -70,7 +70,7 @@ const mintHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error });
+    return res.status(500).json({ error: (error as Error).toString() });
   }
 };
 
