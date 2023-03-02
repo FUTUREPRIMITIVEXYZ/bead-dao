@@ -228,7 +228,7 @@ const Scan: NextPage = () => {
             </div>
           </div>
         )}
-        <Toaster />
+        <Toaster position="bottom-center" />
       </Background>
     </div>
   );
