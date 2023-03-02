@@ -19,7 +19,7 @@ export interface Nft {
 
 interface Props {
   nft: Nft;
-  ownedBy?: `0x{string}` | undefined;
+  ownedBy?: string;
   balance: number;
 }
 
@@ -27,7 +27,7 @@ export const NftViewer: React.FC<
   Props & React.HTMLAttributes<HTMLDivElement>
 > = ({ className, nft, ownedBy, balance }) => {
   const { data: ensName } = useEnsName({
-    address: ownedBy,
+    address: ownedBy as `0x{string}`,
   });
 
   const ownerDisplay = ensName

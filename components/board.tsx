@@ -38,7 +38,7 @@ const Row: React.FC<RowProps & React.HTMLAttributes<HTMLDivElement>> = ({
 };
 
 interface Member {
-  account: string;
+  account: `0x{string}`;
   balance: number;
   tokenId: string;
 }
