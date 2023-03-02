@@ -1,6 +1,9 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Badge } from "./badge";
 import Link from "next/link";
+import { useAccount } from "wagmi";
+
+import { Button } from "./button";
 
 interface Props {
   display?: string;
@@ -9,6 +12,8 @@ interface Props {
 export const Background: React.FC<
   Props & React.HTMLAttributes<HTMLDivElement>
 > = ({ children, className, display }) => {
+  const { address } = useAccount();
+
   return (
     <div
       className={`${className} w-full h-[100vh] overflow-scroll bg-main bg-cover bg-center bg-no-repeat`}
@@ -28,11 +33,22 @@ export const Background: React.FC<
               <div className="font-medium font-xl">beadDAO®</div>
             </Link>
           </Badge>
-          <ConnectButton
-            accountStatus="avatar"
-            chainStatus="name"
-            showBalance={false}
-          />
+          <div className="flex flex-row">
+            {address && (
+              <Link href={`/account/${address}`}>
+                <Button className="mr-2">
+                  <div className="px-2 py-1 whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
+                    Your Lizard
+                  </div>
+                </Button>
+              </Link>
+            )}
+            <ConnectButton
+              accountStatus="avatar"
+              chainStatus="name"
+              showBalance={false}
+            />
+          </div>
         </div>
         {children}
       </div>
