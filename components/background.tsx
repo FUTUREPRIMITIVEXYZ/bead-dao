@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useAccount } from "wagmi";
 
 import { Button } from "./button";
+import { useState } from "react";
 
 interface Props {
   display?: string;
@@ -12,7 +13,10 @@ interface Props {
 export const Background: React.FC<
   Props & React.HTMLAttributes<HTMLDivElement>
 > = ({ children, className, display }) => {
-  const { address } = useAccount();
+  const [clientAddress, setClientAddress] = useState<string>();
+  useAccount({
+    onConnect: ({ address }) => setClientAddress(address),
+  });
 
   return (
     <div
@@ -34,8 +38,8 @@ export const Background: React.FC<
             </Link>
           </Badge>
           <div className="flex flex-row">
-            {address && (
-              <Link href={`/account/${address}`}>
+            {clientAddress && (
+              <Link href={`/account/${clientAddress}`}>
                 <Button className="mr-2">
                   <div className="px-2 py-1 whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
                     Your Lizard
@@ -43,11 +47,13 @@ export const Background: React.FC<
                 </Button>
               </Link>
             )}
-            <ConnectButton
-              accountStatus="avatar"
-              chainStatus="name"
-              showBalance={false}
-            />
+            {!clientAddress && (
+              <ConnectButton
+                accountStatus="avatar"
+                chainStatus="name"
+                showBalance={false}
+              />
+            )}
           </div>
         </div>
         {children}

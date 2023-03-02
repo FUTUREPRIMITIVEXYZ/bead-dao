@@ -28,6 +28,7 @@ export const NftViewer: React.FC<
 > = ({ className, nft, ownedBy, balance }) => {
   const { data: ensName } = useEnsName({
     address: ownedBy as `0x{string}`,
+    chainId: 1,
   });
 
   const ownerDisplay = ensName
@@ -67,6 +68,8 @@ export const NftViewer: React.FC<
           <span className="whitespace-nowrap">Owned By:</span>
           <a
             href={`https://goerli.etherscan.io/address/${ownedBy}`}
+            target="_blank"
+            rel="noreferrer"
             className="cursor-pointer"
           >
             <div className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
