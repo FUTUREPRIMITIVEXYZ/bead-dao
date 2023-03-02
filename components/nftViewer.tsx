@@ -6,6 +6,7 @@ import { EtherscanIcon } from "./etherscanIcon";
 import { TwitterIcon } from "./twitterIcon";
 import { Balance } from "./balance";
 import Link from "next/link";
+import { useEnsName } from "wagmi";
 
 export interface Nft {
   image: string;
@@ -18,13 +19,21 @@ export interface Nft {
 
 interface Props {
   nft: Nft;
-  ownedBy: string;
+  ownedBy?: `0x{string}` | undefined;
   balance: number;
 }
 
 export const NftViewer: React.FC<
   Props & React.HTMLAttributes<HTMLDivElement>
 > = ({ className, nft, ownedBy, balance }) => {
+  const { data: ensName } = useEnsName({
+    address: ownedBy,
+  });
+
+  const ownerDisplay = ensName
+    ? ensName
+    : `${ownedBy?.slice(0, 6)}...${ownedBy?.slice(-4)}`;
+
   return (
     <Card className={className}>
       <div className="flex flex-col space-y-4 items-start justify-center">
@@ -55,19 +64,20 @@ export const NftViewer: React.FC<
         )}
         <div className="mb-4 flex items-center space-x-2 justify-start font-bold text-address-color-secondary">
           <WalletIcon height={25} width={24} />
-          <span className="whitespace-nowrap">Owned by</span>
-          <a href={"/"} className="cursor-pointer">
-            {/* {addressToFetch && ( */}
-            <span className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
-              {ownedBy}
-            </span>
-            {/* )} */}
+          <span className="whitespace-nowrap">Owned By:</span>
+          <a
+            href={`https://goerli.etherscan.io/address/${ownedBy}`}
+            className="cursor-pointer"
+          >
+            <div className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
+              {ownerDisplay}
+            </div>
           </a>
         </div>
         <h1 className="text-3xl font-bold">{nft.name}</h1>
         <div className="flex justify-between items-end w-full">
           <div>
-            <div className="font-bold text-sm">My Bead power</div>
+            <div className="font-bold text-sm">Bead Power</div>
             <Balance balance={balance} />
           </div>
           <Link href="/governance">
@@ -76,16 +86,6 @@ export const NftViewer: React.FC<
             </div>
           </Link>
         </div>
-        {/* <AddressBar
-                text={
-                  data
-                    ? `${data[0].address.slice(0, 4)}...${data[0].address.slice(
-                        -4
-                      )}`
-                    : "no data"
-                }
-                link={`https://etherscan.io/address/${addressToFetch}`}
-              /> */}
         <div className="flex items-center justify-start space-x-4">
           <a
             href={`https://https://testnets.opensea.io/assets/ethereum/${nft.contract}/${nft.tokenId}`}

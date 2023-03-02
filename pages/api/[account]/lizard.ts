@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ethers } from "ethers";
-import supabase from "../../../utils/supabase";
 import alchemy from "../../../utils/alchemy";
 
 const provider = new ethers.providers.AlchemyProvider(
@@ -22,6 +21,9 @@ const lizardHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const lizard = nfts.ownedNfts[0];
 
+  if (!lizard)
+    return res.status(404).json({ error: "Account does not own lizard" });
+
   const registry = "0xc49B4a8368B545DECeE584258343bE469E65EAc6";
 
   const accountRegistry = new ethers.Contract(
@@ -41,7 +43,13 @@ const lizardHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     contractAddresses: [process.env.NEXT_PUBLIC_BEADZ_NFT_ADDRESS!],
   });
 
-  return res.json({ beadCount: beadz.ownedNfts[0].balance });
+  const response = {
+    ...lizard,
+    account: tba,
+    beadCount: beadz.ownedNfts[0].balance,
+  };
+
+  return res.json(response);
 };
 
 export default lizardHandler;

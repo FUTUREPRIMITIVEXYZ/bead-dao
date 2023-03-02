@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { Background } from "../../components/background";
 import useGetNfts from "../../utils/hooks/useGetNfts";
 import { useRouter } from "next/router";
-import { fetchEnsName } from "@wagmi/core";
 import { NftViewer, Nft } from "../../components/nftViewer";
 import { RefreshIcon } from "../../components/refreshIcon";
 import useGetBeads from "../../utils/hooks/useGetBeads";
@@ -14,23 +13,13 @@ import { MintSuccess } from "../../components/mintSuccess";
 import { BeadSuccess } from "../../components/beadSuccess";
 import { BeadLoading } from "../../components/beadLoading";
 import { GetServerSideProps } from "next";
+import { ethers } from "ethers";
 
 import useSWR from "swr";
 
 const Address: NextPage = () => {
-  const [ensName, setEnsName] = useState<string | undefined>();
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState<any>(null);
-
-  const [displayedNft, setDisplayedNft] = useState<Nft>({
-    image: "/liz-nft.png",
-    name: "No lizards. Go mint",
-    address: "",
-    format: "jpeg",
-    contract: "",
-    tokenId: "",
-  });
-  const { address } = useAccount();
 
   const router = useRouter();
   const { query } = router;
@@ -40,51 +29,14 @@ const Address: NextPage = () => {
     ? queryAddress[0]
     : queryAddress;
 
-  const { data: beadData, error: beadError } = useSWR(
+  const formattedAddress = addressFromUrl
+    ? ethers.utils.getAddress(addressFromUrl!)
+    : undefined;
+
+  const { data, error, isLoading, mutate } = useSWR(
     addressFromUrl ? `/api/${addressFromUrl}/lizard` : "",
     async (url: string) => fetch(url).then((res) => res.json())
   );
-
-  console.log(beadData, beadError);
-
-  useEffect(() => {
-    async function getEnsName() {
-      if (queryAddress) {
-        const ensName = await fetchEnsName({
-          address: queryAddress as `0x${string}`,
-        });
-
-        if (ensName) {
-          setEnsName(ensName);
-        }
-      }
-    }
-
-    getEnsName();
-  }, [queryAddress]);
-
-  const {
-    data,
-    mutate: refetch,
-    isValidating,
-    isLoading,
-  } = useGetNfts({ address: addressFromUrl });
-
-  useEffect(() => {
-    if (data && data.length) {
-      setDisplayedNft({
-        // image: data[0].image,
-        image: "https://media.giphy.com/media/NKrCnXI49QmrEe5FhK/giphy.gif",
-        name: data[0].name,
-        address: data[0].address,
-        format: data[0].format,
-        contract: data[0].contract,
-        tokenId: data[0].tokenId,
-      });
-
-      return;
-    }
-  }, [data]);
 
   useEffect(() => {
     if (minted === "true") {
@@ -93,7 +45,6 @@ const Address: NextPage = () => {
 
       return;
     }
-
     if (beadClaim === "true") {
       setModalContent(<BeadSuccess />);
       setShowModal(true);
@@ -101,8 +52,6 @@ const Address: NextPage = () => {
       return;
     }
   }, [minted, beadClaim]);
-
-  console.log({ showModal, modalContent });
 
   return (
     <div>
@@ -115,7 +64,7 @@ const Address: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background>
-        {isValidating || isLoading ? (
+        {isLoading ? (
           <div className="flex flex-col justify-center items-center h-full">
             <div className="relative ">
               <video
@@ -133,22 +82,15 @@ const Address: NextPage = () => {
           </div>
         ) : (
           <div>
-            {addressFromUrl && data && data.length !== 0 && (
+            {addressFromUrl && data && (
               <div className="flex flex-col justify-center items-center">
                 <div className="flex justify-end items-center w-full p-5">
-                  <RefreshIcon handleClick={() => refetch()} />
+                  <RefreshIcon handleClick={mutate} />
                 </div>
                 <NftViewer
-                  nft={displayedNft}
-                  ownedBy={
-                    ensName ||
-                    (addressFromUrl
-                      ? `${addressFromUrl.slice(0, 4)}...${addressFromUrl.slice(
-                          -4
-                        )}`
-                      : "")
-                  }
-                  balance={beadData?.beadCount}
+                  nft={data}
+                  ownedBy={formattedAddress}
+                  balance={data.beadCount}
                 />
               </div>
             )}

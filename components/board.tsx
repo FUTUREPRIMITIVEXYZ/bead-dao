@@ -2,39 +2,28 @@ import Image from "next/image";
 import { Card } from "./card";
 import { Balance } from "./balance";
 import { useEffect, useState } from "react";
-import { fetchEnsName } from "@wagmi/core";
+
+import { useEnsName } from "wagmi";
 
 interface RowProps {
-  name: string;
+  address: `0x{string}`;
   balance: number;
   isUser: boolean;
 }
 
 const Row: React.FC<RowProps & React.HTMLAttributes<HTMLDivElement>> = ({
   className,
-  name,
+  address,
   balance,
   isUser,
 }) => {
-  const [displayName, setDisplayName] = useState("");
+  const { data: ensName } = useEnsName({
+    address,
+    chainId: 1,
+  });
 
-  useEffect(() => {
-    async function getEnsName() {
-      if (name) {
-        const ensName = await fetchEnsName({
-          address: name as `0x${string}`,
-        });
-
-        if (ensName) {
-          setDisplayName(name);
-        } else {
-          setDisplayName(`${name.slice(0, 4)}...${name.slice(-4)}`);
-        }
-      }
-    }
-
-    getEnsName();
-  }, [name]);
+  const displayName =
+    ensName ?? `${address.slice(0, 6)}...${address.slice(-4)}`;
 
   return (
     <div
@@ -71,10 +60,10 @@ export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           Governance Board
         </h1>
         <div className="flex flex-col space-y-2 items-center justify-center w-full overflow-scroll h-full">
-          {(data || []).map((row, i) => (
+          {data?.map((row, i) => (
             <Row
               key={i}
-              name={row.account}
+              address={row.account}
               balance={row.balance}
               isUser={row.account === address}
             />

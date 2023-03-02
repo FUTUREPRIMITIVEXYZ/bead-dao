@@ -1,36 +1,72 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { GetNftsForContractOptions } from "alchemy-sdk";
+import { ethers } from "ethers";
 import supabase from "../../utils/supabase";
 
 import alchemy from "../../utils/alchemy";
+
+const provider = new ethers.providers.AlchemyProvider(
+  "goerli",
+  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!
+);
 
 const votingWeightsHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const { nfts } = await alchemy.nft.getNftsForContract(
-    "0x07F884bFBB6B8e440e746543b4BE87737121A085",
+  const lizardz = await alchemy.nft.getNftsForContract(
+    process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
     {
       pageSize: 10000,
     }
   );
 
-  const votingWeightsDummy = nfts.map((nft) => ({ [nft.tokenId]: 1 }));
+  const promises = lizardz.nfts.map(async (nft) => {
+    const registry = "0xc49B4a8368B545DECeE584258343bE469E65EAc6";
 
-  console.log(nfts);
-  console.log(votingWeightsDummy);
+    const accountRegistry = new ethers.Contract(
+      registry,
+      ["function account(address, uint256) returns (address)"],
+      provider
+    );
 
-  // const { data, error } = await supabase.from("lizards").select();
-  //
-  // const weights = data?.map((token) => ({ [token.tokenId]: token.beadCount }));
-  //
-  // if (!weights) {
-  //   return res.status(500).json([]);
-  // }
-  //
-  // console.log(weights);
+    const account = await accountRegistry.callStatic.account(
+      ethers.utils.getAddress(nft.contract.address),
+      nft.tokenId
+    );
 
-  return res.json(votingWeightsDummy);
+    console.log(account);
+
+    return { ...nft, account };
+  });
+
+  const nftsWithAccounts = await Promise.all(promises);
+
+  console.log(nftsWithAccounts);
+
+  const beadz = await alchemy.nft.getOwnersForContract(
+    process.env.NEXT_PUBLIC_BEADZ_NFT_ADDRESS!,
+    { withTokenBalances: true }
+  );
+
+  const beadzByTokenBoundAccount: { [key: string]: number } =
+    beadz.owners.reduce((acc, current) => {
+      return {
+        ...acc,
+        [ethers.utils.getAddress(current.ownerAddress)]:
+          current.tokenBalances[0].balance,
+      };
+    }, {});
+
+  console.log(beadzByTokenBoundAccount);
+
+  const votingWeights = nftsWithAccounts.map((nft) => {
+    return {
+      [nft.tokenId]: beadzByTokenBoundAccount[nft.account],
+    };
+  });
+
+  return res.json(votingWeights);
 };
 
 export default votingWeightsHandler;

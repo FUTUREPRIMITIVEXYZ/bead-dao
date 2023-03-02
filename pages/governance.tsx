@@ -9,33 +9,14 @@ import { Board } from "../components/board";
 import useSWR from "swr";
 
 const GovernanceBoard: NextPage = () => {
-  const [ensName, setEnsName] = useState<string | undefined>();
-  const [isLoading, setIsLoading] = useState(false);
   const { address } = useAccount();
 
-  // const { data } = useSWR("/api/governance", async (url) =>
-  //   fetch(url).then((res) => res.json())
-  // );
-
-  const { data, error } = useSWR("api/governanceBoard", async (url: string) =>
-    fetch(url).then((res) => res.json())
+  const { data, error, isLoading } = useSWR(
+    "api/governanceBoard",
+    async (url: string) => fetch(url).then((res) => res.json())
   );
 
-  useEffect(() => {
-    async function getEnsName() {
-      if (address) {
-        const ensName = await fetchEnsName({
-          address: address as `0x${string}`,
-        });
-
-        if (ensName) {
-          setEnsName(ensName);
-        }
-      }
-    }
-
-    getEnsName();
-  }, [address]);
+  console.log(data);
 
   return (
     <div>
