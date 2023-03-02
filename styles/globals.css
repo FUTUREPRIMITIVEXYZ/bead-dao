@@ -11,14 +11,21 @@
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 50px; 
-  padding: 10px; 
-  background: linear-gradient(45deg, #ff0000,#ff7f00,#ffff00,#00ff00,#0000ff,#4b0082,#9400d3);
-  -webkit-mask: 
-     linear-gradient(#fff 0 0) content-box, 
-     linear-gradient(#fff 0 0);
+  border-radius: 50px;
+  padding: 4px;
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7f00,
+    #ffff00,
+    #00ff00,
+    #0000ff,
+    #4b0082,
+    #9400d3
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
-          mask-composite: exclude; 
+  mask-composite: exclude;
 }
 
 /* 

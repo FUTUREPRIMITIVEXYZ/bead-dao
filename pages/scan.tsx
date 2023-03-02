@@ -133,7 +133,7 @@ const Scan: NextPage = () => {
       toast.promise(mintRequestPromise, {
         loading: "Submitting transaction...",
         success: "Transaction submitted!",
-        error: "Transaction failed",
+        error: "Transaction failed. You can only mint once per hour per chip",
       });
 
       const response = await mintRequestPromise;
@@ -143,7 +143,16 @@ const Scan: NextPage = () => {
 
       console.log(txHash);
 
-      const tx = await provider.waitForTransaction(txHash);
+      const txPromise = provider.waitForTransaction(txHash);
+
+      toast.promise(txPromise, {
+        loading: "Waiting for transaction...",
+        success: "Beadz minted!",
+        error: "Uh oh, transaction failed",
+      });
+
+      const tx = await txPromise;
+
       console.log(tx);
 
       console.log(response);
@@ -182,7 +191,7 @@ const Scan: NextPage = () => {
           {!clientIsConnected && (
             <div>
               <Button className="mb-4" onClick={openConnectModal}>
-                <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
+                <div className="py-1 px-2 text-3xl whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
                   Connect Wallet
                 </div>
               </Button>
@@ -190,7 +199,7 @@ const Scan: NextPage = () => {
           )}
           {!isLoading && clientIsConnected && (
             <Button className="mb-4" onClick={initiateTap}>
-              <div className="py-3 px-4 text-[20px] whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
+              <div className="py-2 px-4 text-3xl whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
                 Mint
               </div>
             </Button>

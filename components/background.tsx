@@ -20,20 +20,18 @@ export const Background: React.FC<
 
   return (
     <div
-      className={`${className} w-full h-[100vh] overflow-scroll bg-main bg-cover bg-center bg-no-repeat`}
-      // className={`${className} w-full ${height} bg-main bg-cover bg-center bg-no-repeat`}
+      className={`${className} w-full h-screen bg-main bg-cover bg-center bg-no-repeat`}
     >
       <div
         className={`h-full w-full ${
           display || "flex flex-col items-center justify-start"
         } py-4 pb-20`}
-        // className={`h-full w-full flex flex-col items-center ${justifyContent} py-4 pb-20`}
       >
         <div
           className={`w-full flex items-center justify-between px-4 md:px-4`}
         >
           <Link href="/">
-            <div className="flex flex-row">
+            <div className="flex flex-row cursor-pointer">
               <svg
                 className="mr-2"
                 width="34"
@@ -94,7 +92,7 @@ export const Background: React.FC<
             {clientAddress && (
               <Link href={`/account/${clientAddress}`}>
                 <Button>
-                  <div className="px-2 py-1 whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
+                  <div className="px-1 whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
                     My Lizard
                   </div>
                 </Button>

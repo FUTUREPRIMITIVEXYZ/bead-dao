@@ -31,15 +31,10 @@ const Home: NextPage = () => {
       modal: true,
       modalContent: <How />,
     },
-    // commenting out for now as leader board is not finished and mint can only be accessed via scan
     {
       link: "/governance",
       text: "Governance Board",
     },
-    // {
-    //   link: "/scan",
-    //   text: "Mint",
-    // },
     {
       link: `/account/${address}`,
       text: "My wallet",
@@ -122,7 +117,7 @@ const Home: NextPage = () => {
       </Background>
       {showModal && (
         <Modal
-          title={"How to Play"}
+          title={"How to Mint"}
           onClose={() => {
             setModalContent(null);
             setShowModal(false);

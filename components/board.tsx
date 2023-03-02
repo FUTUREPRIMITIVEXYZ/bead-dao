@@ -59,7 +59,7 @@ export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
         <h1 className="w-full text-center font-bold text-2xl">
           Governance Board
         </h1>
-        <div className="flex flex-col space-y-2 items-center justify-center w-full overflow-scroll h-full">
+        <div className="flex flex-col space-y-2 items-center justify-center w-full min-h-full">
           {data?.map((row, i) => (
             <Row
               key={i}
