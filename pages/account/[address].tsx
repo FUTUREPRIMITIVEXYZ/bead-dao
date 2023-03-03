@@ -39,20 +39,18 @@ const Address: NextPage = () => {
   );
 
   useEffect(() => {
-    // if (minted === "true") {
-    //   setModalContent(<MintSuccess />);
-    //   setShowModal(true);
-    //
-    //   return;
-    // }
-    // if (beadClaim === "true") {
-    //   setModalContent(<BeadSuccess />);
-    //   setShowModal(true);
-    //
-    //   return;
-    // }
-    setModalContent(<BeadSuccess />);
-    setShowModal(true);
+    if (minted === "true") {
+      setModalContent(<MintSuccess />);
+      setShowModal(true);
+
+      return;
+    }
+    if (beadClaim === "true") {
+      setModalContent(<BeadSuccess />);
+      setShowModal(true);
+
+      return;
+    }
   }, [minted, beadClaim]);
 
   return (
@@ -101,14 +99,16 @@ const Address: NextPage = () => {
         )}
       </Background>
       {showModal && (
-        <Modal
-          onClose={() => {
-            setModalContent(null);
-            setShowModal(false);
-          }}
-        >
-          {modalContent}
-        </Modal>
+        <div>
+          <Modal
+            onClose={() => {
+              setModalContent(null);
+              setShowModal(false);
+            }}
+          >
+            {modalContent}
+          </Modal>
+        </div>
       )}
       {beadLoading === "true" && <BeadLoading />}
     </div>
