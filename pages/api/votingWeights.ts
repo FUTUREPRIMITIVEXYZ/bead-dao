@@ -1,16 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { GetNftsForContractOptions } from "alchemy-sdk";
 import { ethers } from "ethers";
-import supabase from "../../utils/supabase";
 
 import alchemy from "../../utils/alchemy";
-
 import lizardAccounts from "../../public/lizardAccounts.json";
-
-const provider = new ethers.providers.AlchemyProvider(
-  "goerli",
-  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!
-);
 
 const votingWeightsHandler = async (
   req: NextApiRequest,

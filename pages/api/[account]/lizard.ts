@@ -1,11 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { ethers } from "ethers";
 import alchemy from "../../../utils/alchemy";
 
-const provider = new ethers.providers.AlchemyProvider(
-  "goerli",
-  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!
-);
+import lizardAccounts from "../../../public/lizardAccounts.json";
+import { parseInt } from "lodash";
 
 const lizardHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { account } = req.query;
@@ -24,20 +21,7 @@ const lizardHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!lizard)
     return res.status(404).json({ error: "Account does not own lizard" });
 
-  const registry = "0xc49B4a8368B545DECeE584258343bE469E65EAc6";
-
-  const accountRegistry = new ethers.Contract(
-    registry,
-    ["function account(address, uint256) returns (address)"],
-    provider
-  );
-
-  const tba = await accountRegistry.callStatic.account(
-    ethers.utils.getAddress(lizard.contract.address),
-    lizard.tokenId
-  );
-
-  console.log(tba);
+  const tba = lizardAccounts[parseInt(lizard.tokenId) - 1];
 
   const beadz = await alchemy.nft.getNftsForOwner(tba, {
     contractAddresses: [process.env.NEXT_PUBLIC_BEADZ_NFT_ADDRESS!],
