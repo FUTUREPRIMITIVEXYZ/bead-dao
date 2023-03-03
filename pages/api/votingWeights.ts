@@ -5,6 +5,8 @@ import supabase from "../../utils/supabase";
 
 import alchemy from "../../utils/alchemy";
 
+import lizardAccounts from "../../public/lizardAccounts.json";
+
 const provider = new ethers.providers.AlchemyProvider(
   "goerli",
   process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!
@@ -14,36 +16,6 @@ const votingWeightsHandler = async (
   req: NextApiRequest,
   res: NextApiResponse
 ) => {
-  const lizardz = await alchemy.nft.getNftsForContract(
-    process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
-    {
-      pageSize: 10000,
-    }
-  );
-
-  const promises = lizardz.nfts.map(async (nft) => {
-    const registry = "0xc49B4a8368B545DECeE584258343bE469E65EAc6";
-
-    const accountRegistry = new ethers.Contract(
-      registry,
-      ["function account(address, uint256) returns (address)"],
-      provider
-    );
-
-    const account = await accountRegistry.callStatic.account(
-      ethers.utils.getAddress(nft.contract.address),
-      nft.tokenId
-    );
-
-    console.log(account);
-
-    return { ...nft, account };
-  });
-
-  const nftsWithAccounts = await Promise.all(promises);
-
-  console.log(nftsWithAccounts);
-
   const beadz = await alchemy.nft.getOwnersForContract(
     process.env.NEXT_PUBLIC_BEADZ_NFT_ADDRESS!,
     { withTokenBalances: true }
@@ -58,11 +30,9 @@ const votingWeightsHandler = async (
       };
     }, {});
 
-  console.log(beadzByTokenBoundAccount);
-
-  const votingWeights = nftsWithAccounts.map((nft) => {
+  const votingWeights = lizardAccounts.map((account, index) => {
     return {
-      [nft.tokenId]: beadzByTokenBoundAccount[nft.account],
+      [index + 1]: beadzByTokenBoundAccount[account],
     };
   });
 
