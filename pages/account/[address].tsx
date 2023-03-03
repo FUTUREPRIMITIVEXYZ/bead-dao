@@ -90,6 +90,7 @@ const Address: NextPage = () => {
                 <NftViewer
                   nft={data}
                   ownedBy={formattedAddress}
+                  account={data.account}
                   balance={data.beadCount}
                 />
               </div>

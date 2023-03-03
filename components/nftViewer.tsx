@@ -20,12 +20,13 @@ export interface Nft {
 interface Props {
   nft: Nft;
   ownedBy?: string;
+  account: string;
   balance: number;
 }
 
 export const NftViewer: React.FC<
   Props & React.HTMLAttributes<HTMLDivElement>
-> = ({ className, nft, ownedBy, balance }) => {
+> = ({ className, nft, ownedBy, account, balance }) => {
   const { data: ensName } = useEnsName({
     address: ownedBy as `0x{string}`,
     chainId: 1,
@@ -74,6 +75,20 @@ export const NftViewer: React.FC<
           >
             <div className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
               {ownerDisplay}
+            </div>
+          </a>
+        </div>
+        <div className="mb-4 flex items-center space-x-2 justify-start font-bold text-address-color-secondary">
+          <WalletIcon height={25} width={24} />
+          <span className="whitespace-nowrap">Lizard Account:</span>
+          <a
+            href={`https://goerli.etherscan.io/address/${account}`}
+            target="_blank"
+            rel="noreferrer"
+            className="cursor-pointer"
+          >
+            <div className="rounded-3xl bg-address py-1 px-4 cursor-pointer">
+              {`${account.slice(0, 6)}...${account.slice(-4)}`}
             </div>
           </a>
         </div>
