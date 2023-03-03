@@ -91,20 +91,18 @@ export const Background: React.FC<
           <div className="flex flex-row">
             {clientAddress && (
               <Link href={`/account/${clientAddress}`}>
-                <Button>
+                <Button className="mr-2">
                   <div className="px-1 whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
                     My Lizard
                   </div>
                 </Button>
               </Link>
             )}
-            {!clientAddress && (
-              <ConnectButton
-                accountStatus="avatar"
-                chainStatus="name"
-                showBalance={false}
-              />
-            )}
+            <ConnectButton
+              accountStatus="avatar"
+              chainStatus="none"
+              showBalance={false}
+            />
           </div>
         </div>
         {children}
