@@ -39,18 +39,20 @@ const Address: NextPage = () => {
   );
 
   useEffect(() => {
-    if (minted === "true") {
-      setModalContent(<MintSuccess />);
-      setShowModal(true);
-
-      return;
-    }
-    if (beadClaim === "true") {
-      setModalContent(<BeadSuccess />);
-      setShowModal(true);
-
-      return;
-    }
+    // if (minted === "true") {
+    //   setModalContent(<MintSuccess />);
+    //   setShowModal(true);
+    //
+    //   return;
+    // }
+    // if (beadClaim === "true") {
+    //   setModalContent(<BeadSuccess />);
+    //   setShowModal(true);
+    //
+    //   return;
+    // }
+    setModalContent(<BeadSuccess />);
+    setShowModal(true);
   }, [minted, beadClaim]);
 
   return (
