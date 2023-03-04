@@ -1,18 +1,14 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import { Background } from "../../components/background";
-import useGetNfts from "../../utils/hooks/useGetNfts";
 import { useRouter } from "next/router";
-import { NftViewer, Nft } from "../../components/nftViewer";
+import { NftViewer } from "../../components/nftViewer";
 import { RefreshIcon } from "../../components/refreshIcon";
-import useGetBeads from "../../utils/hooks/useGetBeads";
 import { Modal } from "../../components/modal";
 import { MintSuccess } from "../../components/mintSuccess";
 import { BeadSuccess } from "../../components/beadSuccess";
 import { BeadLoading } from "../../components/beadLoading";
-import { GetServerSideProps } from "next";
 import { ethers } from "ethers";
 
 import useSWR from "swr";
@@ -33,7 +29,7 @@ const Address: NextPage = () => {
     ? ethers.utils.getAddress(addressFromUrl!)
     : undefined;
 
-  const { data, error, isLoading, mutate } = useSWR(
+  const { data, isLoading, mutate } = useSWR(
     addressFromUrl ? `/api/${addressFromUrl}/lizard` : "",
     async (url: string) => fetch(url).then((res) => res.json())
   );
