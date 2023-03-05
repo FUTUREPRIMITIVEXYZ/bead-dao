@@ -1,0 +1,46 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Lizardz
+    network: goerli
+    source:
+      address: "0x07F884bFBB6B8e440e746543b4BE87737121A085"
+      abi: Lizardz
+      startBlock: 8578822
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Lizard
+      abis:
+        - name: AccountRegistry
+          file: ./abis/AccountRegistry.json
+        - name: Lizardz
+          file: ./abis/Lizardz.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/lizardz.ts
+  - kind: ethereum
+    name: AccountRegistry
+    network: goerli
+    source:
+      address: "0xc49B4a8368B545DECeE584258343bE469E65EAc6"
+      abi: AccountRegistry
+      startBlock: 8578822
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AccountRegistry
+      abis:
+        - name: AccountRegistry
+          file: ./abis/AccountRegistry.json
+      eventHandlers:
+        - event: AccountCreated(address,indexed address,indexed uint256)
+          handler: handleAccountCreated
+      file: ./src/accountRegistry.ts
