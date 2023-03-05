@@ -20,7 +20,7 @@ export const Background: React.FC<
 
   return (
     <div
-      className={`${className} w-full h-screen overflow-scroll bg-main bg-cover bg-center bg-no-repeat`}
+      className={`${className} w-screen h-screen overflow-scroll bg-main bg-cover bg-center bg-no-repeat`}
     >
       <div
         className={`h-full w-full ${
