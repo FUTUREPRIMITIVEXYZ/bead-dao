@@ -14,7 +14,7 @@ const metadataHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { tokenId } = req.query as MetadataRequest;
 
   const compose = new ComposeClient({
-    ceramic: "http://localhost:7007",
+    ceramic: "https://ceramic-node-production.up.railway.app",
     //@ts-ignore
     definition,
   });
@@ -36,14 +36,22 @@ const metadataHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   `);
 
-  console.log(response);
+  if (response.errors) {
+    return res.json({
+      description: "ᗷEᗩᗪᘔ.EᑎᑕOᗰᑭᗩᔕᔕ.ᗩᒪᒪ.ᗪᖇEᗩᗰᔕ https://ilovebeadz.xyz",
+      external_url: "https://ilovebeadz.xyz",
+      name: `ᗷEᗩᗪ DAO Lizard #${tokenId}`,
+      image: "https://ilovebeadz.xyz/liz-nft.png",
+    });
+  } else {
+    const tokenMetadata = (response.data?.nftMetadataIndex as any).edges
+      .filter((edge: any) => edge.node.tokenId === parseInt(tokenId))
+      .at(0).node;
 
-  return res.json({
-    description: "ᗷEᗩᗪᘔ.EᑎᑕOᗰᑭᗩᔕᔕ.ᗩᒪᒪ.ᗪᖇEᗩᗰᔕ https://ilovebeadz.xyz",
-    external_url: "https://ilovebeadz.xyz",
-    name: `ᗷEᗩᗪ DAO Lizard #${tokenId}`,
-    image: "https://ilovebeadz.xyz/liz-nft.png",
-  });
+    const { id: _id, tokenId: _tokenId, ...metadata } = tokenMetadata;
+
+    return res.json(metadata);
+  }
 };
 
 export default metadataHandler;

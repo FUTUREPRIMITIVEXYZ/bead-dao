@@ -11,7 +11,7 @@ dotenv.config();
 
 async function main() {
   const compose = new ComposeClient({
-    ceramic: "http://localhost:7007",
+    ceramic: "https://ceramic-node-production.up.railway.app",
     //@ts-ignore
     definition,
   });
@@ -37,24 +37,24 @@ async function main() {
     }
   `;
 
-  // for (let tokenId = 2; tokenId < 101; tokenId++) {
-  //   console.log(tokenId);
-  //   const response = await compose.executeQuery(createMetadataMutation, {
-  //     nftMetadata: {
-  //       content: {
-  //         tokenContract: process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
-  //         tokenId,
-  //         name: `ᗷEᗩᗪ DAO Lizard #${tokenId}`,
-  //         description: "ᗷEᗩᗪᘔ.EᑎᑕOᗰᑭᗩᔕᔕ.ᗩᒪᒪ.ᗪᖇEᗩᗰᔕ https://ilovebeadz.xyz",
-  //         external_url: "https://ilovebeadz.xyz",
-  //         image: "https://ilovebeadz.xyz/liz-nft.png",
-  //         attributes: [],
-  //       },
-  //     },
-  //   });
-  //
-  //   console.log(response);
-  // }
+  for (let tokenId = 68; tokenId < 101; tokenId++) {
+    console.log(tokenId);
+    const response = await compose.executeQuery(createMetadataMutation, {
+      nftMetadata: {
+        content: {
+          tokenContract: process.env.NEXT_PUBLIC_LIZARD_NFT_ADDRESS!,
+          tokenId,
+          name: `ᗷEᗩᗪ DAO Lizard #${tokenId}`,
+          description: "ᗷEᗩᗪᘔ.EᑎᑕOᗰᑭᗩᔕᔕ.ᗩᒪᒪ.ᗪᖇEᗩᗰᔕ https://ilovebeadz.xyz",
+          external_url: "https://ilovebeadz.xyz",
+          image: "https://ilovebeadz.xyz/liz-nft.png",
+          attributes: [],
+        },
+      },
+    });
+
+    console.log(response);
+  }
 
   const response = await compose.executeQuery(`
     query {
@@ -72,6 +72,8 @@ async function main() {
       }
     }
   `);
+
+  console.log(response);
 
   console.log((response?.data?.nftMetadataIndex as any).edges);
 }
