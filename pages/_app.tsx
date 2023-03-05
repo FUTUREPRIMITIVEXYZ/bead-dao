@@ -29,7 +29,8 @@ export const rainbowMagicConnector = ({ chains }: any) => ({
         apiKey: "pk_live_B2F2B987B9826713",
         magicSdkConfiguration: {
           network: {
-            rpcUrl: `https://eth-goerli.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`,
+            rpcUrl:
+              "https://eth-mainnet.gateway.pokt.network/v1/lb/92fd9951b65f78fa784377d2",
             chainId: 5,
           },
         },

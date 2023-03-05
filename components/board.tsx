@@ -54,7 +54,7 @@ export const Board: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
   data,
 }) => {
   return (
-    <Card className={`${className} my-0 mx-auto `}>
+    <Card className={`${className} my-0 mx-auto mb-24`}>
       <div className="flex flex-col space-y-4 items-start justify-center h-full">
         <h1 className="w-full text-center font-bold text-2xl">
           Governance Board
