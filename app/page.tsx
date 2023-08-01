@@ -1,27 +1,14 @@
 'use client'
-
-import clsx from 'clsx'
-import { WindowProvider } from 'wagmi'
-import { TBAccount } from './components'
-import { ExampleAlchemyFetch } from './components/ExampleAlchemyFetch'
-
 import { useAccount } from 'wagmi'
-
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { Button } from '@/components/button'
-import { useEffect, useState, useMemo, ReactNode } from 'react'
-import { Alchemy, Network, Contract } from 'alchemy-sdk'
+import { useState, useMemo, ReactNode } from 'react'
 import { Background } from '@/components/background'
 import { NavLink } from '@/components/navLink'
 import Link from 'next/link'
 import { Modal } from '@/components/modal'
 import { How } from '@/components/how'
-import { TelegramIcon } from '@/components/telegramIcon'
-import { IgIcon } from '@/components/igIcon'
-import { TwitIconFilled } from '@/components/twitIconFilled'
-
 import infoIcon from "public/icons/infoDock-icon.png";
 import twitterIcon from "public/icons/twitter-icon.png";
 import telegramIcon from "public/icons/telegram-icon.png";
@@ -103,7 +90,7 @@ const Home: NextPage = () => {
                       setModalContent(item.modalContent);
                       setShowModal(true);
                     }: () => {console.log("hmm")}}
-                    detailed={item.detailed}
+                    detailed={item.detailed || false}
                   >
                     <div className="text-center text-xl font-bold first-letter:capitalize">
                         {item.text}
