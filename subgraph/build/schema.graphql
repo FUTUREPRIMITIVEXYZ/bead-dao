@@ -1,5 +1,0 @@
-type Lizard @entity {
-  id: ID! # tokenId
-  owner: Bytes! # owner address
-  account: Bytes! # account address
-}
