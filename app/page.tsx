@@ -11,7 +11,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { Button } from '@/components/button'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, ReactNode } from 'react'
 import { Alchemy, Network, Contract } from 'alchemy-sdk'
 import { Background } from '@/components/background'
 import { NavLink } from '@/components/navLink'
@@ -22,6 +22,24 @@ import { TelegramIcon } from '@/components/telegramIcon'
 import { IgIcon } from '@/components/igIcon'
 import { TwitIconFilled } from '@/components/twitIconFilled'
 
+import infoIcon from "public/icons/infoDock-icon.png";
+import twitterIcon from "public/icons/twitter-icon.png";
+import telegramIcon from "public/icons/telegram-icon.png";
+import igIcon from "public/icons/ig-fx-icon.png";
+
+const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December']
+
+const getDateTime = () => {
+  const date = new Date();
+  return {
+    weekday: days[date.getDay()],
+    month: months[date.getMonth()],
+    date: date.getDate(),
+    time: date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0")
+  }
+}
+
 const Home: NextPage = () => {
   const [showModal, setShowModal] = useState(false)
   const [modalContent, setModalContent] = useState<any>(null)
@@ -30,6 +48,12 @@ const Home: NextPage = () => {
 
   const links = useMemo(
     () => [
+      {
+        link: '',
+        text: 'About',
+        external: true,
+        detailed: true
+      },
       {
         link: 'https://eips.ethereum.org/EIPS/eip-6551',
         text: 'About',
@@ -48,7 +72,7 @@ const Home: NextPage = () => {
     ],
     [address]
   )
-
+  const { weekday, month, date, time } = getDateTime();
   return (
     <div className="">
       <Head>
@@ -57,49 +81,53 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background>
-        <div className="h-[100%] flex flex-col justify-end items-center space-y-8">
-          {links.map((item, i) => (
-            <div key={i}>
-              {item.modal ? (
-                <NavLink
-                  key={item.link}
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setModalContent(item.modalContent)
-                    setShowModal(true)
-                  }}
-                >
-                  <div className="text-center text-xl font-bold first-letter:capitalize">
-                    {item.text}
-                  </div>
-                </NavLink>
-              ) : (
-                <NavLink key={item.link} className="cursor-pointer">
-                  {item.external ? (
-                    <a href={item.link} target="_blank" rel="noreferrer">
-                      <div className="text-center text-xl font-bold first-letter:capitalize">
-                        {item.text}
-                      </div>
-                    </a>
-                  ) : (
-                    <Link href={item.link}>
-                      <div className="text-center text-xl font-bold first-letter:capitalize">
-                        {item.text}
-                      </div>
-                    </Link>
-                  )}
-                </NavLink>
-              )}
+      <div className="min-h-full mt-5 flex flex-col justify-between items-center">
+          <div className="flex flex-col items-center">
+            <div className="text-white font-joker text-xl">
+              {weekday}, {month} {date}
             </div>
+            <div className="text-white font-inter font-semibold text-[5rem]">
+              {time}
+              </div>
+          </div>
+          {links
+            // will bring all `detailed` items on top
+            .sort((a,b) => (Number(b.detailed) - Number(a.detailed)))
+            .map((item, i) => (
+              <div key={i}>
+                <LinkWrapper isExternal={item.external || false} href={item.link}>
+                  <NavLink
+                    key={item.link}
+                    className="cursor-pointer"
+                    onClick={item.modal ? () => {
+                      setModalContent(item.modalContent);
+                      setShowModal(true);
+                    }: () => {console.log("hmm")}}
+                    detailed={item.detailed}
+                  >
+                    <div className="text-center text-xl font-bold first-letter:capitalize">
+                        {item.text}
+                    </div>
+                  </NavLink>
+                </LinkWrapper>
+              </div>
           ))}
-          <div className="flex justify-center items-center space-x-4">
+          <div className="flex justify-center items-center space-x-4 rounded-[41px] bg-link backdrop-blur-sm w-full py-4">
             <a
               className="cursor-pointer"
               href="https://t.me/beaddao"
               target="_blank"
               rel="noreferrer"
             >
-              <TelegramIcon />
+              <Image src={infoIcon} width={60} height={60} alt="info dock icon" />
+            </a>
+            <a
+              className="cursor-pointer"
+              href="https://t.me/beaddao"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Image src={telegramIcon} width={60} height={60} alt="info dock icon" />
             </a>
             <a
               className="cursor-pointer"
@@ -107,7 +135,7 @@ const Home: NextPage = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <TwitIconFilled />
+              <Image src={twitterIcon} width={60} height={60} alt="twitter dock icon" />
             </a>
             <a
               className="cursor-pointer"
@@ -115,7 +143,7 @@ const Home: NextPage = () => {
               target="_blank"
               rel="noreferrer"
             >
-              <IgIcon />
+              <Image src={igIcon} width={60} height={60} alt="instagram dock icon" />
             </a>
           </div>
         </div>
@@ -132,6 +160,21 @@ const Home: NextPage = () => {
         </Modal>
       )}
     </div>
+  )
+}
+
+const LinkWrapper = ({children, isExternal, href}: {children: ReactNode, isExternal: boolean, href: string}) => {
+  if (isExternal) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    )
+  }
+  return (
+    <Link href={href}>
+      {children}
+    </Link>
   )
 }
 
