@@ -4,8 +4,8 @@ import {
   DefenderRelayProvider,
 } from "defender-relay-client/lib/ethers";
 import { BigNumber, ethers } from "ethers";
-import supabase from "../../utils/supabase";
-import alchemy from "../../utils/alchemy";
+// import supabase from "../../utils/supabase";
+import {alchemyService as alchemy} from "@/services/alchemy-service";
 
 type MintRequest = {
   lizard: string;

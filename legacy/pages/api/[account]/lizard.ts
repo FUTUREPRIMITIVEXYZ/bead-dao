@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import alchemy from "../../../utils/alchemy";
+import {alchemyService as alchemy} from "@/services/alchemy-service";
 
-import lizardAccounts from "../../../public/lizardAccounts.json";
+import lizardAccounts from "../../../../public/lizardAccounts.json";
 import { parseInt } from "lodash";
 
 const lizardHandler = async (req: NextApiRequest, res: NextApiResponse) => {

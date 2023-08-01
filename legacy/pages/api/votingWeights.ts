@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ethers } from "ethers";
 
-import alchemy from "../../utils/alchemy";
-import lizardAccounts from "../../public/lizardAccounts.json";
+import {alchemyService as alchemy} from "@/services/alchemy-service";
+import lizardAccounts from "../../../public/lizardAccounts.json";
 
 const votingWeightsHandler = async (
   req: NextApiRequest,

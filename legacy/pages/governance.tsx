@@ -1,11 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useAccount } from "wagmi";
-import { useEffect, useState } from "react";
-import { Background } from "../components/background";
-import { useRouter } from "next/router";
-import { fetchEnsName } from "@wagmi/core";
-import { Board } from "../components/board";
+import { Background } from "@/components/background";
+import { Board } from "@/components/board";
 import useSWR from "swr";
 
 const GovernanceBoard: NextPage = () => {

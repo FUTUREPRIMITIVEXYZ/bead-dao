@@ -1,9 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { ethers } from "ethers";
-import alchemy from "../../utils/alchemy";
+import {alchemyService as alchemy} from "@/services/alchemy-service";
 import { orderBy } from "lodash";
-
-import lizardAccounts from "../../public/lizardAccounts.json";
+import lizardAccounts from "../../../public/lizardAccounts.json";
 
 const governanceBoardHandler = async (
   req: NextApiRequest,

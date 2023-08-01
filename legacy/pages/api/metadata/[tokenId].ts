@@ -4,7 +4,7 @@ import { DID } from "dids";
 import { Ed25519Provider } from "key-did-provider-ed25519";
 import * as KeyResolver from "key-did-resolver";
 
-import definition from "../../../ceramic/runtime-schema.json";
+// import definition from "../../../ceramic/runtime-schema.json";
 
 type MetadataRequest = {
   tokenId: string;

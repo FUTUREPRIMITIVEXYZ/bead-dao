@@ -1,14 +1,14 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { Background } from "../../components/background";
+import { Background } from "@/components/background";
 import { useRouter } from "next/router";
-import { NftViewer } from "../../components/nftViewer";
-import { RefreshIcon } from "../../components/refreshIcon";
-import { Modal } from "../../components/modal";
-import { MintSuccess } from "../../components/mintSuccess";
-import { BeadSuccess } from "../../components/beadSuccess";
-import { BeadLoading } from "../../components/beadLoading";
+import { NftViewer } from "@/components/nftViewer";
+import { RefreshIcon } from "@/components/refreshIcon";
+import { Modal } from "@/components/modal";
+import { MintSuccess } from "@/components/mintSuccess";
+import { BeadSuccess } from "@/components/beadSuccess";
+import { BeadLoading } from "@/components/beadLoading";
 import { ethers } from "ethers";
 
 import useSWR from "swr";

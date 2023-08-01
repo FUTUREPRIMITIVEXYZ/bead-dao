@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Background } from "../components/background";
-import { Button } from "../components/button";
+import { Background } from "@/components/background";
+import { Button } from "@/components/button";
 import { ethers } from "ethers";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 import { useAccount } from "wagmi";
@@ -16,6 +16,7 @@ import {
 } from "pbt-chip-client/kong";
 
 import parseKeys from "@/utils/parseKeys";
+import Image from "next/image";
 
 const provider = new ethers.providers.AlchemyProvider(
   "goerli",
@@ -208,9 +209,12 @@ const Scan: NextPage = () => {
         {tapLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-start bg-black bg-opacity-30">
             <div className="h-64 w-64 mt-4 bg-white rounded-lg overflow-hidden shadow mb-4">
-              <img
+              <Image
                 className="w-64 h-64 mb-4"
                 src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGY3ZGRmNTU1YjAxNjM2ODQzY2Y2MzU4YmZhMjEwOGFlYzNhZTE3NCZjdD1z/QtX9VvsqoJ9nNpRVGF/giphy.gif"
+                alt="scan image"
+                width={64}
+                height={64}
               />
             </div>
             <div className="bg-white rounded-full px-4 py-2 font-bold">
@@ -221,9 +225,12 @@ const Scan: NextPage = () => {
         {isLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <div className="h-64 w-64 mt-8 bg-white rounded-lg overflow-hidden shadow mb-4">
-              <img
+              <Image
                 className="w-64 h-64 mb-4"
                 src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2ZkNWIxZDMxNTM0MTBmNGU2NTU4NzhjYTE4ZDhiMDg2NTk2MTAzZSZjdD1z/yYmPdb7UNlih5LlpL8/giphy.gif"
+                alt="scan image"
+                width={64}
+                height={64}
               />
             </div>
           </div>
