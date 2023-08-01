@@ -11,7 +11,7 @@ import {
   rainbowWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { configureChains, Connector, createClient, WagmiConfig } from "wagmi";
+import { configureChains, Connector, createConfig, WagmiConfig } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { NextSeo } from "next-seo";
@@ -43,7 +43,7 @@ export const rainbowMagicConnector = ({ chains }: any) => ({
   },
 });
 
-const { chains, provider, webSocketProvider } = configureChains(
+const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet, goerli],
   [
     alchemyProvider({
@@ -65,11 +65,11 @@ const connectors = connectorsForWallets([
   },
 ]);
 
-const wagmiClient = createClient({
+const wagmiConfig = createConfig({
   autoConnect: true,
   connectors,
-  provider,
-  webSocketProvider,
+  publicClient,
+  webSocketPublicClient,
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -113,7 +113,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       }
     ]}
   />
-    <WagmiConfig client={wagmiClient}>
+    <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
         <Component {...pageProps} />
       </RainbowKitProvider>
