@@ -15,7 +15,7 @@ import {
   getSignatureFromScan,
 } from "pbt-chip-client/kong";
 
-import parseKeys from "../helpers/parseKeys";
+import parseKeys from "@/utils/parseKeys";
 
 const provider = new ethers.providers.AlchemyProvider(
   "goerli",

@@ -1,17 +1,14 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Background } from "../components/background";
+import { Background } from "@/components/background";
 import Image from "next/image";
-import { Button } from "../components/button";
+import { Button } from "@/components/button";
 import { ethers } from "ethers";
 import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
 import { useAccount } from "wagmi";
-
 import { useEffect } from "react";
-
 import URL from "url-parse";
-import parseKeys from "../helpers/parseKeys";
-
+import parseKeys from "@/utils/parseKeys";
 import {
   getPublicKeysFromScan,
   getSignatureFromScan,

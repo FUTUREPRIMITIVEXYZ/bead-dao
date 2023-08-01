@@ -11,13 +11,13 @@ import { MintSuccess } from '@/components/mintSuccess'
 import { BeadSuccess } from '@/components/beadSuccess'
 import { BeadLoading } from '@/components/beadLoading'
 import { ethers } from 'ethers'
-
 import useSWR from 'swr'
-
-const Address: NextPage = ({
-  params,
-}: {
+type AddressProps = {
   params: { address: string; beadClaim: string; minted: string; beadLoading: string }
+}
+
+const Address: NextPage<AddressProps> = ({
+  params,
 }) => {
   const [showModal, setShowModal] = useState(false)
   const [modalContent, setModalContent] = useState<any>(null)
