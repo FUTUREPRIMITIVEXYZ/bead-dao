@@ -2,22 +2,16 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useAccount } from "wagmi";
-import { Button } from "../components/button";
-import { useEffect, useState } from "react";
-import { Alchemy, Network, Contract } from "alchemy-sdk";
+import { useState } from "react";
 import { Background } from "../components/background";
 import { NavLink } from "../components/navLink";
 import Link from "next/link";
 import { Modal } from "../components/modal";
 import { How } from "../components/how";
-import { TelegramIcon } from "../components/telegramIcon";
-import { IgIcon } from "../components/igIcon";
-import { TwitIconFilled } from "../components/twitIconFilled";
 import infoIcon from "public/icons/infoDock-icon.png";
 import twitterIcon from "public/icons/twitter-icon.png";
 import telegramIcon from "public/icons/telegram-icon.png";
 import igIcon from "public/icons/ig-fx-icon.png";
-
 
 const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December']
