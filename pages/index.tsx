@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useAccount } from "wagmi";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Background } from "../components/background";
 import { NavLink } from "../components/navLink";
 import Link from "next/link";
@@ -33,19 +33,28 @@ const Home: NextPage = () => {
 
   const links = [
     {
+      link: "/",
+      text: "About",
+      external: false,
+      detailed: false,
+    },
+    {
       link: "https://eips.ethereum.org/EIPS/eip-6551",
       text: "About",
       external: true,
+      detailed: true,
     },
     {
-      link: "/how",
+      link: "",
       text: "How to Mint",
       modal: true,
       modalContent: <How />,
+      detailed: false,
     },
     {
       link: `/account/${address}`,
       text: "My wallet",
+      detailed: false,
     },
   ];
   const { weekday, month, date, time } = getDateTime();
@@ -69,39 +78,27 @@ const Home: NextPage = () => {
               {time}
             </div>
           </div>
-          {links.map((item, i) => (
-            <div key={i}>
-              {item.modal ? (
-                <NavLink
-                  key={item.link}
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setModalContent(item.modalContent);
-                    setShowModal(true);
-                  }}
-                >
-                  <div className="text-center text-xl font-bold first-letter:capitalize">
-                    {item.text}
-                  </div>
-                </NavLink>
-              ) : (
-                <NavLink key={item.link} className="cursor-pointer">
-                  {item.external ? (
-                    <a href={item.link} target="_blank" rel="noreferrer">
-                      <div className="text-center text-xl font-bold first-letter:capitalize">
+          {links
+            // will bring all `detailed` items on top
+            .sort((a,b) => (Number(b.detailed) - Number(a.detailed)))
+            .map((item, i) => (
+              <div key={i}>
+                <LinkWrapper isExternal={item.external || false} href={item.link}>
+                  <NavLink
+                    key={item.link}
+                    className="cursor-pointer"
+                    onClick={item.modal ? () => {
+                      setModalContent(item.modalContent);
+                      setShowModal(true);
+                    }: () => {console.log("hmm")}}
+                    detailed={item.detailed}
+                  >
+                    <div className="text-center text-xl font-bold first-letter:capitalize">
                         {item.text}
-                      </div>
-                    </a>
-                  ) : (
-                    <Link href={item.link}>
-                      <div className="text-center text-xl font-bold first-letter:capitalize">
-                        {item.text}
-                      </div>
-                    </Link>
-                  )}
-                </NavLink>
-              )}
-            </div>
+                    </div>
+                  </NavLink>
+                </LinkWrapper>
+              </div>
           ))}
           <div className="flex justify-center items-center space-x-4 rounded-[41px] bg-link backdrop-blur-sm w-full py-4">
             <a
@@ -153,5 +150,20 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+const LinkWrapper = ({children, isExternal, href}: {children: ReactNode, isExternal: boolean, href: string}) => {
+  if (isExternal) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    )
+  }
+  return (
+    <Link href={href}>
+      {children}
+    </Link>
+  )
+}
 
 export default Home;
