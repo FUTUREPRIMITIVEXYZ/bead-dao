@@ -14,6 +14,7 @@ import {
 import { configureChains, Connector, createClient, WagmiConfig } from "wagmi";
 import { mainnet, polygon, optimism, arbitrum, goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
+import { NextSeo } from "next-seo";
 
 import { MagicConnectConnector } from "@everipedia/wagmi-magic-connector";
 
@@ -73,11 +74,51 @@ const wagmiClient = createClient({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
+    <>
+    <NextSeo
+    titleTemplate="Ilovebeadz | %s"
+    defaultTitle="Ilovebeadz"
+    description="" // @todo
+    openGraph={{
+      url: "", // @todo
+      title: "Ilovebeadz",
+      description:
+        "", // @todo
+      images: [
+        {
+          url: "", // @todo
+          alt: "Ilovebeadz",
+          type: "image/jpeg",
+        },
+      ],
+      site_name: "Ilovebeadz",
+    }}
+    twitter={{
+      handle: "@Ilovebeadz",
+      site: "https://twitter.com/Ilovebeadz",
+      cardType: "summary_large_image",
+    }}
+    additionalLinkTags={[
+      {
+        rel: "preload",
+        href: "/fonts/Jokerman/Jokerman.otf",
+        as: "font",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "preload",
+        href: "/fonts/Inter/Inter-Bold.ttf",
+        as: "font",
+        crossOrigin: "anonymous",
+      }
+    ]}
+  />
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
         <Component {...pageProps} />
       </RainbowKitProvider>
     </WagmiConfig>
+    </>
   );
 }
 
