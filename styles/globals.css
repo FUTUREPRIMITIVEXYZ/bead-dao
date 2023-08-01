@@ -1,9 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Jokerman";
+  src: url("/fonts/Jokerman/Jokerman.otf");
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter/Inter-Bold.ttf");
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+}
 .box {
   position: relative;
 }
@@ -28,7 +40,7 @@
   mask-composite: exclude;
 }
 
-/* 
+/*
 html,
 body {
   padding: 0;

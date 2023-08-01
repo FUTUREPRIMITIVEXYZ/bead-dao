@@ -11,6 +11,7 @@ module.exports = {
   theme: {
     fontFamily: {
       joker: ["Jokerman"],
+      inter: ["Inter"]
     },
     extend: {
       colors: {
