@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* :root {
+  --foreground: 0, 0, 0;
+  --background: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground: 255, 255, 255;
+    --background: 0, 0, 0;
+  }
+} */
+
+@layer base {
+  body {
+    /* - This allows us to have a holy-grail `flex` layout: https: //philipwalton.github.io/solved-by-flexbox/demos/holy-grail/ */
+    /* - Children can fill available height with `flex: 1` */
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 100dvh;
+  }
+}
+
+.box {
+  position: relative;
+}
+.box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  padding: 4px;
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7f00,
+    #ffff00,
+    #00ff00,
+    #0000ff,
+    #4b0082,
+    #9400d3
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}

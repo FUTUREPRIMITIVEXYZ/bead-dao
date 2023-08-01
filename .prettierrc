@@ -1,0 +1,24 @@
+{
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "importOrderSortSpecifiers": true,
+  "printWidth": 90,
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "importOrderSeparation": true,
+  "importOrder": [
+    "^react(.*)",
+    "^[abis]",
+    "^[data]",
+    "^[services]",
+    "^[utils]",
+    "^[constants]",
+    "^[components]",
+    "^[hooks]",
+    "^[styles]",
+    "^[types]",
+    "^@(.*)$",
+    "^[./]"
+  ]
+}
