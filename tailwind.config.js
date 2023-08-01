@@ -21,10 +21,9 @@ module.exports = {
         "address-text": "#8695AB",
       },
       backgroundImage: {
-        main: "url('/lizzbg.png')",
-        "footer-texture": "url('/img/footer-texture.png')",
-      },
-    },
-  },
-  plugins: [],
+        main: "url('/bg-beaddao.jpg')",
+        "footer-texture": "url('/img/footer-texture.png')"
+      }
+    }
+  }
 };
