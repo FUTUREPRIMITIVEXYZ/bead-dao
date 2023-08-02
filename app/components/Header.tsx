@@ -95,7 +95,9 @@ export function Header({ variant, className, ...rest }: Props) {
             </svg>
           </div>
         </Link>
-        <div className="flex flex-row">
+
+        {
+          address ?
           <Link href={`/account/${address}`}>
             <Button className="mr-2">
               <div className="px-1 whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
@@ -103,8 +105,9 @@ export function Header({ variant, className, ...rest }: Props) {
               </div>
             </Button>
           </Link>
+          :
           <ConnectKitButton />
-        </div>
+        }
       </div>
     </nav>
   )

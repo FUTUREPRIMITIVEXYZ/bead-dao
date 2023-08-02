@@ -68,7 +68,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background>
-      <div className="min-h-full mt-5 flex flex-col justify-between items-center">
+      <div className="min-h-full mt-[3.25rem] flex flex-col justify-between items-center">
           <div className="flex flex-col items-center">
             <div className="text-white font-joker text-xl">
               {weekday}, {month} {date}
