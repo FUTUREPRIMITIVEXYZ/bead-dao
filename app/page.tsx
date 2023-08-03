@@ -36,28 +36,39 @@ const Home: NextPage = () => {
   const links = useMemo(
     () => [
       {
+        type: 'item',
         link: '',
         text: 'About',
         external: true,
         detailed: true
       },
       {
+        type: 'separator',
+        link: '',
+        text: '---',
+        external: false,
+        detailed: false
+      },
+      {
+        type: 'item',
         link: 'https://eips.ethereum.org/EIPS/eip-6551',
         text: 'About',
         external: true,
       },
       {
+        type: 'item',
         link: '/how',
         text: 'How to Mint',
         modal: true,
         modalContent: <How />,
       },
-      {
-        link: `/account/${address}`,
-        text: 'My wallet',
-      },
+      // {
+      //   link: `/account/${address}`,
+      //   text: 'My wallet',
+      // },
     ],
-    [address]
+    // [address]
+    []
   )
   const { weekday, month, date, time } = getDateTime();
   return (
@@ -68,7 +79,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background>
-      <div className="min-h-full mt-[3.25rem] flex flex-col justify-between items-center">
+      <div className="min-h-full mt-[3.25rem] flex flex-col  items-center">
           <div className="flex flex-col items-center">
             <div className="text-white font-joker text-xl">
               {weekday}, {month} {date}
@@ -77,11 +88,20 @@ const Home: NextPage = () => {
               {time}
               </div>
           </div>
+          <div className="flex-1 [&>*]:my-2">
           {links
             // will bring all `detailed` items on top
             .sort((a,b) => (Number(b.detailed) - Number(a.detailed)))
-            .map((item, i) => (
-              <div key={i}>
+            .map((item, i) => {
+              if (item.type === "separator") {
+                return (
+                  <div className="place-self-start font-inter  font-semibold first-letter:capitalize text-white text-lg" key={i}>
+                    Beadification Center
+                  </div>
+                )
+              }
+
+              return (<div key={i}>
                 <LinkWrapper isExternal={item.external || false} href={item.link}>
                   <NavLink
                     key={item.link}
@@ -97,9 +117,11 @@ const Home: NextPage = () => {
                     </div>
                   </NavLink>
                 </LinkWrapper>
-              </div>
-          ))}
-          <div className="flex justify-center items-center space-x-4 rounded-[41px] bg-link backdrop-blur-sm w-full py-4">
+              </div>)
+            }
+          )}
+          </div>
+          <div className="flex justify-center items-center space-x-4 rounded-[41px] bg-link backdrop-blur-sm w-full py-4 place-self-end">
             <a
               className="cursor-pointer"
               href="https://t.me/beaddao"
