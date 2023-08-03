@@ -67,14 +67,12 @@ function Mint({}: MintProps) {
         </div>
       </Background>
     )
-  }
-
-  return (
-    <Background className="flex flex-col items-center justify-center px-3">
-      {hasMounted && (
-        <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
-          {mintState === MintState.PREMINT && (
-            <>
+  } else if (address) {
+    return (
+      <>
+        {mintState === MintState.PREMINT && (
+          <Background className="flex flex-col items-center justify-center px-3">
+            <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
               <MintImage caption="Image Name" />
               <form className="flex flex-col items-center w-full gap-6">
                 <Input
@@ -92,32 +90,42 @@ function Mint({}: MintProps) {
                   Mint Bead
                 </Button>
               </form>
-            </>
-          )}
-          {mintState === MintState.MINTING && (
-            <>
-              <BeadLoading />
-              <Button
-                // disabled={!hasRequiredFields}
-                type="submit"
-                onClick={() => setMintState(MintState.MINTED)}
-              >
-                Go to MINTED
-              </Button>
-            </>
-          )}
-          {mintState === MintState.MINTERROR && (
-            <div className="flex flex-col items-center gap-6">
-              <h1 className="text-xl font-bold">:(</h1>
-              <h1 className="text-xl font-bold">Oopsie, something went wrong</h1>
-
-              <Button type="submit" onClick={() => setMintState(MintState.PREMINT)}>
-                Try Again
-              </Button>
             </div>
-          )}
-          {mintState === MintState.MINTED && (
-            <>
+          </Background>
+        )}
+        {mintState === MintState.MINTING && (
+          <Background className="flex flex-col items-center justify-center px-3">
+            <div className="flex flex-col gap-4 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
+              <div className="flex flex-col items-center w-full gap-6 aspect-square">
+                <BeadLoading />
+                <Button
+                  // disabled={!hasRequiredFields}
+                  type="submit"
+                  onClick={() => setMintState(MintState.MINTED)}
+                >
+                  Go to MINTED
+                </Button>
+              </div>
+            </div>
+          </Background>
+        )}
+        {mintState === MintState.MINTERROR && (
+          <Background className="flex flex-col items-center justify-center px-3">
+            <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
+              <div className="flex flex-col items-center gap-6">
+                <h1 className="text-xl font-bold">:(</h1>
+                <h1 className="text-xl font-bold">Oopsie, something went wrong</h1>
+
+                <Button type="submit" onClick={() => setMintState(MintState.PREMINT)}>
+                  Try Again
+                </Button>
+              </div>
+            </div>
+          </Background>
+        )}
+        {mintState === MintState.MINTED && (
+          <Background className="flex flex-col items-center justify-center px-3">
+            <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
               <MintImage caption={`You Minted Bead #${BEAD_NUMBER}!`} />
 
               <Button type="submit" onClick={() => setMintState(MintState.MINTING)}>
@@ -126,12 +134,13 @@ function Mint({}: MintProps) {
               <Button variant="aquaGrey" onClick={() => setMintState(MintState.MINTING)}>
                 Back Home
               </Button>
-            </>
-          )}
-        </div>
-      )}
-    </Background>
-  )
+            </div>
+          </Background>
+        )}
+      </>
+    )
+  }
+  return null
 }
 
 export default Mint

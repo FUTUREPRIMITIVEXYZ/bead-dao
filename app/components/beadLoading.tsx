@@ -10,8 +10,8 @@ export const BeadLoading: React.FC<
 > = ({}) => {
   return (
     <div className="">
-      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
-        <div className="max-w-[400px] relative w-auto my-6 mx-auto">
+      <div className="">
+        <div className="max-w-[400px] relative w-auto mx-auto">
           <Image
             height={322}
             width={322}
@@ -20,7 +20,7 @@ export const BeadLoading: React.FC<
           />
         </div>
       </div>
-      <div className="fixed inset-0 z-40 bg-black opacity-80"></div>
+      {/* <div className="fixed inset-0 z-40 bg-black opacity-80"></div> */}
     </div>
   )
 }
