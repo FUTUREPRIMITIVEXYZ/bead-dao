@@ -7,14 +7,14 @@ import { Button } from '../components/button'
 import { ethers } from 'ethers'
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree'
 import { useAccount } from 'wagmi'
-import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { toast, Toaster } from 'react-hot-toast'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import URL from 'url-parse'
 import { getPublicKeysFromScan, getSignatureFromScan } from 'pbt-chip-client/kong'
-
 import parseKeys from '@/utils/parseKeys'
+import Image from 'next/image'
+import { useModal } from 'connectkit'
 
 const provider = new ethers.providers.AlchemyProvider(
   'goerli',
@@ -31,7 +31,7 @@ type MintPayload = {
 
 const Scan: NextPage = () => {
   const router = useRouter()
-  const { openConnectModal } = useConnectModal()
+  const {setOpen} = useModal();
   const [clientIsConnected, setclientIsConnected] = useState(false)
 
   const [tapLoading, setTapLoading] = useState(false)
@@ -184,7 +184,7 @@ const Scan: NextPage = () => {
         <div className="flex flex-col justify-center items-center min-h-full">
           {!clientIsConnected && (
             <div>
-              <Button className="mb-4" onClick={openConnectModal}>
+              <Button className="mb-4" onClick={()=>{setOpen(true)}}>
                 <div className="py-1 px-2 text-3xl whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
                   Connect Wallet
                 </div>
@@ -202,9 +202,12 @@ const Scan: NextPage = () => {
         {tapLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-start bg-black bg-opacity-30">
             <div className="h-64 w-64 mt-4 bg-white rounded-lg overflow-hidden shadow mb-4">
-              <img
+              <Image
                 className="w-64 h-64 mb-4"
                 src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGY3ZGRmNTU1YjAxNjM2ODQzY2Y2MzU4YmZhMjEwOGFlYzNhZTE3NCZjdD1z/QtX9VvsqoJ9nNpRVGF/giphy.gif"
+                alt="processing gif"
+                width={64}
+                height={64}
               />
             </div>
             <div className="bg-white rounded-full px-4 py-2 font-bold">
@@ -215,9 +218,12 @@ const Scan: NextPage = () => {
         {isLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <div className="h-64 w-64 mt-8 bg-white rounded-lg overflow-hidden shadow mb-4">
-              <img
+              <Image
                 className="w-64 h-64 mb-4"
                 src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2ZkNWIxZDMxNTM0MTBmNGU2NTU4NzhjYTE4ZDhiMDg2NTk2MTAzZSZjdD1z/yYmPdb7UNlih5LlpL8/giphy.gif"
+                width={64}
+                height={64}
+                alt="loading image"
               />
             </div>
           </div>
