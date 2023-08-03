@@ -17,11 +17,11 @@ import { Inter as InterFont, Space_Mono, Source_Sans_3 } from 'next/font/google'
 //   // additional weights can be added here  
 //  })
 
-const Inter = InterFont({
-  variable: '--font-inter', // a custom css variable for the font
-  subsets: ['latin'],
-  display: 'swap'
-})
+// const Inter = InterFont({
+//   variable: '--font-inter', // a custom css variable for the font
+//   subsets: ['latin'],
+//   display: 'swap'
+// })
 
 const SpaceMono = Space_Mono({
   variable: '--font-space_mono',
@@ -50,7 +50,7 @@ const SourceCodePro400 = Source_Sans_3({
 // - The 'fontFamily' block of tailwind.config.js, so we can conveniently use them in Tailwind classes like 'font-mono'
 
 export { 
-  Inter,
+  // Inter,
   SpaceMono,
   SourceCodePro400,
   // sourceCodePro700,

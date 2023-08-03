@@ -1,6 +1,6 @@
 'use client'
 
-import { Inter, SpaceMono, SourceCodePro400 } from '@/fonts'
+import { SpaceMono, SourceCodePro400 } from '@/fonts'
 import { useHasMounted } from '@/hooks'
 
 type ProviderType = {
@@ -16,7 +16,8 @@ export function GlobalStyleProvider({ children }: ProviderType) {
         <style>
           {`
           html {
-            --font-inter: ${Inter.style.fontFamily}, sans-serif;
+            --font-display: 'SF Pro Display Semibold', 'Helvetica Neue', sans-serif;
+            --font-primary: 'SF Pro Display', 'Helvetica Neue', sans-serif;
             --font-space_mono: ${SpaceMono.style.fontFamily}, monospace;
             --font-sourcecode400: ${SourceCodePro400.style.fontFamily}, monospace;
           }

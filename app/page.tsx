@@ -106,7 +106,9 @@ const Home: NextPage = () => {
             <div className="text-xl text-white font-joker">
               {weekday}, {month} {date}
             </div>
-            <div className="text-white font-inter font-semibold text-[5rem]">{time}</div>
+            <div className="text-white font-display font-semibold text-[5rem]">
+              {time}
+            </div>
           </div>
           <div className="flex-1 [&>*]:my-2">
             {links
@@ -116,7 +118,7 @@ const Home: NextPage = () => {
                 if (item.type === 'separator') {
                   return (
                     <div
-                      className="text-lg text-white place-self-start font-inter first-letter:capitalize"
+                      className="text-lg text-white place-self-start font-display first-letter:capitalize"
                       key={i}
                     >
                       Beadification Center
@@ -151,7 +153,7 @@ const Home: NextPage = () => {
                             />
                           )}
                           <div className="flex flex-col flex-1 gap-1">
-                            <div className="font-inter first-letter:capitalize">
+                            <div className="font-primary first-letter:capitalize">
                               {item.text}
                             </div>
                             <div className="text-slate-500">{item.description}</div>
