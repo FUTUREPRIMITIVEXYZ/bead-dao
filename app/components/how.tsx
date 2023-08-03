@@ -76,17 +76,17 @@ export const How: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
           objectFit="cover"
         />
       </div>
-      <div className="flex flex-col justify-center items-start max-w-[322px] space-y-4 my-4">
+      {/* <div className="flex flex-col justify-center items-start max-w-[322px] space-y-4 my-4">
         <p>
           Collect BEADZ to increase your governance in the BEAD DAO! The more
           people you meet, the more impact you can have.
         </p>
-      </div>
-      <Link href="/governance">
+      </div> */}
+      {/* <Link href="/governance">
         <div className="rounded-full text-white bg-black font-bold text-xl py-3 px-6 my-4 mx-auto">
           Governance Board
         </div>
-      </Link>
+      </Link> */}
       <h1 className="font-bold text-2xl my-3">Win Prizes for BEADZ</h1>
       <div className="border-4 border-solid border-black rounded-2xl h-[320px] w-[320px] m-0 overflow-hidden">
         <Image
