@@ -1,13 +1,10 @@
 import { Background } from "@/components/background";
+import { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import MembersImg from "public/members-img.png";
 
-interface Props {}
-
-const Gallery: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> = ({
-  children,
-}) => {
+const Gallery: NextPage= () => {
   return (
     <div>
       <Head>
