@@ -123,9 +123,6 @@ module.exports = {
           padding: '0.6rem 2rem',
           position: 'relative',
           transition: 'all ease .3s',
-          // background: '#4A90E2',
-          // borderColor: '#3672B6',
-          // color: '#000',
         },
         // '.aqua-button::before': {
         //   background: 'linear-gradient(rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)',
@@ -144,9 +141,9 @@ module.exports = {
           color: '#000',
         },
         '.aqua-button-grey': {
-          background: '#4A90E2',
-          borderColor: '#3672B6',
-          color: '#000',
+          background: '#D0D0D0',
+          borderColor: '#B8B8B8',
+          color: '#6F6F6F',
         },
       }
 

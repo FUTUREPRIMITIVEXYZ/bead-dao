@@ -87,7 +87,7 @@ function Mint({}: MintProps) {
                 <Button
                   disabled={!canMint}
                   type="submit"
-                  onClick={() => setMintState(MintState.MINTING)}
+                  onClick={() => setMintState(MintState.M)}
                 >
                   Mint Bead
                 </Button>
@@ -123,7 +123,9 @@ function Mint({}: MintProps) {
               <Button type="submit" onClick={() => setMintState(MintState.MINTING)}>
                 View on OpenSea
               </Button>
-              <Button onClick={() => setMintState(MintState.MINTING)}>Back Home</Button>
+              <Button variant="aquaGrey" onClick={() => setMintState(MintState.MINTING)}>
+                Back Home
+              </Button>
             </>
           )}
         </div>

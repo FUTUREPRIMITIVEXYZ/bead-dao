@@ -45,7 +45,7 @@ export function Header({ variant, className, ...rest }: Props) {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g clip-path="url(#clip0_163_718)">
+            <g clipPath="url(#clip0_163_718)">
               <circle
                 cx="17"
                 cy="17"
@@ -72,7 +72,7 @@ export function Header({ variant, className, ...rest }: Props) {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g clip-path="url(#clip0_163_715)">
+            <g clipPath="url(#clip0_163_715)">
               <path
                 d="M106.245 1.51506H15.7502C7.82699 1.51506 1.40393 8.44667 1.40393 16.9973C1.40393 25.5478 7.82699 32.4794 15.7502 32.4794H106.245C114.168 32.4794 120.591 25.5478 120.591 16.9973C120.591 8.44667 114.168 1.51506 106.245 1.51506Z"
                 fill="#FCFAFA"
