@@ -16,6 +16,7 @@ import igIcon from "public/icons/ig-fx-icon.png";
 import tapImage from "public/tap-chip.jpg";
 import icon1 from "public/icon-1.png";
 import icon2 from "public/icon-2.png";
+import { Button } from './components/button'
 
 
 const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -38,10 +39,10 @@ const Home: NextPage = () => {
     () => [
       {
         type: 'item',
-        link: '',
+        link: '/scan',
         text: 'Tap Chip n Mint Beads',
         description: 'Find someone with a Lizard Halo Chip to mint a Bead!',
-        external: true,
+        external: false,
         detailed: true,
         image: tapImage
       },
@@ -141,6 +142,14 @@ const Home: NextPage = () => {
                         <div className='text-slate-500'>
                           {item.description}
                         </div>
+                        {
+                          item.detailed &&
+                          <Button className='max-w-[150px]'>
+                             <div className="text-xs text-white rounded-full cursor-pointer">
+                              Mint a Bead NFT
+                            </div>
+                          </Button>
+                        }
                       </div>
                       {
                         item.detailed ?

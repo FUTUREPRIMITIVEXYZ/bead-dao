@@ -194,7 +194,7 @@ const Scan: NextPage = () => {
           {!isLoading && clientIsConnected && (
             <Button className="mb-4" onClick={initiateTap}>
               <div className="py-2 px-4 text-3xl whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
-                Mint
+                Verify Lizard
               </div>
             </Button>
           )}
