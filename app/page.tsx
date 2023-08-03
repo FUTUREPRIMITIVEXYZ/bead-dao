@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState, useMemo, ReactNode } from 'react'
+import { useState, useMemo, ReactNode, useEffect } from 'react'
 import { Background } from '@/components/background'
 import { NavLink } from '@/components/navLink'
 import Link from 'next/link'
@@ -21,11 +21,8 @@ import icon2 from "public/icon-2.png";
 const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December']
 
-const getDateTime = ({ random = false }: { random?: boolean } = {}) => {
-  let date = new Date();
-  if (random) {
-    date = new Date(Math.floor(Math.random() * Date.now()));
-  }
+const getDateTime = () => {
+  const date = new Date();
   return {
     weekday: days[date.getDay()],
     month: months[date.getMonth()],
@@ -37,9 +34,6 @@ const getDateTime = ({ random = false }: { random?: boolean } = {}) => {
 const Home: NextPage = () => {
   const [showModal, setShowModal] = useState(false)
   const [modalContent, setModalContent] = useState<any>(null)
-  const { address } = useAccount()
-  console.log(address)
-
   const links = useMemo(
     () => [
       {
@@ -153,7 +147,7 @@ const Home: NextPage = () => {
                         <></>
                         :
                         <div className="self-start left-0 text-xxs text-slate-500">
-                          {getDateTime({random: true}).time}
+                          now
                         </div>
                       }
                     </div>
