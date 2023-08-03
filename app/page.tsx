@@ -39,7 +39,7 @@ const Home: NextPage = () => {
     () => [
       {
         type: 'item',
-        link: '/scan',
+        link: '/scan?start=true',
         text: 'Tap Chip n Mint Beads',
         description: 'Find someone with a Lizard Halo Chip to mint a Bead!',
         external: false,
@@ -55,7 +55,7 @@ const Home: NextPage = () => {
       },
       {
         type: 'item',
-        link: 'https://eips.ethereum.org/EIPS/eip-6551',
+        link: 'https://www.instagram.com/ar/1251248262474299/',
         text: 'Get BEADED',
         description: 'Try the ILOVEBEADZ IG filter ✨',
         external: true,
