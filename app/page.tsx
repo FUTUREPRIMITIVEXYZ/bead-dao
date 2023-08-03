@@ -119,7 +119,7 @@ const Home: NextPage = () => {
                     }: () => {console.log("hmm")}}
                     detailed={item.detailed || false}
                   >
-                    <div className="flex flex-row gap-3 text-sm items-center">
+                    <div className="flex flex-row gap-3 text-xs items-center">
                       {
                         item.detailed ?
                         <div className="bg-slate-950 min-w-[102px] min-h-[111px] max-w-[102px] max-h-[111px] rounded-lg"></div>
@@ -138,8 +138,8 @@ const Home: NextPage = () => {
                         item.detailed ?
                         <></>
                         :
-                        <div className="self-start left-0 text-xs text-slate-500">
-                          {getDateTime({random: true}).time}{" "}PM
+                        <div className="self-start left-0 text-xxs text-slate-500">
+                          {getDateTime({random: true}).time}
                         </div>
                       }
                     </div>
@@ -150,14 +150,12 @@ const Home: NextPage = () => {
           )}
           </div>
           <div className="flex justify-center items-center space-x-4 rounded-[41px] bg-link backdrop-blur-sm w-full py-4 place-self-end">
-            <a
-              className="cursor-pointer"
-              href="https://t.me/beaddao"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <div className="cursor-pointer" onClick={() => {
+                setModalContent(<How />);
+                setShowModal(true)
+              }}>
               <Image src={infoIcon} width={60} height={60} alt="info dock icon" />
-            </a>
+            </div>
             <a
               className="cursor-pointer"
               href="https://t.me/beaddao"
