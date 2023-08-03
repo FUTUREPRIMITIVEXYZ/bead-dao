@@ -27,7 +27,7 @@ export function Header({ variant, className, ...rest }: Props) {
   return (
     <nav
       className={clsx(
-        'flex w-full m-2 justify-between items-center text-white absolute top-0 left-0 right-0',
+        'flex max-w-[100vw] m-2 justify-between items-center text-white absolute top-0 left-0 right-0',
         header({ variant }),
         className
       )}
@@ -95,7 +95,7 @@ export function Header({ variant, className, ...rest }: Props) {
         {
           address ?
           <Link href={`/account/${address}`}>
-            <Button className="mr-2">
+            <Button>
               <div className="px-1 whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
                 My Lizard
               </div>
