@@ -31,10 +31,10 @@ type MintPayload = {
 }
 
 const Scan: NextPage = () => {
-  const searchParams = useSearchParams();
-  const isFromHomePage = searchParams.get("start"); // if the page was routed from the home page
+  const searchParams = useSearchParams()
+  const isFromHomePage = searchParams.get('start') // if the page was routed from the home page
 
-  const {setOpen} = useModal();
+  const { setOpen } = useModal()
 
   const [tapLoading, setTapLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
@@ -42,31 +42,31 @@ const Scan: NextPage = () => {
 
   const { address, isConnected, isDisconnected } = useAccount()
 
-  const [buttonCta, setButtonCta] = useState<string>("Connect Wallet");
-  const [tapCta, setTapCta] = useState<string>("Tap the chip again to verify");
+  const [buttonCta, setButtonCta] = useState<string>('Connect Wallet')
+  const [tapCta, setTapCta] = useState<string>('Tap the chip again to verify')
 
   useEffect(() => {
     if (isFromHomePage) {
-      setTapCta("Tap a Lizard chip to mint Beadz");
-      return setTapLoading(true);
+      setTapCta('Tap a Lizard chip to mint Beadz')
+      return setTapLoading(true)
     }
   }, [isFromHomePage])
 
   useEffect(() => {
     if (!isLoading && isConnected) {
-      return setButtonCta("Verify Lizard");
+      return setButtonCta('Verify Lizard')
     }
     if (!isConnected) {
-      return setButtonCta("Connect Wallet");
+      return setButtonCta('Connect Wallet')
     }
   }, [isConnected, isLoading, isDisconnected, address])
 
   const cta = () => {
     if (!isLoading && isConnected) {
-      return initiateTap();
+      return initiateTap()
     }
     if (!isConnected) {
-      return setOpen(true);
+      return setOpen(true)
     }
   }
 
@@ -211,16 +211,16 @@ const Scan: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background>
-        <div className="flex flex-col justify-center items-center min-h-full">
+        <div className="flex flex-col items-center justify-center min-h-full">
           <Button className="mb-4" onClick={cta}>
-            <div className="py-1 px-2 text-3xl whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
+            <div className="px-2 py-1 text-3xl font-medium text-white rounded-full cursor-pointer whitespace-nowrap">
               {buttonCta}
             </div>
           </Button>
         </div>
         {tapLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-start bg-black bg-opacity-30">
-            <div className="h-64 w-64 mt-4 bg-white rounded-lg overflow-hidden shadow mb-4">
+            <div className="w-64 h-64 mt-4 mb-4 overflow-hidden bg-white rounded-lg shadow">
               <Image
                 className="w-64 h-64 mb-4"
                 src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGY3ZGRmNTU1YjAxNjM2ODQzY2Y2MzU4YmZhMjEwOGFlYzNhZTE3NCZjdD1z/QtX9VvsqoJ9nNpRVGF/giphy.gif"
@@ -229,14 +229,12 @@ const Scan: NextPage = () => {
                 height={64}
               />
             </div>
-            <div className="bg-white rounded-md px-4 py-2 font-bold">
-              {tapCta}
-            </div>
+            <div className="px-4 py-2 font-bold bg-white rounded-md">{tapCta}</div>
           </div>
         )}
         {isLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="h-64 w-64 mt-8 bg-white rounded-lg overflow-hidden shadow mb-4">
+            <div className="w-64 h-64 mt-8 mb-4 overflow-hidden bg-white rounded-lg shadow">
               <Image
                 className="w-64 h-64 mb-4"
                 src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2ZkNWIxZDMxNTM0MTBmNGU2NTU4NzhjYTE4ZDhiMDg2NTk2MTAzZSZjdD1z/yYmPdb7UNlih5LlpL8/giphy.gif"

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Background } from '../components/background'
 import { Button } from '../components/button'
 import { useAccount } from 'wagmi'
-// import { toast, Toaster } from 'react-hot-toast'
+import { toast, Toaster } from 'react-hot-toast'
 import { useState } from 'react'
 import { Input } from '@/components'
 import { ConnectKitButton } from 'connectkit'
@@ -86,7 +86,13 @@ function Mint({}: MintProps) {
                 <Button
                   disabled={!canMint}
                   type="submit"
-                  onClick={() => setMintState(MintState.MINTING)}
+                  onClick={() => {
+                    setMintState(MintState.MINTING)
+                    // STUB FOR TOASTS:
+                    // toast.success('This is a test toast')
+                    // toast.error('This is a test toast')
+                    // toast.loading('This is a test toast')
+                  }}
                 >
                   Mint Bead
                 </Button>
@@ -140,6 +146,7 @@ function Mint({}: MintProps) {
             </div>
           </Background>
         )}
+        <Toaster position="bottom-center" />
       </>
     )
   }
