@@ -2,11 +2,8 @@
 import { ConnectKitButton } from 'connectkit'
 import clsx from 'clsx'
 import { cva, type VariantProps } from 'class-variance-authority'
-
 import Link from 'next/link'
-
 import { useAccount } from 'wagmi'
-
 import { Button } from './button'
 
 const header = cva('replace this text with styles shared by all variants', {
@@ -30,13 +27,13 @@ export function Header({ variant, className, ...rest }: Props) {
   return (
     <nav
       className={clsx(
-        'flex p-5 w-full justify-end items-center text-white absolute top-0 left-0 right-0',
+        'flex w-full m-2 justify-between items-center text-white absolute top-0 left-0 right-0',
         header({ variant }),
         className
       )}
       {...rest}
     >
-      <div className={`w-full flex items-center justify-between px-4 md:px-4`}>
+      <div className={`w-full flex items-center justify-between`}>
         <Link href="/">
           <div className="flex flex-row cursor-pointer">
             <svg
