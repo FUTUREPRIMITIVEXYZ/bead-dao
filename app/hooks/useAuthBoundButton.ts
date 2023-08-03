@@ -13,7 +13,7 @@ export const useAuthBoundButton = (
 
   const { address } = useAccount()
   const buttonBehavior = useMemo(
-    () => (!address ? () => openConnectModal() : onClickAction),
+    () => (!address ? () => openConnectModal && openConnectModal() : onClickAction),
     [address, openConnectModal, onClickAction]
   )
   return buttonBehavior
