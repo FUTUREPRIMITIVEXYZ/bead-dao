@@ -1,4 +1,4 @@
-
+'use client'
 import { alchemyToken } from '@/data/queries'
 import useSWR from 'swr'
 import { Address } from 'wagmi'

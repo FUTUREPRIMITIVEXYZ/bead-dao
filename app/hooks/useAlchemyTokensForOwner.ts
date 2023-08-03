@@ -1,4 +1,5 @@
 
+'use client'
 import { alchemyTokensForOwner } from '@/data/queries'
 import { useMemo } from 'react';
 import useSWR from 'swr'

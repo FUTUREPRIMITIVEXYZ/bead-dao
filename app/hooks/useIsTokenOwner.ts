@@ -1,3 +1,4 @@
+'use client'
 import { alchemyTokenOwner } from '@/data/queries'
 import { isAddressMatch } from '@/utils'
 
