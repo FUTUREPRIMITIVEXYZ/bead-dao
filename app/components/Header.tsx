@@ -33,7 +33,6 @@ export function Header({ variant, className, ...rest }: Props) {
       )}
       {...rest}
     >
-      <div className={`w-full flex items-center justify-between`}>
         <Link href="/">
           <div className="flex flex-row cursor-pointer">
             <svg
@@ -105,7 +104,6 @@ export function Header({ variant, className, ...rest }: Props) {
           :
           <ConnectKitButton />
         }
-      </div>
     </nav>
   )
 }
