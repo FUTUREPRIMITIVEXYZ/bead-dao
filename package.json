@@ -19,6 +19,7 @@
     "@hashlips-lab/art-engine": "2.0.0-alpha5",
     "@openzeppelin/merkle-tree": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.4",
+    "@rainbow-me/rainbowkit": "^1.0.8",
     "@segment/analytics-next": "^1.53.1",
     "@tokenbound/sdk": "0.3.0",
     "@types/node": "20.4.0",

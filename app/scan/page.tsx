@@ -14,8 +14,10 @@ import URL from 'url-parse'
 import { getPublicKeysFromScan, getSignatureFromScan } from 'pbt-chip-client/kong'
 import parseKeys from '@/utils/parseKeys'
 import Image from 'next/image'
-import { useModal } from 'connectkit'
+// import { useModal } from 'connectkit'
 import { useSearchParam } from 'react-use'
+
+import { useConnectModal } from '@rainbow-me/rainbowkit'
 
 const provider = new ethers.providers.AlchemyProvider(
   'goerli',
@@ -34,7 +36,7 @@ const Scan: NextPage = () => {
   const searchParams = useSearchParams()
   const isFromHomePage = searchParams.get('start') // if the page was routed from the home page
 
-  const { setOpen } = useModal()
+  const { openConnectModal } = useConnectModal()
 
   const [tapLoading, setTapLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
@@ -66,7 +68,7 @@ const Scan: NextPage = () => {
       return initiateTap()
     }
     if (!isConnected) {
-      return setOpen(true)
+      openConnectModal?.()
     }
   }
 

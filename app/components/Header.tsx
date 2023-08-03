@@ -1,11 +1,11 @@
 'use client'
-import { ConnectKitButton } from 'connectkit'
 import clsx from 'clsx'
 import { cva, type VariantProps } from 'class-variance-authority'
 import Link from 'next/link'
 import { useAccount } from 'wagmi'
 import { Button } from './button'
 import { useHasMounted } from '@/hooks'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 const header = cva('replace this text with styles shared by all variants', {
   variants: {
@@ -103,7 +103,7 @@ export function Header({ variant, className, ...rest }: Props) {
           </Button>
         </Link>
       ) : (
-        <ConnectKitButton />
+        <ConnectButton />
       )}
     </nav>
   )

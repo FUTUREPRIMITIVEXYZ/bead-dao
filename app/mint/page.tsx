@@ -6,10 +6,11 @@ import { useAccount } from 'wagmi'
 import { toast, Toaster } from 'react-hot-toast'
 import { useState } from 'react'
 import { Input } from '@/components'
-import { ConnectKitButton } from 'connectkit'
 import { BeadLoading } from '@/components/beadLoading'
 import { useHasMounted } from '@/hooks'
 import Link from 'next/link'
+
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 interface MintProps {}
 
@@ -48,22 +49,23 @@ function Mint({}: MintProps) {
   if (!address) {
     return (
       <Background className="px-3">
-        <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
+        <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-white bg-opacity-20 backdrop-blur-3xl">
           <div className="flex flex-col gap-8">
             <MintImage caption="Image Name" />
-            <ConnectKitButton.Custom>
-              {({ isConnected, isConnecting, show, hide, address, ensName, chain }) => {
-                return (
-                  <Button
-                    // disabled={!hasRequiredFields}
-                    variant="default"
-                    onClick={show}
-                  >
-                    Connect to Mint
-                  </Button>
-                )
-              }}
-            </ConnectKitButton.Custom>
+            <ConnectButton />
+            {/* <ConnectKitButton.Custom> */}
+            {/*   {({ isConnected, isConnecting, show, hide, address, ensName, chain }) => { */}
+            {/*     return ( */}
+            {/*       <Button */}
+            {/*         // disabled={!hasRequiredFields} */}
+            {/*         variant="default" */}
+            {/*         onClick={show} */}
+            {/*       > */}
+            {/*         Connect to Mint */}
+            {/*       </Button> */}
+            {/*     ) */}
+            {/*   }} */}
+            {/* </ConnectKitButton.Custom> */}
           </div>
         </div>
       </Background>

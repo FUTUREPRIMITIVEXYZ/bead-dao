@@ -1,9 +1,14 @@
 'use client'
 
-import { WagmiConfig, createConfig, mainnet, sepolia } from 'wagmi'
-import { ConnectKitProvider, getDefaultConfig } from 'connectkit'
 import { SWRConfig } from 'swr'
 import { FP_APP, FP_ENABLED_CHAINS } from '@/config'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { publicProvider } from 'wagmi/providers/public'
+
+import '@rainbow-me/rainbowkit/styles.css'
+
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
 
 const swrFetcher = (url: string, params: RequestInit) =>
   fetch(url, params)
@@ -16,16 +21,22 @@ const swrFetcher = (url: string, params: RequestInit) =>
       }
     })
 
-const wagmiConfig = createConfig(
-  getDefaultConfig({
-    alchemyId: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY,
-    walletConnectProjectId: process.env.WALLETCONNECT_PROJECT_ID!,
-    chains: FP_ENABLED_CHAINS,
-    appName: FP_APP.NAME,
-    appDescription: FP_APP.DESCRIPTION,
-    appUrl: FP_APP.URL,
-  })
-)
+const { chains, publicClient } = configureChains(FP_ENABLED_CHAINS, [
+  alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY! }),
+  publicProvider(),
+])
+
+const { connectors } = getDefaultWallets({
+  appName: 'BEAD DAO',
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
+  chains: FP_ENABLED_CHAINS,
+})
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+})
 
 type ProviderType = {
   children: React.ReactNode
@@ -34,7 +45,7 @@ type ProviderType = {
 export function BaseProviders({ children }: ProviderType) {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <ConnectKitProvider debugMode>
+      <RainbowKitProvider chains={FP_ENABLED_CHAINS}>
         <SWRConfig
           value={{
             revalidateOnFocus: false,
@@ -43,7 +54,7 @@ export function BaseProviders({ children }: ProviderType) {
         >
           {children}
         </SWRConfig>
-      </ConnectKitProvider>
+      </RainbowKitProvider>
     </WagmiConfig>
   )
 }
