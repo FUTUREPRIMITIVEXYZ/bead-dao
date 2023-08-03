@@ -78,15 +78,8 @@
 }
 
 @font-face {
-  font-family: "Jokerman";
-  src: url("/fonts/Jokerman/Jokerman.otf");
-  font-style: normal;
-  font-weight: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Inter";
-  src: url("/fonts/Inter/Inter-Bold.ttf");
+  font-family: 'Jokerman';
+  src: url('/fonts/Jokerman/Jokerman.otf');
   font-style: normal;
   font-weight: normal;
   font-display: swap;
