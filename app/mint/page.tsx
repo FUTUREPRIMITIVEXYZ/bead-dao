@@ -9,6 +9,7 @@ import { Input } from '@/components'
 import { ConnectKitButton } from 'connectkit'
 import { BeadLoading } from '@/components/beadLoading'
 import { useHasMounted } from '@/hooks'
+import Link from 'next/link'
 
 interface MintProps {}
 
@@ -30,7 +31,7 @@ function MintImage({ caption }: { caption: string }) {
         height={1080}
         className="flex items-center justify-center w-full bg-white rounded-lg aspect-square"
       />
-      <figcaption className="text-xl font-bold">image name</figcaption>
+      <figcaption className="text-xl font-bold">{caption}</figcaption>
     </figure>
   )
 }
@@ -128,12 +129,14 @@ function Mint({}: MintProps) {
             <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
               <MintImage caption={`You Minted Bead #${BEAD_NUMBER}!`} />
 
-              <Button type="submit" onClick={() => setMintState(MintState.MINTING)}>
-                View on OpenSea
-              </Button>
-              <Button variant="aquaGrey" onClick={() => setMintState(MintState.MINTING)}>
-                Back Home
-              </Button>
+              <Link href={`https://opensea.io/assets/ethereum/`} className="self-center">
+                <Button type="submit" onClick={() => setMintState(MintState.MINTING)}>
+                  View on OpenSea
+                </Button>
+              </Link>
+              <Link href="/" className="self-center">
+                <Button variant="aquaGrey">Back Home</Button>
+              </Link>
             </div>
           </Background>
         )}
