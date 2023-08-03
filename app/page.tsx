@@ -17,8 +17,11 @@ import igIcon from "public/icons/ig-fx-icon.png";
 const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December']
 
-const getDateTime = () => {
-  const date = new Date();
+const getDateTime = ({ random = false }: { random?: boolean } = {}) => {
+  let date = new Date();
+  if (random) {
+    date = new Date(Math.floor(Math.random() * Date.now()));
+  }
   return {
     weekday: days[date.getDay()],
     month: months[date.getMonth()],
@@ -98,7 +101,7 @@ const Home: NextPage = () => {
             .map((item, i) => {
               if (item.type === "separator") {
                 return (
-                  <div className="place-self-start font-inter  font-semibold first-letter:capitalize text-white text-lg" key={i}>
+                  <div className="place-self-start font-inter first-letter:capitalize text-white text-lg" key={i}>
                     Beadification Center
                   </div>
                 )
@@ -123,14 +126,22 @@ const Home: NextPage = () => {
                         :
                         <div className="bg-slate-950 min-w-[38px] min-h-[38px] max-w-[38px] max-h-[38px] rounded-lg"></div>
                       }
-                      <div className='flex flex-col gap-1'>
-                      <div className="font-inter first-letter:capitalize">
-                        {item.text}
+                      <div className='flex flex-col gap-1 flex-1'>
+                        <div className="font-inter first-letter:capitalize">
+                          {item.text}
+                        </div>
+                        <div className='text-slate-500'>
+                          {item.description}
+                        </div>
                       </div>
-                      <div>
-                        {item.description}
-                      </div>
-                      </div>
+                      {
+                        item.detailed ?
+                        <></>
+                        :
+                        <div className="self-start left-0 text-xs text-slate-500">
+                          {getDateTime({random: true}).time}{" "}PM
+                        </div>
+                      }
                     </div>
                   </NavLink>
                 </LinkWrapper>
