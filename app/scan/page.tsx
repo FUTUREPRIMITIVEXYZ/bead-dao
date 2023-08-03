@@ -92,13 +92,19 @@ const Scan: NextPage = () => {
 
       setTapLoading(false)
 
-      mint({
-        lizard: keyAddress,
-        signatureBlockNumber: number,
-        lizardSignature: signature,
-        lizardProof: proof,
-        recipient: address,
-      })
+      /**
+       * @todo
+       * redirect to /mint from here
+       * https://www.figma.com/file/YkwW4NwSkYhjvwUay6LD20/ETHDenver2022-BEADDAO?type=design&node-id=516%3A710&mode=design&t=eJj4kFCk1hhnI5si-1
+       */
+
+      // mint({
+      //   lizard: keyAddress,
+      //   signatureBlockNumber: number,
+      //   lizardSignature: signature,
+      //   lizardProof: proof,
+      //   recipient: address,
+      // })
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.toString())
@@ -109,68 +115,68 @@ const Scan: NextPage = () => {
     }
   }
 
-  const mint = async (payload: MintPayload) => {
-    try {
-      setMintLoading(true)
-      const mintRequestPromise = fetch('/api/mint', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res.error)
-          if (res.error) throw Error(res.error)
-          return res
-        })
+  // const mint = async (payload: MintPayload) => {
+  //   try {
+  //     setMintLoading(true)
+  //     const mintRequestPromise = fetch('/api/mint', {
+  //       method: 'POST',
+  //       headers: {
+  //         Accept: 'application/json',
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(payload),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((res) => {
+  //         console.log(res.error)
+  //         if (res.error) throw Error(res.error)
+  //         return res
+  //       })
 
-      toast.promise(mintRequestPromise, {
-        loading: 'Submitting transaction...',
-        success: 'Transaction submitted!',
-        error: 'Transaction failed. You can only mint once per hour per chip',
-      })
+  //     toast.promise(mintRequestPromise, {
+  //       loading: 'Submitting transaction...',
+  //       success: 'Transaction submitted!',
+  //       error: 'Transaction failed. You can only mint once per hour per chip',
+  //     })
 
-      const response = await mintRequestPromise
-      if (response.error) throw Error('Error minting lizard')
+  //     const response = await mintRequestPromise
+  //     if (response.error) throw Error('Error minting lizard')
 
-      const { txHash } = response
+  //     const { txHash } = response
 
-      console.log(txHash)
+  //     console.log(txHash)
 
-      const txPromise = provider.waitForTransaction(txHash)
+  //     const txPromise = provider.waitForTransaction(txHash)
 
-      toast.promise(txPromise, {
-        loading: 'Waiting for transaction...',
-        success: 'Beadz minted!',
-        error: 'Uh oh, transaction failed',
-      })
+  //     toast.promise(txPromise, {
+  //       loading: 'Waiting for transaction...',
+  //       success: 'Beadz minted!',
+  //       error: 'Uh oh, transaction failed',
+  //     })
 
-      const tx = await txPromise
+  //     const tx = await txPromise
 
-      console.log(tx)
+  //     console.log(tx)
 
-      console.log(response)
+  //     console.log(response)
 
-      if (response.firstLizard) {
-        router.push(`/account/${address}?minted=true`)
-      } else {
-        router.push(`/account/${address}?beadClaim=true`)
-      }
+  //     if (response.firstLizard) {
+  //       router.push(`/account/${address}?minted=true`)
+  //     } else {
+  //       router.push(`/account/${address}?beadClaim=true`)
+  //     }
 
-      setMintLoading(false)
-    } catch (error) {
-      // if (error instanceof Error) {
-      //   toast.error(error.toString());
-      // }
-      console.error(error)
-      setMintLoading(false)
-    } finally {
-      setMintLoading(false)
-    }
-  }
+  //     setMintLoading(false)
+  //   } catch (error) {
+  //     // if (error instanceof Error) {
+  //     //   toast.error(error.toString());
+  //     // }
+  //     console.error(error)
+  //     setMintLoading(false)
+  //   } finally {
+  //     setMintLoading(false)
+  //   }
+  // }
   const isLoading = mintLoading
 
   return (
@@ -210,8 +216,8 @@ const Scan: NextPage = () => {
                 height={64}
               />
             </div>
-            <div className="bg-white rounded-full px-4 py-2 font-bold">
-              Tap the chip again
+            <div className="bg-white rounded-md px-4 py-2 font-bold">
+              Tap the chip again to verify
             </div>
           </div>
         )}
