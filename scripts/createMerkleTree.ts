@@ -1,12 +1,18 @@
-import { StandardMerkleTree } from "@openzeppelin/merkle-tree";
-import fs from "fs";
+const { StandardMerkleTree } = require('@openzeppelin/merkle-tree')
+const fs = require('fs')
 
-const chipData = JSON.parse(fs.readFileSync("./public/lizards.json", "utf-8"));
+const chipDatav2 = JSON.parse(fs.readFileSync('./public/lizards-v2.json', 'utf-8'))
+const chipDatav1 = JSON.parse(fs.readFileSync('./public/lizards.json', 'utf-8'))
+const chipData = { ...chipDatav1, ...chipDatav2 }
 
-const chips = Object.keys(chipData).map((key) => [chipData[key].address]);
+console.log(chipData)
 
-const tree = StandardMerkleTree.of(chips, ["address"]);
+const chips = Object.keys(chipData).map((key: any) => [chipData[key].address])
 
-console.log("Merkle Root:", tree.root);
+console.log(chips.length)
 
-fs.writeFileSync("./public/lizardTree.json", JSON.stringify(tree.dump()));
+const tree = StandardMerkleTree.of(chips, ['address'])
+
+console.log('Merkle Root:', tree.root)
+
+fs.writeFileSync('./public/lizardTree-v2.json', JSON.stringify(tree.dump()))
