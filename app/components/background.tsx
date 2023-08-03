@@ -1,3 +1,5 @@
+
+'use client'
 import { useHasMounted } from '@/hooks'
 
 interface Props {
