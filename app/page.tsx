@@ -63,12 +63,12 @@ const Home: NextPage = () => {
       },
       {
         type: 'item',
-        link: '/how',
+        link: '/gallery',
         text: 'View the BeadDAO Gallery',
         description: 'See who else loves beadz IRL',
-        modal: true,
-        modalContent: <How />,
-        image: icon2
+        modal: false,
+        image: icon2,
+        external: false
       },
     ],
     []
@@ -82,7 +82,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background>
-      <div className="min-h-full mt-[3.25rem] ml-2 mr-2 flex flex-col  items-center">
+      <div className="min-h-full pt-[3.5rem] pb-[1rem] ml-2 mr-2 flex flex-col  items-center">
           <div className="flex flex-col items-center">
             <div className="text-white font-joker text-xl">
               {weekday}, {month} {date}
@@ -110,10 +110,6 @@ const Home: NextPage = () => {
                   <NavLink
                     key={item.link}
                     className="cursor-pointer"
-                    onClick={item.modal ? () => {
-                      setModalContent(item.modalContent);
-                      setShowModal(true);
-                    }: () => {console.log("hmm")}}
                     detailed={item.detailed || false}
                   >
                     <div className="flex flex-row gap-3 text-xs items-center">

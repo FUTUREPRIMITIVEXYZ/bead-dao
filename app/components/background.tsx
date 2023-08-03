@@ -21,7 +21,7 @@ export const Background: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> 
       <div
         className={`h-full w-full ${
           display || 'flex flex-col items-center justify-start'
-        } py-4 pb-20`}
+        }`}
       >
         {children}
       </div>
