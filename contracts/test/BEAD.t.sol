@@ -13,8 +13,11 @@ contract BEADTest is Test {
     bytes32 lizardRoot =
         0x6516e9023c69d23b0e7acfe325d6ac80d903995bfa8e6c21cfd69c29641dcb88;
 
+    string baseURI =
+        'ipfs://bafybeiemt555y6bsgkree3ee4o4v52wgvk275hb2ml5mvv4r24viq74vpq/';
+
     function setUp() public {
-        bead = new BEAD(lizardRoot, 1260, 'https://example.com/');
+        bead = new BEAD(lizardRoot, 1260, baseURI);
     }
 
     function testMint() public {
@@ -31,7 +34,13 @@ contract BEADTest is Test {
 
         vm.prank(vm.addr(10));
         uint256 start = gasleft();
-        bead.mint(block.number, sig, proof, vm.addr(10), '');
+        bead.mint(
+            block.number,
+            sig,
+            proof,
+            vm.addr(10),
+            'bead dao represent frfr no cap we out here'
+        );
         console.log(start - gasleft());
 
         assertEq(bead.ownerOf(uint256(hash)), vm.addr(10));

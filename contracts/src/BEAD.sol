@@ -1,18 +1,24 @@
 pragma solidity ^0.8.17;
 
 import 'openzeppelin-contracts/token/ERC721/ERC721.sol';
+import 'openzeppelin-contracts/access/Ownable2Step.sol';
 import 'openzeppelin-contracts/utils/cryptography/ECDSA.sol';
 import 'openzeppelin-contracts/utils/cryptography/MerkleProof.sol';
 import 'openzeppelin-contracts/utils/Strings.sol';
 import 'openzeppelin-contracts/utils/Base64.sol';
 
-contract BEAD is ERC721 {
+interface IRenderer {
+    function imageURI(uint256 tokenId) external view returns (string memory);
+}
+
+contract BEAD is ERC721, Ownable2Step {
     using ECDSA for bytes32;
     using Strings for uint256;
 
     bytes32 public immutable lizardRoot;
     uint256 public immutable editionCount;
 
+    address public renderer;
     string public baseURI;
     mapping(uint256 => string) messages;
 
@@ -24,6 +30,7 @@ contract BEAD is ERC721 {
         lizardRoot = _lizardRoot;
         editionCount = _editionCount;
         baseURI = _baseURI;
+        renderer = address(this);
     }
 
     function mint(
@@ -32,7 +39,7 @@ contract BEAD is ERC721 {
         bytes32[] calldata proof,
         address recipient,
         string memory message
-    ) public {
+    ) external {
         bytes32 messageHash = getMessageHash(recipient, blockNumber);
         address signer = messageHash.recover(signature);
 
@@ -52,7 +59,6 @@ contract BEAD is ERC721 {
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         _requireMinted(tokenId);
 
-        uint256 beadId = (tokenId % editionCount) + 1;
         string memory message = messages[tokenId];
 
         if (bytes(message).length == 0) {
@@ -68,8 +74,7 @@ contract BEAD is ERC721 {
             unicode'ᗷEᗩᗪᘔ.EᑎᑕOᗰᑭᗩᔕᔕ.ᗩᒪᒪ.ᗪᖇEᗩᗰᔕ https://ilovebeadz.xyz',
             '",',
             '"image": "',
-            baseURI,
-            beadId.toString(),
+            IRenderer(renderer).imageURI(tokenId),
             '.png',
             '"',
             '}'
@@ -79,6 +84,14 @@ contract BEAD is ERC721 {
             string(
                 abi.encodePacked('data:application/json;base64,', Base64.encode(dataURI))
             );
+    }
+
+    function imageURI(uint256 tokenId) public view returns (string memory) {
+        _requireMinted(tokenId);
+
+        uint256 beadId = (tokenId % editionCount) + 1;
+
+        return string(abi.encodePacked(baseURI, beadId.toString()));
     }
 
     function getMessageHash(address recipient, uint256 blockNumber)
