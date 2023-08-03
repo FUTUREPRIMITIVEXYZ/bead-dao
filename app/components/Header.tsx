@@ -94,7 +94,7 @@ export function Header({ variant, className, ...rest }: Props) {
         </div>
       </Link>
 
-      {hasMounted && address ? (
+      {/* {hasMounted && address ? (
         <Link href={`/account/${address}`}>
           <Button className="mr-2">
             <div className="px-1 font-medium text-white rounded-full cursor-pointer whitespace-nowrap">
@@ -104,7 +104,7 @@ export function Header({ variant, className, ...rest }: Props) {
         </Link>
       ) : (
         <ConnectButton />
-      )}
+      )} */}
     </nav>
   )
 }
