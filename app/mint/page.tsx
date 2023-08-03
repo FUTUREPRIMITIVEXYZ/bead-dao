@@ -87,7 +87,7 @@ function Mint({}: MintProps) {
                 <Button
                   disabled={!canMint}
                   type="submit"
-                  onClick={() => setMintState(MintState.M)}
+                  onClick={() => setMintState(MintState.MINTING)}
                 >
                   Mint Bead
                 </Button>
