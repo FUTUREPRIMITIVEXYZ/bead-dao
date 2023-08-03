@@ -8,13 +8,14 @@ import { ethers } from 'ethers'
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree'
 import { useAccount } from 'wagmi'
 import { toast, Toaster } from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import URL from 'url-parse'
 import { getPublicKeysFromScan, getSignatureFromScan } from 'pbt-chip-client/kong'
 import parseKeys from '@/utils/parseKeys'
 import Image from 'next/image'
 import { useModal } from 'connectkit'
+import { useSearchParam } from 'react-use'
 
 const provider = new ethers.providers.AlchemyProvider(
   'goerli',
@@ -30,20 +31,36 @@ type MintPayload = {
 }
 
 const Scan: NextPage = () => {
-  const router = useRouter()
+  const searchParams = useSearchParams();
+  console.log(searchParams.get("start"));
+
   const {setOpen} = useModal();
-  const [clientIsConnected, setclientIsConnected] = useState(false)
 
   const [tapLoading, setTapLoading] = useState(false)
   const [mintLoading, setMintLoading] = useState(false)
+  const isLoading = mintLoading
 
-  const { address } = useAccount()
+  const { address, isConnected, isDisconnected } = useAccount()
+
+  const [buttonCta, setButtonCta] = useState<string>("Connect Wallet");
 
   useEffect(() => {
-    if (address) {
-      setclientIsConnected(true)
+    if (!isLoading && isConnected) {
+      return setButtonCta("Verify Lizard");
     }
-  }, [address])
+    if (!isConnected) {
+      return setButtonCta("Connect Wallet");
+    }
+  }, [isConnected, isLoading, isDisconnected, address])
+
+  const cta = () => {
+    if (!isLoading && isConnected) {
+      return initiateTap();
+    }
+    if (!isConnected) {
+      return setOpen(true);
+    }
+  }
 
   const initiateTap = async () => {
     try {
@@ -177,7 +194,6 @@ const Scan: NextPage = () => {
   //     setMintLoading(false)
   //   }
   // }
-  const isLoading = mintLoading
 
   return (
     <div className="font-[Inter]">
@@ -188,22 +204,11 @@ const Scan: NextPage = () => {
       </Head>
       <Background>
         <div className="flex flex-col justify-center items-center min-h-full">
-          {!clientIsConnected && (
-            <div>
-              <Button className="mb-4" onClick={()=>{setOpen(true)}}>
-                <div className="py-1 px-2 text-3xl whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
-                  Connect Wallet
-                </div>
-              </Button>
+          <Button className="mb-4" onClick={cta}>
+            <div className="py-1 px-2 text-3xl whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
+              {buttonCta}
             </div>
-          )}
-          {!isLoading && clientIsConnected && (
-            <Button className="mb-4" onClick={initiateTap}>
-              <div className="py-2 px-4 text-3xl whitespace-nowrap text-white rounded-full cursor-pointer font-medium">
-                Verify Lizard
-              </div>
-            </Button>
-          )}
+          </Button>
         </div>
         {tapLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-start bg-black bg-opacity-30">
