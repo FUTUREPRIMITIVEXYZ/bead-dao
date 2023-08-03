@@ -32,7 +32,7 @@ type MintPayload = {
 
 const Scan: NextPage = () => {
   const searchParams = useSearchParams();
-  console.log(searchParams.get("start"));
+  const isFromHomePage = searchParams.get("start"); // if the page was routed from the home page
 
   const {setOpen} = useModal();
 
@@ -43,6 +43,14 @@ const Scan: NextPage = () => {
   const { address, isConnected, isDisconnected } = useAccount()
 
   const [buttonCta, setButtonCta] = useState<string>("Connect Wallet");
+  const [tapCta, setTapCta] = useState<string>("Tap the chip again to verify");
+
+  useEffect(() => {
+    if (isFromHomePage) {
+      setTapCta("Tap a Lizard chip to mint Beadz");
+      return setTapLoading(true);
+    }
+  }, [isFromHomePage])
 
   useEffect(() => {
     if (!isLoading && isConnected) {
@@ -66,48 +74,48 @@ const Scan: NextPage = () => {
     try {
       setTapLoading(true)
       window.focus()
-      const url = URL(window.location.href, true)
+      // const url = URL(window.location.href, true)
 
-      let keys: any = parseKeys(url.query.static)
-      if (!keys) {
-        keys = await getPublicKeysFromScan()
-      }
+      // let keys: any = parseKeys(url.query.static)
+      // if (!keys) {
+      //   keys = await getPublicKeysFromScan()
+      // }
 
-      const primaryKey = keys?.primaryPublicKeyRaw
+      // const primaryKey = keys?.primaryPublicKeyRaw
 
-      if (!primaryKey) {
-        throw Error('Invalid primary key')
-      }
+      // if (!primaryKey) {
+      //   throw Error('Invalid primary key')
+      // }
 
-      const keyAddress = ethers.utils.computeAddress(`0x${primaryKey}`)
+      // const keyAddress = ethers.utils.computeAddress(`0x${primaryKey}`)
 
-      const lizardTree = await fetch('/lizardTree.json').then((res) => res.json())
+      // const lizardTree = await fetch('/lizardTree.json').then((res) => res.json())
 
-      const tree = StandardMerkleTree.load(lizardTree)
+      // const tree = StandardMerkleTree.load(lizardTree)
 
-      const proof = tree.getProof([keyAddress])
+      // const proof = tree.getProof([keyAddress])
 
-      if (!tree.verify([keyAddress], proof)) {
-        throw Error('Not a lizard')
-      }
+      // if (!tree.verify([keyAddress], proof)) {
+      //   throw Error('Not a lizard')
+      // }
 
-      const { hash, number } = await provider.getBlock('latest')
+      // const { hash, number } = await provider.getBlock('latest')
 
-      if (!address) {
-        throw Error('No wallet connected')
-      }
+      // if (!address) {
+      //   throw Error('No wallet connected')
+      // }
 
-      const signature = await getSignatureFromScan({
-        chipPublicKey: keys.primaryPublicKeyRaw,
-        address: address!,
-        hash,
-      })
+      // const signature = await getSignatureFromScan({
+      //   chipPublicKey: keys.primaryPublicKeyRaw,
+      //   address: address!,
+      //   hash,
+      // })
 
-      if (!signature) {
-        throw Error('No signature returned')
-      }
+      // if (!signature) {
+      //   throw Error('No signature returned')
+      // }
 
-      setTapLoading(false)
+      // setTapLoading(false)
 
       /**
        * @todo
@@ -128,7 +136,7 @@ const Scan: NextPage = () => {
       }
       setTapLoading(false)
     } finally {
-      setTapLoading(false)
+      // setTapLoading(false)
     }
   }
 
@@ -222,7 +230,7 @@ const Scan: NextPage = () => {
               />
             </div>
             <div className="bg-white rounded-md px-4 py-2 font-bold">
-              Tap the chip again to verify
+              {tapCta}
             </div>
           </div>
         )}
