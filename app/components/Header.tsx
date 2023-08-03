@@ -52,7 +52,7 @@ export function Header({ variant, className, ...rest }: Props) {
                 r="15.435"
                 fill="white"
                 stroke="black"
-                stroke-width="3.13"
+                strokeWidth="3.13"
               />
               <path
                 d="M15.2 24V18.7059H18.8V24H23.3V16.9412H26L17 9L8 16.9412H10.7V24H15.2Z"
@@ -77,7 +77,7 @@ export function Header({ variant, className, ...rest }: Props) {
                 d="M106.245 1.51506H15.7502C7.82699 1.51506 1.40393 8.44667 1.40393 16.9973C1.40393 25.5478 7.82699 32.4794 15.7502 32.4794H106.245C114.168 32.4794 120.591 25.5478 120.591 16.9973C120.591 8.44667 114.168 1.51506 106.245 1.51506Z"
                 fill="#FCFAFA"
                 stroke="black"
-                stroke-width="3.03562"
+                strokeWidth="3.03562"
                 stroke-miterlimit="10"
               />
               <path

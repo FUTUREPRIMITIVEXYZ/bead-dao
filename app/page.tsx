@@ -9,26 +9,45 @@ import { NavLink } from '@/components/navLink'
 import Link from 'next/link'
 import { Modal } from '@/components/modal'
 import { How } from '@/components/how'
-import infoIcon from "public/icons/infoDock-icon.png";
-import twitterIcon from "public/icons/twitter-icon.png";
-import telegramIcon from "public/icons/telegram-icon.png";
-import igIcon from "public/icons/ig-fx-icon.png";
-import tapImage from "public/tap-chip.jpg";
-import icon1 from "public/icon-1.png";
-import icon2 from "public/icon-2.png";
+import infoIcon from 'public/icons/infoDock-icon.png'
+import twitterIcon from 'public/icons/twitter-icon.png'
+import telegramIcon from 'public/icons/telegram-icon.png'
+import igIcon from 'public/icons/ig-fx-icon.png'
+import tapImage from 'public/tap-chip.jpg'
+import icon1 from 'public/icon-1.png'
+import icon2 from 'public/icon-2.png'
 import { Button } from './components/button'
 
-
-const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December']
+const days = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+]
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'November',
+  'December',
+]
 
 const getDateTime = () => {
-  const date = new Date();
+  const date = new Date()
   return {
     weekday: days[date.getDay()],
     month: months[date.getMonth()],
     date: date.getDate(),
-    time: date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0")
+    time: date.getHours() + ':' + String(date.getMinutes()).padStart(2, '0'),
   }
 }
 
@@ -44,14 +63,14 @@ const Home: NextPage = () => {
         description: 'Find someone with a Lizard Halo Chip to mint a Bead!',
         external: false,
         detailed: true,
-        image: tapImage
+        image: tapImage,
       },
       {
         type: 'separator',
         link: '',
         text: '---',
         external: false,
-        detailed: false
+        detailed: false,
       },
       {
         type: 'item',
@@ -59,7 +78,7 @@ const Home: NextPage = () => {
         text: 'Get BEADED',
         description: 'Try the ILOVEBEADZ IG filter ✨',
         external: true,
-        image: icon1
+        image: icon1,
       },
       {
         type: 'item',
@@ -68,12 +87,12 @@ const Home: NextPage = () => {
         description: 'See who else loves beadz IRL',
         modal: false,
         image: icon2,
-        external: false
+        external: false,
       },
     ],
     []
   )
-  const { weekday, month, date, time } = getDateTime();
+  const { weekday, month, date, time } = getDateTime()
   return (
     <div className="">
       <Head>
@@ -82,91 +101,90 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background>
-      <div className="min-h-full pt-[3.5rem] pb-[1rem] ml-2 mr-2 flex flex-col  items-center">
+        <div className="min-h-full pt-[3.5rem] pb-[1rem] ml-2 mr-2 flex flex-col  items-center">
           <div className="flex flex-col items-center">
-            <div className="text-white font-joker text-xl">
+            <div className="text-xl text-white font-joker">
               {weekday}, {month} {date}
             </div>
-            <div className="text-white font-inter font-semibold text-[5rem]">
-              {time}
-              </div>
+            <div className="text-white font-inter font-semibold text-[5rem]">{time}</div>
           </div>
           <div className="flex-1 [&>*]:my-2">
-          {links
-            // will bring all `detailed` items on top
-            .sort((a,b) => (Number(b.detailed) - Number(a.detailed)))
-            .map((item, i) => {
-              if (item.type === "separator") {
+            {links
+              // will bring all `detailed` items on top
+              .sort((a, b) => Number(b.detailed) - Number(a.detailed))
+              .map((item, i) => {
+                if (item.type === 'separator') {
+                  return (
+                    <div
+                      className="text-lg text-white place-self-start font-inter first-letter:capitalize"
+                      key={i}
+                    >
+                      Beadification Center
+                    </div>
+                  )
+                }
+
                 return (
-                  <div className="place-self-start font-inter first-letter:capitalize text-white text-lg" key={i}>
-                    Beadification Center
+                  <div key={i}>
+                    <LinkWrapper isExternal={item.external || false} href={item.link}>
+                      <NavLink
+                        key={item.link}
+                        className="cursor-pointer"
+                        detailed={item.detailed || false}
+                      >
+                        <div className="flex flex-row items-center gap-3 text-xs">
+                          {item.detailed ? (
+                            <Image
+                              className="min-w-[102px] min-h-[111px] max-w-[102px] max-h-[111px] rounded-lg"
+                              width={102}
+                              height={111}
+                              alt="tap image help"
+                              src={item.image || ''}
+                            />
+                          ) : (
+                            <Image
+                              className="min-w-[38px] min-h-[38px] max-w-[38px] max-h-[38px] rounded-lg"
+                              width={38}
+                              height={38}
+                              alt="icon image"
+                              src={item.image || ''}
+                            />
+                          )}
+                          <div className="flex flex-col flex-1 gap-1">
+                            <div className="font-inter first-letter:capitalize">
+                              {item.text}
+                            </div>
+                            <div className="text-slate-500">{item.description}</div>
+                            {item.detailed && (
+                              <Button className="max-w-[175px]">
+                                <div className="text-xs text-white rounded-full cursor-pointer">
+                                  Mint a Bead NFT
+                                </div>
+                              </Button>
+                            )}
+                          </div>
+                          {item.detailed ? (
+                            <></>
+                          ) : (
+                            <div className="left-0 self-start text-xxs text-slate-500">
+                              now
+                            </div>
+                          )}
+                        </div>
+                      </NavLink>
+                    </LinkWrapper>
                   </div>
                 )
-              }
-
-              return (
-              <div key={i}>
-                <LinkWrapper isExternal={item.external || false} href={item.link}>
-                  <NavLink
-                    key={item.link}
-                    className="cursor-pointer"
-                    detailed={item.detailed || false}
-                  >
-                    <div className="flex flex-row gap-3 text-xs items-center">
-                      {
-                        item.detailed ?
-                        <Image
-                          className="min-w-[102px] min-h-[111px] max-w-[102px] max-h-[111px] rounded-lg"
-                          width={102}
-                          height={111}
-                          alt="tap image help"
-                          src={item.image || ""}
-                        />
-                        :
-                        <Image
-                          className="min-w-[38px] min-h-[38px] max-w-[38px] max-h-[38px] rounded-lg"
-                          width={38}
-                          height={38}
-                          alt="icon image"
-                          src={item.image || ""}
-                        />
-                      }
-                      <div className='flex flex-col gap-1 flex-1'>
-                        <div className="font-inter first-letter:capitalize">
-                          {item.text}
-                        </div>
-                        <div className='text-slate-500'>
-                          {item.description}
-                        </div>
-                        {
-                          item.detailed &&
-                          <Button className='max-w-[150px]'>
-                             <div className="text-xs text-white rounded-full cursor-pointer">
-                              Mint a Bead NFT
-                            </div>
-                          </Button>
-                        }
-                      </div>
-                      {
-                        item.detailed ?
-                        <></>
-                        :
-                        <div className="self-start left-0 text-xxs text-slate-500">
-                          now
-                        </div>
-                      }
-                    </div>
-                  </NavLink>
-                </LinkWrapper>
-              </div>)
-            }
-          )}
+              })}
           </div>
           <div className="flex justify-center items-center space-x-4 rounded-[41px] bg-link backdrop-blur-sm w-full py-4 place-self-end">
-            <div className="cursor-pointer" onClick={() => {
-                setModalContent(<How />);
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                setModalContent(<How />)
                 setShowModal(true)
-              }}>
+              }}
+            >
               <Image src={infoIcon} width={60} height={60} alt="info dock icon" />
             </div>
             <a
@@ -211,7 +229,15 @@ const Home: NextPage = () => {
   )
 }
 
-const LinkWrapper = ({children, isExternal, href}: {children: ReactNode, isExternal: boolean, href: string}) => {
+const LinkWrapper = ({
+  children,
+  isExternal,
+  href,
+}: {
+  children: ReactNode
+  isExternal: boolean
+  href: string
+}) => {
   if (isExternal) {
     return (
       <a href={href} target="_blank" rel="noreferrer">
@@ -219,11 +245,7 @@ const LinkWrapper = ({children, isExternal, href}: {children: ReactNode, isExter
       </a>
     )
   }
-  return (
-    <Link href={href}>
-      {children}
-    </Link>
-  )
+  return <Link href={href}>{children}</Link>
 }
 
 export default Home
