@@ -13,6 +13,10 @@ import infoIcon from "public/icons/infoDock-icon.png";
 import twitterIcon from "public/icons/twitter-icon.png";
 import telegramIcon from "public/icons/telegram-icon.png";
 import igIcon from "public/icons/ig-fx-icon.png";
+import tapImage from "public/tap-chip.jpg";
+import icon1 from "public/icon-1.png";
+import icon2 from "public/icon-2.png";
+
 
 const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'November', 'December']
@@ -44,7 +48,8 @@ const Home: NextPage = () => {
         text: 'Tap Chip n Mint Beads',
         description: 'Find someone with a Lizard Halo Chip to mint a Bead!',
         external: true,
-        detailed: true
+        detailed: true,
+        image: tapImage
       },
       {
         type: 'separator',
@@ -59,6 +64,7 @@ const Home: NextPage = () => {
         text: 'Get BEADED',
         description: 'Try the ILOVEBEADZ IG filter ✨',
         external: true,
+        image: icon1
       },
       {
         type: 'item',
@@ -67,13 +73,9 @@ const Home: NextPage = () => {
         description: 'See who else loves beadz IRL',
         modal: true,
         modalContent: <How />,
+        image: icon2
       },
-      // {
-      //   link: `/account/${address}`,
-      //   text: 'My wallet',
-      // },
     ],
-    // [address]
     []
   )
   const { weekday, month, date, time } = getDateTime();
@@ -122,9 +124,21 @@ const Home: NextPage = () => {
                     <div className="flex flex-row gap-3 text-xs items-center">
                       {
                         item.detailed ?
-                        <div className="bg-slate-950 min-w-[102px] min-h-[111px] max-w-[102px] max-h-[111px] rounded-lg"></div>
+                        <Image
+                          className="min-w-[102px] min-h-[111px] max-w-[102px] max-h-[111px] rounded-lg"
+                          width={102}
+                          height={111}
+                          alt="tap image help"
+                          src={item.image || ""}
+                        />
                         :
-                        <div className="bg-slate-950 min-w-[38px] min-h-[38px] max-w-[38px] max-h-[38px] rounded-lg"></div>
+                        <Image
+                          className="min-w-[38px] min-h-[38px] max-w-[38px] max-h-[38px] rounded-lg"
+                          width={38}
+                          height={38}
+                          alt="icon image"
+                          src={item.image || ""}
+                        />
                       }
                       <div className='flex flex-col gap-1 flex-1'>
                         <div className="font-inter first-letter:capitalize">
