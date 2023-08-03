@@ -1,4 +1,3 @@
-
 'use client'
 import { useHasMounted } from '@/hooks'
 
@@ -18,12 +17,12 @@ export const Background: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> 
     >
       {hasMounted && (
         <div
-        className={`h-full w-full ${
-          display || 'flex flex-col items-center justify-center'
-        }`}
-      >
-        {children}
-      </div>
+          className={`h-full w-full ${
+            display || 'flex flex-col items-center justify-center'
+          }`}
+        >
+          {children}
+        </div>
       )}
     </div>
   )
