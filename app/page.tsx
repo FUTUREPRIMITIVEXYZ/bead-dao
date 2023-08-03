@@ -38,7 +38,8 @@ const Home: NextPage = () => {
       {
         type: 'item',
         link: '',
-        text: 'About',
+        text: 'Tap Chip n Mint Beads',
+        description: 'Find someone with a Lizard Halo Chip to mint a Bead!',
         external: true,
         detailed: true
       },
@@ -52,13 +53,15 @@ const Home: NextPage = () => {
       {
         type: 'item',
         link: 'https://eips.ethereum.org/EIPS/eip-6551',
-        text: 'About',
+        text: 'Get BEADED',
+        description: 'Try the ILOVEBEADZ IG filter ✨',
         external: true,
       },
       {
         type: 'item',
         link: '/how',
-        text: 'How to Mint',
+        text: 'View the BeadDAO Gallery',
+        description: 'See who else loves beadz IRL',
         modal: true,
         modalContent: <How />,
       },
@@ -79,7 +82,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Background>
-      <div className="min-h-full mt-[3.25rem] flex flex-col  items-center">
+      <div className="min-h-full mt-[3.25rem] ml-2 mr-2 flex flex-col  items-center">
           <div className="flex flex-col items-center">
             <div className="text-white font-joker text-xl">
               {weekday}, {month} {date}
@@ -101,7 +104,8 @@ const Home: NextPage = () => {
                 )
               }
 
-              return (<div key={i}>
+              return (
+              <div key={i}>
                 <LinkWrapper isExternal={item.external || false} href={item.link}>
                   <NavLink
                     key={item.link}
@@ -112,8 +116,21 @@ const Home: NextPage = () => {
                     }: () => {console.log("hmm")}}
                     detailed={item.detailed || false}
                   >
-                    <div className="text-center text-xl font-bold first-letter:capitalize">
+                    <div className="flex flex-row gap-3 text-sm items-center">
+                      {
+                        item.detailed ?
+                        <div className="bg-slate-950 min-w-[102px] min-h-[111px] max-w-[102px] max-h-[111px] rounded-lg"></div>
+                        :
+                        <div className="bg-slate-950 min-w-[38px] min-h-[38px] max-w-[38px] max-h-[38px] rounded-lg"></div>
+                      }
+                      <div className='flex flex-col gap-1'>
+                      <div className="font-inter first-letter:capitalize">
                         {item.text}
+                      </div>
+                      <div>
+                        {item.description}
+                      </div>
+                      </div>
                     </div>
                   </NavLink>
                 </LinkWrapper>
