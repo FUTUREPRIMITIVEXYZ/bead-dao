@@ -1,4 +1,4 @@
-
+'use client'
 import useSWRInfinite, { SWRInfiniteResponse } from "swr/infinite";
 
 import { Address } from 'wagmi'
