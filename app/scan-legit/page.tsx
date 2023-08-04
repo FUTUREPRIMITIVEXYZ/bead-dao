@@ -45,11 +45,11 @@ const Scan: NextPage = () => {
     chainId: 11155111,
   })
 
-  const { data, isLoading, isSuccess, write } = useBeadMint()
+  const { data, isLoading, isSuccess, writeAsync } = useBeadMint()
 
   const {
     trigger: triggerScan,
-    data: mintSignature,
+    data: mintData,
     isMutating: scanLoading,
   } = useSWRMutation('/scan', async () => {
     if (!address) {
@@ -79,11 +79,14 @@ const Scan: NextPage = () => {
       throw Error('Not a lizard')
     }
 
-    const { hash, number } = await publicClient.getBlock()
+    const { hash, number: blockNumber } = await publicClient.getBlock()
+    // const hash =
+    //   '0x081dbfe2b4b7a2f0a62fc8a93f0a2f656eda1be2853123aaa646d34bc9027ad64025758n'
+    // const blockNumber = 4025758n
 
-    console.log(hash, number)
+    console.log(hash, blockNumber)
 
-    if (!hash || !number) {
+    if (!hash || !blockNumber) {
       throw Error('Error fetching block information')
     }
 
@@ -91,19 +94,19 @@ const Scan: NextPage = () => {
       address: '0xe84011D1b695bcf5b92700b09D973D5688e7682f',
       abi: beadABI,
       functionName: 'beadId',
-      args: [address, number],
+      args: [address, blockNumber],
     })
 
     console.log(beadId)
 
-    const signature =
-      '0xb81ecf1a55b79b25562585d4238a276704b5634a7edb42674c3c565630ca2914210b7ccb53b74a36670431d965e34c5d1c5cb8e54726084537848a7232fb10361b'
+    // const signature =
+    //   '0xacf12d8a4ce871d007689c42d142a803a4d13407492815487c978d1530fbd23b2ff033ddb957e4d3d4699c1a425523b9645151243edcca2de669a3a4c8cc96f11b'
 
-    // const signature = await getSignatureFromScan({
-    //   chipPublicKey: keys.primaryPublicKeyRaw,
-    //   address: address!,
-    //   hash: hash,
-    // })
+    const signature = await getSignatureFromScan({
+      chipPublicKey: keys.primaryPublicKeyRaw,
+      address: address!,
+      hash: hash,
+    })
 
     console.log(signature)
 
@@ -118,7 +121,7 @@ const Scan: NextPage = () => {
     return {
       signature,
       proof,
-      blockNumber: number,
+      blockNumber,
       image,
     }
   })
@@ -237,7 +240,7 @@ const Scan: NextPage = () => {
               </div>
             </Button>
           )}
-          {isConnected && !mintSignature && (
+          {isConnected && !mintData && (
             <Button className="mb-4" onClick={() => triggerScan()}>
               <div className="px-2 py-1 text-3xl font-medium text-white rounded-full cursor-pointer whitespace-nowrap">
                 Verify Lizard
@@ -261,19 +264,42 @@ const Scan: NextPage = () => {
             </div>
           </div>
         )}
-        {/* {isLoading && ( */}
-        {/*   <div className="absolute inset-0 flex flex-col items-center justify-center"> */}
-        {/*     <div className="w-64 h-64 mt-8 mb-4 overflow-hidden bg-white rounded-lg shadow"> */}
-        {/*       <Image */}
-        {/*         className="w-64 h-64 mb-4" */}
-        {/*         src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2ZkNWIxZDMxNTM0MTBmNGU2NTU4NzhjYTE4ZDhiMDg2NTk2MTAzZSZjdD1z/yYmPdb7UNlih5LlpL8/giphy.gif" */}
-        {/*         width={64} */}
-        {/*         height={64} */}
-        {/*         alt="loading image" */}
-        {/*       /> */}
-        {/*     </div> */}
-        {/*   </div> */}
-        {/* )} */}
+
+        {mintData !== undefined && (
+          <Button
+            className="mb-4"
+            onClick={async () => {
+              const tx = await writeAsync({
+                args: [
+                  mintData.blockNumber,
+                  mintData.signature as `0x${string}`,
+                  mintData.proof as `0x${string}`[],
+                  address as `0x${string}`,
+                  'hello world',
+                ],
+              })
+
+              console.log(tx)
+            }}
+          >
+            <div className="px-2 py-1 text-3xl font-medium text-white rounded-full cursor-pointer whitespace-nowrap">
+              Mint Bead
+            </div>
+          </Button>
+        )}
+        {isLoading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="w-64 h-64 mt-8 mb-4 overflow-hidden bg-white rounded-lg shadow">
+              <Image
+                className="w-64 h-64 mb-4"
+                src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2ZkNWIxZDMxNTM0MTBmNGU2NTU4NzhjYTE4ZDhiMDg2NTk2MTAzZSZjdD1z/yYmPdb7UNlih5LlpL8/giphy.gif"
+                width={64}
+                height={64}
+                alt="loading image"
+              />
+            </div>
+          </div>
+        )}
         <Toaster position="bottom-center" />
       </Background>
     </div>
