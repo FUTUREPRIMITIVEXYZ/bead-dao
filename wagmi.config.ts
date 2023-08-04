@@ -1,7 +1,7 @@
 import { defineConfig } from '@wagmi/cli'
 import { react } from '@wagmi/cli/plugins'
 
-import BEAD_CONTRACT from './contracts/out/BEAD.sol/BEAD.json'
+import BEAD_CONTRACT from './app/abis/BEAD.json'
 
 export default defineConfig({
   out: 'app/generated.ts',

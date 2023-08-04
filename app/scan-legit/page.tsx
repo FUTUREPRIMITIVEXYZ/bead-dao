@@ -19,7 +19,7 @@ import { useSearchParam } from 'react-use'
 import useSWRMutation from 'swr/mutation'
 import useSWR from 'swr'
 
-import { hashMessage, keccak256, encodePacked } from 'viem'
+import { hashMessage, keccak256, encodePacked, hexToBigInt } from 'viem'
 
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 
@@ -40,10 +40,6 @@ const Scan: NextPage = () => {
 
   const { address, isConnected, status } = useAccount()
   const { openConnectModal } = useConnectModal()
-
-  const publicClient = usePublicClient({
-    chainId: 11155111,
-  })
 
   const { data, isLoading, isSuccess, writeAsync } = useBeadMint()
 
@@ -79,10 +75,9 @@ const Scan: NextPage = () => {
       throw Error('Not a lizard')
     }
 
-    const { hash, number: blockNumber } = await publicClient.getBlock()
-    // const hash =
-    //   '0x081dbfe2b4b7a2f0a62fc8a93f0a2f656eda1be2853123aaa646d34bc9027ad64025758n'
-    // const blockNumber = 4025758n
+    // const { hash, number: blockNumber } = await publicClient.getBlock()
+    const hash = '0x91262cb304885ffe68241227be5bdaf33b5450b219c05ee091ec19179a038509'
+    const blockNumber = 4025817n
 
     console.log(hash, blockNumber)
 
@@ -90,23 +85,24 @@ const Scan: NextPage = () => {
       throw Error('Error fetching block information')
     }
 
-    const beadId = await publicClient.readContract({
-      address: '0xe84011D1b695bcf5b92700b09D973D5688e7682f',
-      abi: beadABI,
-      functionName: 'beadId',
-      args: [address, blockNumber],
+    const localMessageHash = hashMessage({
+      raw: keccak256(encodePacked(['address', 'bytes32'], [address, hash])),
     })
 
-    console.log(beadId)
+    const tokenId = hexToBigInt(localMessageHash)
 
-    // const signature =
-    //   '0xacf12d8a4ce871d007689c42d142a803a4d13407492815487c978d1530fbd23b2ff033ddb957e4d3d4699c1a425523b9645151243edcca2de669a3a4c8cc96f11b'
+    const beadId = (tokenId % 1260n) + 1n
 
-    const signature = await getSignatureFromScan({
-      chipPublicKey: keys.primaryPublicKeyRaw,
-      address: address!,
-      hash: hash,
-    })
+    console.log(tokenId, beadId)
+
+    const signature =
+      '0xce712ccacf13919ff5ad5704259bacb462b0259e9dfbcdf93d7a440112d9c97d22f025feb8708600c4391fc8a5be2492f63c17e5c7ab11fc71d2de703d90c2ef1b'
+
+    // const signature = await getSignatureFromScan({
+    //   chipPublicKey: keys.primaryPublicKeyRaw,
+    //   address: address!,
+    //   hash: hash,
+    // })
 
     console.log(signature)
 
@@ -266,26 +262,31 @@ const Scan: NextPage = () => {
         )}
 
         {mintData !== undefined && (
-          <Button
-            className="mb-4"
-            onClick={async () => {
-              const tx = await writeAsync({
-                args: [
-                  mintData.blockNumber,
-                  mintData.signature as `0x${string}`,
-                  mintData.proof as `0x${string}`[],
-                  address as `0x${string}`,
-                  'hello world',
-                ],
-              })
-
-              console.log(tx)
-            }}
-          >
-            <div className="px-2 py-1 text-3xl font-medium text-white rounded-full cursor-pointer whitespace-nowrap">
-              Mint Bead
+          <>
+            <div>
+              <img src={mintData.image} className="w-56 h-56" />
             </div>
-          </Button>
+            <Button
+              className="mb-4"
+              onClick={async () => {
+                const tx = await writeAsync({
+                  args: [
+                    mintData.blockNumber,
+                    mintData.signature as `0x${string}`,
+                    mintData.proof as `0x${string}`[],
+                    address as `0x${string}`,
+                    'hello world',
+                  ],
+                })
+
+                console.log(tx)
+              }}
+            >
+              <div className="px-2 py-1 text-3xl font-medium text-white rounded-full cursor-pointer whitespace-nowrap">
+                Mint Bead
+              </div>
+            </Button>
+          </>
         )}
         {isLoading && (
           <div className="absolute inset-0 flex flex-col items-center justify-center">

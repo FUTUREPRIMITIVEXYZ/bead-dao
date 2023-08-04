@@ -45,7 +45,6 @@ function Mint({}: MintProps) {
   const { address } = useAccount()
   const [message, setMessage] = useState('')
   const [mintState, setMintState] = useState<MintStateType>(MintState.PREMINT)
-  const hasMounted = useHasMounted()
   const canMint = !!message
 
   if (!address) {
