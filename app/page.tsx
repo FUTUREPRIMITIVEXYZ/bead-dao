@@ -17,6 +17,7 @@ import tapImage from 'public/tap-chip.jpg'
 import icon1 from 'public/icon-1.png'
 import icon2 from 'public/icon-2.png'
 import { Button } from './components/button'
+import { Text } from '@/components/'
 
 const days = [
   'Sunday',
@@ -106,7 +107,9 @@ const Home: NextPage = () => {
             <div className="text-xl text-white font-joker">
               {weekday}, {month} {date}
             </div>
-            <div className="text-white font-inter font-semibold text-[5rem]">{time}</div>
+            <div className="text-white font-display font-semibold text-[5rem]">
+              {time}
+            </div>
           </div>
           <div className="flex-1 [&>*]:my-2">
             {links
@@ -115,12 +118,19 @@ const Home: NextPage = () => {
               .map((item, i) => {
                 if (item.type === 'separator') {
                   return (
-                    <div
-                      className="text-lg text-white place-self-start font-inter first-letter:capitalize"
+                    <Text
+                      variant="heading-sm"
+                      className="text-white place-self-start first-letter:capitalize"
                       key={i}
                     >
                       Beadification Center
-                    </div>
+                    </Text>
+                    // <div
+                    //   className="text-lg text-white place-self-start font-display first-letter:capitalize"
+
+                    // >
+                    //   Beadification Center
+                    // </div>
                   )
                 }
 
@@ -151,24 +161,29 @@ const Home: NextPage = () => {
                             />
                           )}
                           <div className="flex flex-col flex-1 gap-1">
-                            <div className="font-inter first-letter:capitalize">
+                            <Text
+                              variant="heading-xs"
+                              className=" first-letter:capitalize"
+                            >
                               {item.text}
-                            </div>
-                            <div className="text-slate-500">{item.description}</div>
+                            </Text>
+
+                            <Text variant="paragraph-xs" className="text-slate-500">
+                              {item.description}
+                            </Text>
                             {item.detailed && (
-                              <Button className="max-w-[175px]">
-                                <div className="text-xs text-white rounded-full cursor-pointer">
-                                  Mint a Bead NFT
-                                </div>
-                              </Button>
+                              <Button className="max-w-[200px]">Mint a Bead NFT</Button>
                             )}
                           </div>
                           {item.detailed ? (
                             <></>
                           ) : (
-                            <div className="left-0 self-start text-xxs text-slate-500">
+                            <Text
+                              variant="paragraph-xs"
+                              className="left-0 self-start text-slate-500"
+                            >
                               now
-                            </div>
+                            </Text>
                           )}
                         </div>
                       </NavLink>

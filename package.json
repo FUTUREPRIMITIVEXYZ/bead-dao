@@ -16,6 +16,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
     "@hashlips-lab/art-engine": "2.0.0-alpha5",
     "@openzeppelin/merkle-tree": "^1.0.5",
     "@radix-ui/react-dialog": "^1.0.4",
