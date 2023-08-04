@@ -1,6 +1,6 @@
 'use client'
 import { useHasMounted } from '@/hooks'
-
+import clsx from 'clsx'
 interface Props {
   display?: string
 }
@@ -13,7 +13,10 @@ export const Background: React.FC<Props & React.HTMLAttributes<HTMLDivElement>> 
   const hasMounted = useHasMounted()
   return (
     <div
-      className={`${className} w-screen h-screen overflow-scroll bg-main bg-cover bg-center bg-no-repeat`}
+      className={clsx(
+        `w-screen h-screen overflow-scroll bg-main bg-cover bg-center bg-no-repeat`,
+        className
+      )}
     >
       {hasMounted && (
         <div
