@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler } from 'react'
-
+import { Text } from '@/components'
 interface InputProps {
   onChange: ChangeEventHandler<HTMLInputElement>
   name: string
@@ -10,9 +10,9 @@ export function Input({ onChange, label, name, placeholder }: InputProps) {
   return (
     <div className="flex flex-col items-center flex-1 w-full gap-2">
       {label && (
-        <label htmlFor={name} className="text-sm italic text-center">
-          {label}
-        </label>
+        <Text variant="paragraph-sm" className="italic text-center opacity-70">
+          <label htmlFor={name}>{label}</label>
+        </Text>
       )}
       <input
         id="name"

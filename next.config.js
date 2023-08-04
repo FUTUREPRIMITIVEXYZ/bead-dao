@@ -6,15 +6,15 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async redirects() {
-    return [
-      {
-        source: '/scan',
-        destination: 'https://t.me/beaddao',
-        permanent: false,
-      },
-    ]
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/scan',
+  //       destination: 'https://t.me/beaddao',
+  //       permanent: false,
+  //     },
+  //   ]
+  // },
   reactStrictMode: true,
   images: {
     dangerouslyAllowSVG: true,

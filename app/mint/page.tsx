@@ -5,7 +5,7 @@ import { Button } from '../components/button'
 import { useAccount } from 'wagmi'
 import { toast, Toaster } from 'react-hot-toast'
 import { useState } from 'react'
-import { Input } from '@/components'
+import { Text, Input } from '@/components'
 import { BeadLoading } from '@/components/beadLoading'
 import { useHasMounted } from '@/hooks'
 import Link from 'next/link'
@@ -24,7 +24,7 @@ type MintStateType = (typeof MintState)[keyof typeof MintState]
 
 function MintImage({ caption }: { caption: string }) {
   return (
-    <figure className="flex flex-col items-center gap-4">
+    <figure className="flex flex-col items-center gap-6">
       <Image
         alt="image name"
         src="/beaddao.png"
@@ -32,7 +32,9 @@ function MintImage({ caption }: { caption: string }) {
         height={1080}
         className="flex items-center justify-center w-full bg-white rounded-lg aspect-square"
       />
-      <figcaption className="text-xl font-bold">{caption}</figcaption>
+      <Text variant="heading-md" isInline asChild>
+        <figcaption>{caption}</figcaption>
+      </Text>
     </figure>
   )
 }
@@ -49,7 +51,7 @@ function Mint({}: MintProps) {
   if (!address) {
     return (
       <Background className="px-3">
-        <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-white bg-opacity-20 backdrop-blur-3xl">
+        <div className="flex flex-col w-full gap-4 p-6 mt-10 bg-white md:max-w-lg rounded-xl bg-opacity-20 backdrop-blur-3xl">
           <div className="flex flex-col gap-8">
             <MintImage caption="Image Name" />
             <ConnectButton />
@@ -120,10 +122,14 @@ function Mint({}: MintProps) {
         )}
         {mintState === MintState.MINTERROR && (
           <Background className="flex flex-col items-center justify-center px-3">
-            <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
-              <div className="flex flex-col items-center gap-6">
-                <h1 className="text-xl font-bold">:(</h1>
-                <h1 className="text-xl font-bold">Oopsie, something went wrong</h1>
+            <div className="flex flex-col w-full gap-4 p-6 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
+              <div className="flex flex-col items-center gap-6 pb-2">
+                <Text variant="heading-md" asChild isInline>
+                  <h1>:(</h1>
+                </Text>
+                <Text variant="heading-md" asChild isInline>
+                  <h2>Oopsie, something went wrong</h2>
+                </Text>
 
                 <Button type="submit" onClick={() => setMintState(MintState.PREMINT)}>
                   Try Again
@@ -134,17 +140,21 @@ function Mint({}: MintProps) {
         )}
         {mintState === MintState.MINTED && (
           <Background className="flex flex-col items-center justify-center px-3">
-            <div className="flex flex-col w-full gap-4 p-6 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
+            <div className="flex flex-col w-full gap-6 p-6 mt-10 md:max-w-lg rounded-xl bg-lightbrown bg-opacity-80 backdrop-blur-3xl">
               <MintImage caption={`You Minted Bead #${BEAD_NUMBER}!`} />
-
-              <Link href={`https://opensea.io/assets/ethereum/`} className="self-center">
-                <Button type="submit" onClick={() => setMintState(MintState.MINTING)}>
-                  View on OpenSea
-                </Button>
-              </Link>
-              <Link href="/" className="self-center">
-                <Button variant="aquaGrey">Back Home</Button>
-              </Link>
+              <div className="flex flex-col gap-4 pb-2">
+                <Link
+                  href={`https://opensea.io/assets/ethereum/`}
+                  className="self-center"
+                >
+                  <Button type="submit" onClick={() => setMintState(MintState.MINTING)}>
+                    View on OpenSea
+                  </Button>
+                </Link>
+                <Link href="/" className="self-center">
+                  <Button variant="aquaGrey">Back Home</Button>
+                </Link>
+              </div>
             </div>
           </Background>
         )}

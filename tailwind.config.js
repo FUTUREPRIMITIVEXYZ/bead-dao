@@ -19,6 +19,17 @@ module.exports = {
       lg: '976px',
       xl: '1440px',
     },
+    fontSize: {
+      xs: ['0.75rem', { lineHeight: '1.5rem' }], // 12px
+      sm: ['0.875rem', { lineHeight: '1.5rem' }], // 14px
+      base: ['0.9325rem', { lineHeight: '1.5rem' }], // 15px
+      lg: ['1.25rem', { lineHeight: '1.5rem' }], // 20px
+      xl: ['1.5rem', { lineHeight: '1.2rem' }], // 24px
+      '2xl': ['2rem', { lineHeight: '1.2rem' }], // 32px
+      '3xl': ['2.5rem', { lineHeight: '1.2rem' }], // 40px
+      '4xl': ['3rem', { lineHeight: '1' }], // 48px
+      '5xl': ['4rem', { lineHeight: '1' }], // 64px
+    },
     fontFamily: {
       joker: ['Jokerman'],
       display: ['SF Pro Display Semibold', 'Helvetica Neue', ...fontFamily.sans],

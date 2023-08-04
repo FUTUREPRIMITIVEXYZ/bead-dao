@@ -215,9 +215,7 @@ const Scan: NextPage = () => {
       <Background>
         <div className="flex flex-col items-center justify-center min-h-full">
           <Button className="mb-4" onClick={cta}>
-            <div className="px-2 py-1 text-3xl font-medium text-white rounded-full cursor-pointer whitespace-nowrap">
-              {buttonCta}
-            </div>
+            {buttonCta}
           </Button>
         </div>
         {tapLoading && (
