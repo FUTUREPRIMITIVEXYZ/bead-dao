@@ -59,7 +59,7 @@ const Home: NextPage = () => {
     () => [
       {
         type: 'item',
-        link: '/scan?start=true',
+        link: '/scan',
         text: 'Tap Chip n Mint Beads',
         description: 'Find someone with a Lizard Halo Chip to mint a Bead!',
         external: false,

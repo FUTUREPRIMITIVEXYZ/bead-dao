@@ -1,29 +1,31 @@
 'use client'
 
 import type { NextPage } from 'next'
-
+import Head from 'next/head'
 import { Background } from '../components/background'
 import { Button } from '../components/button'
-import { Text } from '@/components'
 import { ethers } from 'ethers'
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree'
-import { useAccount } from 'wagmi'
+import { useAccount, usePublicClient } from 'wagmi'
 import { toast, Toaster } from 'react-hot-toast'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import URL from 'url-parse'
 import { getPublicKeysFromScan, getSignatureFromScan } from 'pbt-chip-client/kong'
 import parseKeys from '@/utils/parseKeys'
-import Image from 'next/image'
-// import { useModal } from 'connectkit'
 import { useSearchParam } from 'react-use'
+import Image from 'next/image'
+
+import useSWRMutation from 'swr/mutation'
+import useSWR from 'swr'
+
+import { hashMessage, keccak256, encodePacked, hexToBigInt } from 'viem'
 
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 
-const provider = new ethers.providers.AlchemyProvider(
-  'goerli',
-  process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!
-)
+import { useBeadMint, beadABI, beadAddress } from '@/generated'
+
+import { Text, Input } from '@/components'
 
 type MintPayload = {
   lizard: string
@@ -33,187 +35,224 @@ type MintPayload = {
   recipient: string
 }
 
-const Scan: NextPage = () => {
-  const searchParams = useSearchParams()
-  const isFromHomePage = searchParams.get('start') // if the page was routed from the home page
+function conditionalKey(key: string, dependencies: any[]) {
+  for (const dependency of dependencies) {
+    if (!dependency) return null
+  }
 
+  return key
+}
+
+const Scan: NextPage = () => {
+  const [message, setMessage] = useState('')
+  const searchParams = useSearchParams()
+  const keysStatic = searchParams.get('static')
+
+  const { address, isConnected, isConnecting } = useAccount()
   const { openConnectModal } = useConnectModal()
 
-  const [tapLoading, setTapLoading] = useState(false)
-  const [mintLoading, setMintLoading] = useState(false)
-  const isLoading = mintLoading
+  const publicClient = usePublicClient({
+    chainId: 11155111,
+  })
 
-  const { address, isConnected, isDisconnected } = useAccount()
+  const { data: txData, isLoading: mintLoading, isSuccess, write } = useBeadMint()
 
-  const [buttonCta, setButtonCta] = useState<string>('Connect Wallet')
-  const [tapCta, setTapCta] = useState<string>('Tap the chip again to verify')
-
-  useEffect(() => {
-    if (isFromHomePage) {
-      setTapCta('Tap a Lizard chip to mint Beadz')
-      return setTapLoading(true)
-    }
-  }, [isFromHomePage])
-
-  useEffect(() => {
-    if (!isLoading && isConnected) {
-      return setButtonCta('Verify Lizard')
-    }
-    if (!isConnected) {
-      return setButtonCta('Connect Wallet')
-    }
-  }, [isConnected, isLoading, isDisconnected, address])
-
-  const cta = () => {
-    if (!isLoading && isConnected) {
-      return initiateTap()
-    }
-    if (!isConnected) {
-      openConnectModal?.()
-    }
-  }
-
-  const initiateTap = async () => {
-    try {
-      setTapLoading(true)
-      window.focus()
-      // const url = URL(window.location.href, true)
-
-      // let keys: any = parseKeys(url.query.static)
-      // if (!keys) {
-      //   keys = await getPublicKeysFromScan()
-      // }
-
-      // const primaryKey = keys?.primaryPublicKeyRaw
-
-      // if (!primaryKey) {
-      //   throw Error('Invalid primary key')
-      // }
-
-      // const keyAddress = ethers.utils.computeAddress(`0x${primaryKey}`)
-
-      // const lizardTree = await fetch('/lizardTree.json').then((res) => res.json())
-
-      // const tree = StandardMerkleTree.load(lizardTree)
-
-      // const proof = tree.getProof([keyAddress])
-
-      // if (!tree.verify([keyAddress], proof)) {
-      //   throw Error('Not a lizard')
-      // }
-
-      // const { hash, number } = await provider.getBlock('latest')
-
-      // if (!address) {
-      //   throw Error('No wallet connected')
-      // }
-
-      // const signature = await getSignatureFromScan({
-      //   chipPublicKey: keys.primaryPublicKeyRaw,
-      //   address: address!,
-      //   hash,
-      // })
-
-      // if (!signature) {
-      //   throw Error('No signature returned')
-      // }
-
-      // setTapLoading(false)
-
-      /**
-       * @todo
-       * redirect to /mint from here
-       * https://www.figma.com/file/YkwW4NwSkYhjvwUay6LD20/ETHDenver2022-BEADDAO?type=design&node-id=516%3A710&mode=design&t=eJj4kFCk1hhnI5si-1
-       */
-
-      // mint({
-      //   lizard: keyAddress,
-      //   signatureBlockNumber: number,
-      //   lizardSignature: signature,
-      //   lizardProof: proof,
-      //   recipient: address,
-      // })
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.toString())
+  const { data: blockData } = useSWR(
+    conditionalKey(`/${address}/blockData`, [address]),
+    async () => {
+      if (!address) {
+        throw Error('Dependencies not met')
       }
-      setTapLoading(false)
-    } finally {
-      // setTapLoading(false)
+      const { hash, number: blockNumber } = await publicClient.getBlock()
+      // const hash = '0xaef75ccfbb6cb1d509c2e7cfc0e806413c61ad584d35d74b88e54a69207c64f9'
+      // const blockNumber = 4026266n
+
+      console.log(hash, blockNumber)
+
+      if (!hash || !blockNumber) {
+        throw Error('Error fetching block information')
+      }
+
+      const localMessageHash = hashMessage({
+        raw: keccak256(encodePacked(['address', 'bytes32'], [address, hash])),
+      })
+
+      const tokenId = hexToBigInt(localMessageHash)
+
+      const beadId = (tokenId % 1260n) + 1n
+
+      const image = `https://cloudflare-ipfs.com/ipfs/bafybeiemt555y6bsgkree3ee4o4v52wgvk275hb2ml5mvv4r24viq74vpq/${beadId}.png`
+
+      console.log(image)
+
+      return {
+        hash,
+        blockNumber,
+        tokenId,
+        beadId,
+        image,
+      }
     }
-  }
+  )
 
-  // const mint = async (payload: MintPayload) => {
-  //   try {
-  //     setMintLoading(true)
-  //     const mintRequestPromise = fetch('/api/mint', {
-  //       method: 'POST',
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(payload),
-  //     })
-  //       .then((res) => res.json())
-  //       .then((res) => {
-  //         console.log(res.error)
-  //         if (res.error) throw Error(res.error)
-  //         return res
-  //       })
+  const {
+    trigger: triggerScan,
+    data: mintData,
+    isMutating: scanLoading,
+  } = useSWRMutation(
+    conditionalKey(`/${address}/scanData`, [address, blockData]),
+    async () => {
+      if (!address || !blockData) {
+        throw Error('Dependencies not met')
+      }
 
-  //     toast.promise(mintRequestPromise, {
-  //       loading: 'Submitting transaction...',
-  //       success: 'Transaction submitted!',
-  //       error: 'Transaction failed. You can only mint once per hour per chip',
-  //     })
+      let keys: any = parseKeys(keysStatic)
+      if (!keys) {
+        keys = await getPublicKeysFromScan()
+      }
 
-  //     const response = await mintRequestPromise
-  //     if (response.error) throw Error('Error minting lizard')
+      const primaryKey = keys?.primaryPublicKeyRaw
 
-  //     const { txHash } = response
+      if (!primaryKey) {
+        throw Error('Could not fetch lizard key')
+      }
 
-  //     console.log(txHash)
+      const keyAddress = ethers.utils.computeAddress(`0x${primaryKey}`)
 
-  //     const txPromise = provider.waitForTransaction(txHash)
+      const lizardTree = await fetch('/lizardTree-v2.json').then((res) => res.json())
 
-  //     toast.promise(txPromise, {
-  //       loading: 'Waiting for transaction...',
-  //       success: 'Beadz minted!',
-  //       error: 'Uh oh, transaction failed',
-  //     })
+      const tree = StandardMerkleTree.load(lizardTree)
 
-  //     const tx = await txPromise
+      const proof = tree.getProof([keyAddress])
 
-  //     console.log(tx)
+      if (!tree.verify([keyAddress], proof)) {
+        throw Error('Not a lizard')
+      }
 
-  //     console.log(response)
+      console.log(blockData.tokenId, blockData.beadId)
 
-  //     if (response.firstLizard) {
-  //       router.push(`/account/${address}?minted=true`)
-  //     } else {
-  //       router.push(`/account/${address}?beadClaim=true`)
-  //     }
+      const signature = await getSignatureFromScan({
+        chipPublicKey: keys.primaryPublicKeyRaw,
+        address: address!,
+        hash: blockData.hash,
+      })
 
-  //     setMintLoading(false)
-  //   } catch (error) {
-  //     // if (error instanceof Error) {
-  //     //   toast.error(error.toString());
-  //     // }
-  //     console.error(error)
-  //     setMintLoading(false)
-  //   } finally {
-  //     setMintLoading(false)
-  //   }
-  // }
+      // const signature =
+      //   '0x27d46cb5907772c5b8a8bba4f5b966798fee667c5d4bf75aece261ef84d029f670ff1b3d356ae18df2b5dda03c32bf770590bd85caa3c65778202b6877e237a21c'
+
+      console.log(signature)
+
+      if (!signature) {
+        throw Error('No signature returned')
+      }
+
+      return {
+        signature,
+        proof,
+      }
+    }
+  )
 
   return (
-    <Background className="flex flex-col items-center justify-center w-full h-full bg-black bg-opacity-30">
-      <div className="flex flex-col items-center justify-center w-screen h-screen bg-black bg-opacity-30">
-        <div className="flex flex-col items-center justify-center">
-          <Button onClick={cta}>{buttonCta}</Button>
-        </div>
-        {tapLoading && (
-          <div className="inset-0 flex flex-col items-center justify-start ">
+    <div className="font-[Inter]">
+      <Head>
+        <title>Bead DAO</title>
+        <meta name="description" content="Generated by @rainbow-me/create-rainbowkit" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Background>
+        {isConnecting && <Text>LOADING...</Text>}
+
+        {keysStatic && !isConnecting && !isConnected && (
+          <Button onClick={openConnectModal} className="py-4 px-12">
+            <Text variant={'heading-md'} isInline className="text-blue-950 font-normal">
+              Connect Wallet
+            </Text>
+          </Button>
+        )}
+
+        {keysStatic && !isConnecting && isConnected && !mintLoading && (
+          <div className="p-4 w-full">
+            <div className="bg-white bg-opacity-40 backdrop-blur-3xl rounded-lg w-full flex flex-col justify-center items-center p-6">
+              {blockData && (
+                <img
+                  src={blockData.image}
+                  className="h-full w-full rounded aspect-square mb-6"
+                />
+              )}
+              {!mintData && (
+                <Button onClick={() => triggerScan()} className="py-4">
+                  <Text
+                    variant={'paragraph-lg'}
+                    isInline
+                    className="text-blue-950 font-normal"
+                  >
+                    Verify Lizard
+                  </Text>
+                </Button>
+              )}
+              {!txData && mintData && blockData && address && (
+                <>
+                  <div className="mb-4 w-full">
+                    <Input
+                      name="message"
+                      label="Mint a message with your bead"
+                      placeholder="Type your message here"
+                      onChange={(e) => setMessage(e.target.value)}
+                    />
+                  </div>
+                  <Button
+                    onClick={() =>
+                      write({
+                        args: [
+                          blockData.blockNumber,
+                          mintData.signature as `0x${string}`,
+                          mintData.proof as `0x${string}`[],
+                          address,
+                          message,
+                        ],
+                      })
+                    }
+                    className="py-4"
+                  >
+                    <Text
+                      variant={'paragraph-lg'}
+                      isInline
+                      className="text-blue-950 font-normal"
+                    >
+                      Mint Bead
+                    </Text>
+                  </Button>
+                </>
+              )}
+              {txData && blockData && isSuccess && (
+                <div className="flex flex-col justify-center items-center">
+                  <Text variant={'heading-md'} isInline className="text-center mb-4">
+                    You minted a BEAD!
+                  </Text>
+                  <a
+                    href={`https://testnets.opensea.io/assets/sepolia/0xa17f131b2d6c3afa64f24da5e1ce98cffaabdf7d/${blockData.tokenId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Button className="py-4">
+                      <Text
+                        variant={'paragraph-lg'}
+                        isInline
+                        className="text-blue-950 font-normal"
+                      >
+                        View on Opensea
+                      </Text>
+                    </Button>
+                  </a>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {!keysStatic && (
+          <div className="absolute inset-0 flex flex-col items-center justify-start bg-black bg-opacity-30">
             <div className="w-64 h-64 mt-4 mb-4 overflow-hidden bg-white rounded-lg shadow">
               <Image
                 className="w-64 h-64 mb-4"
@@ -223,13 +262,35 @@ const Scan: NextPage = () => {
                 height={64}
               />
             </div>
-            <div className="px-4 py-2 font-bold bg-white rounded-md">
-              <Text variant="paragraph-lg">{tapCta}</Text>
+            <div className="px-4 py-2 bg-white rounded-md">
+              <Text variant={'paragraph-lg'} className="font-bold">
+                Tap a lizard chip to mint beadz
+              </Text>
             </div>
           </div>
         )}
-        {isLoading && (
-          <div className="inset-0 flex flex-col items-center justify-center ">
+
+        {scanLoading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-start bg-black bg-opacity-30">
+            <div className="w-64 h-64 mt-4 mb-4 overflow-hidden bg-white rounded-lg shadow">
+              <Image
+                className="w-64 h-64 mb-4"
+                src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGY3ZGRmNTU1YjAxNjM2ODQzY2Y2MzU4YmZhMjEwOGFlYzNhZTE3NCZjdD1z/QtX9VvsqoJ9nNpRVGF/giphy.gif"
+                alt="processing gif"
+                width={64}
+                height={64}
+              />
+            </div>
+            <div className="px-4 py-2 bg-white rounded-md">
+              <Text variant={'paragraph-lg'} className="font-bold">
+                Tap the chip again to verify
+              </Text>
+            </div>
+          </div>
+        )}
+
+        {mintLoading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-20">
             <div className="w-64 h-64 mt-8 mb-4 overflow-hidden bg-white rounded-lg shadow">
               <Image
                 className="w-64 h-64 mb-4"
@@ -241,9 +302,10 @@ const Scan: NextPage = () => {
             </div>
           </div>
         )}
+
         <Toaster position="bottom-center" />
-      </div>
-    </Background>
+      </Background>
+    </div>
   )
 }
 

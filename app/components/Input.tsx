@@ -19,7 +19,7 @@ export function Input({ onChange, label, name, placeholder }: InputProps) {
         placeholder={placeholder}
         type="text"
         onChange={onChange}
-        className="self-stretch h-10 px-4 text-sm border rounded-lg border-slate-100"
+        className="self-stretch h-10 px-4 border rounded-lg border-slate-100 font-primary text-lg"
       />
     </div>
   )
