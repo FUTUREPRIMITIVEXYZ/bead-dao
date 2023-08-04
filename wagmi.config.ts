@@ -9,7 +9,8 @@ export default defineConfig({
     {
       name: 'BEAD',
       address: {
-        11155111: '0xa17f131B2d6C3AFa64f24dA5e1ce98cffaabDf7D',
+        11155111: '0x4909145BCdFeC4984636656098f8359391a84142',
+        1: '0xDC754d884217E658E5a158E31236D8AeeC4d25A7',
       },
       // @ts-ignore
       abi: BEAD_CONTRACT.abi,

@@ -6,14 +6,12 @@ import { Background } from '../components/background'
 import { Button } from '../components/button'
 import { ethers } from 'ethers'
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree'
-import { useAccount, usePublicClient } from 'wagmi'
+import { useAccount, usePublicClient, useNetwork, Chain } from 'wagmi'
 import { toast, Toaster } from 'react-hot-toast'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import URL from 'url-parse'
 import { getPublicKeysFromScan, getSignatureFromScan } from 'pbt-chip-client/kong'
 import parseKeys from '@/utils/parseKeys'
-import { useSearchParam } from 'react-use'
 import Image from 'next/image'
 
 import useSWRMutation from 'swr/mutation'
@@ -23,17 +21,9 @@ import { hashMessage, keccak256, encodePacked, hexToBigInt } from 'viem'
 
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 
-import { useBeadMint, beadABI, beadAddress } from '@/generated'
+import { useBeadMint, beadAddress } from '@/generated'
 
 import { Text, Input } from '@/components'
-
-type MintPayload = {
-  lizard: string
-  signatureBlockNumber: number
-  lizardSignature: string
-  lizardProof: string[]
-  recipient: string
-}
 
 function conditionalKey(key: string, dependencies: any[]) {
   for (const dependency of dependencies) {
@@ -51,9 +41,16 @@ const Scan: NextPage = () => {
   const { address, isConnected, isConnecting } = useAccount()
   const { openConnectModal } = useConnectModal()
 
+  const { chain } = useNetwork()
+
+  const currentChain = chain?.id || 11155111
+
   const publicClient = usePublicClient({
-    chainId: 11155111,
+    chainId: currentChain,
   })
+
+  // @ts-ignore
+  const tokenContract = beadAddress[currentChain]
 
   const { data: txData, isLoading: mintLoading, isSuccess, write } = useBeadMint()
 
@@ -231,7 +228,7 @@ const Scan: NextPage = () => {
                     You minted a BEAD!
                   </Text>
                   <a
-                    href={`https://testnets.opensea.io/assets/sepolia/0xa17f131b2d6c3afa64f24da5e1ce98cffaabdf7d/${blockData.tokenId}`}
+                    href={`https://testnets.opensea.io/assets/sepolia/${tokenContract}/${blockData.tokenId}`}
                     target="_blank"
                     rel="noreferrer"
                   >

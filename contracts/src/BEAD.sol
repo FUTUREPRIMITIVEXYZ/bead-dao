@@ -1,24 +1,20 @@
 pragma solidity ^0.8.17;
 
 import 'openzeppelin-contracts/token/ERC721/ERC721.sol';
-import 'openzeppelin-contracts/access/Ownable2Step.sol';
+import 'openzeppelin-contracts/access/Ownable.sol';
 import 'openzeppelin-contracts/utils/cryptography/ECDSA.sol';
 import 'openzeppelin-contracts/utils/cryptography/MerkleProof.sol';
 import 'openzeppelin-contracts/utils/Strings.sol';
 import 'openzeppelin-contracts/utils/Base64.sol';
 
-interface IRenderer {
-    function imageURI(uint256 tokenId) external view returns (string memory);
-}
+// ✍️ FUTURE PRIMITIVE
 
-contract BEAD is ERC721, Ownable2Step {
+contract BEAD is ERC721, Ownable {
     using ECDSA for bytes32;
     using Strings for uint256;
 
     bytes32 public immutable lizardRoot;
     uint256 public immutable editionCount;
-
-    address public renderer;
     string public baseURI;
     mapping(uint256 => string) messages;
 
@@ -30,7 +26,6 @@ contract BEAD is ERC721, Ownable2Step {
         lizardRoot = _lizardRoot;
         editionCount = _editionCount;
         baseURI = _baseURI;
-        renderer = address(this);
     }
 
     function mint(
@@ -40,7 +35,9 @@ contract BEAD is ERC721, Ownable2Step {
         address recipient,
         string memory message
     ) external {
-        bytes32 messageHash = getMessageHash(recipient, blockNumber);
+        bytes32 messageHash = keccak256(
+            abi.encodePacked(recipient, blockhash(blockNumber))
+        ).toEthSignedMessageHash();
         address signer = messageHash.recover(signature);
 
         bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(signer))));
@@ -65,6 +62,8 @@ contract BEAD is ERC721, Ownable2Step {
             message = unicode'ᗷEᗩᗪ ᗪᗩO';
         }
 
+        uint256 beadId = (tokenId % editionCount) + 1;
+
         bytes memory dataURI = abi.encodePacked(
             '{',
             '"name": "',
@@ -74,7 +73,7 @@ contract BEAD is ERC721, Ownable2Step {
             unicode'ᗷEᗩᗪᘔ.EᑎᑕOᗰᑭᗩᔕᔕ.ᗩᒪᒪ.ᗪᖇEᗩᗰᔕ https://ilovebeadz.xyz',
             '",',
             '"image": "',
-            IRenderer(renderer).imageURI(tokenId),
+            string(abi.encodePacked(baseURI, beadId.toString())),
             '.png',
             '"',
             '}'
@@ -84,23 +83,5 @@ contract BEAD is ERC721, Ownable2Step {
             string(
                 abi.encodePacked('data:application/json;base64,', Base64.encode(dataURI))
             );
-    }
-
-    function imageURI(uint256 tokenId) public view returns (string memory) {
-        _requireMinted(tokenId);
-
-        uint256 beadId = (tokenId % editionCount) + 1;
-
-        return string(abi.encodePacked(baseURI, beadId.toString()));
-    }
-
-    function getMessageHash(address recipient, uint256 blockNumber)
-        public
-        view
-        returns (bytes32)
-    {
-        return
-            keccak256(abi.encodePacked(recipient, blockhash(blockNumber)))
-                .toEthSignedMessageHash();
     }
 }

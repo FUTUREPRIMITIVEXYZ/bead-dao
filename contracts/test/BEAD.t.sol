@@ -24,7 +24,11 @@ contract BEADTest is Test {
         bytes memory sig;
         bytes32[] memory proof;
 
-        bytes32 hash = bead.getMessageHash(vm.addr(10), block.number);
+        bytes32 message = keccak256(
+            abi.encodePacked(vm.addr(10), blockhash(block.number))
+        );
+        bytes32 hash = ECDSA.toEthSignedMessageHash(message);
+
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, hash);
         sig = abi.encodePacked(r, s, v);
 
