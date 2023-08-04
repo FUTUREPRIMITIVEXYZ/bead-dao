@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import 'forge-std/Test.sol';
-import '../src/Counter.sol';
+import 'openzeppelin-contracts/utils/cryptography/ECDSA.sol';
 
 import '../src/BEAD.sol';
 
@@ -24,8 +24,9 @@ contract BEADTest is Test {
         bytes memory sig;
         bytes32[] memory proof;
 
-        bytes32 hash = bead.getMessageHash(vm.addr(10), block.number);
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, hash);
+        bytes32 beadHash = bead.beadHash(vm.addr(10), block.number);
+        bytes32 messageHash = ECDSA.toEthSignedMessageHash(beadHash);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(1, messageHash);
         sig = abi.encodePacked(r, s, v);
 
         string memory proofData = vm.readFile('./test/proofs/proof-1.json');
@@ -43,7 +44,7 @@ contract BEADTest is Test {
         );
         console.log(start - gasleft());
 
-        assertEq(bead.ownerOf(uint256(hash)), vm.addr(10));
-        console.log(bead.tokenURI(uint256(hash)));
+        assertEq(bead.ownerOf(uint256(beadHash)), vm.addr(10));
+        console.log(bead.tokenURI(uint256(beadHash)));
     }
 }

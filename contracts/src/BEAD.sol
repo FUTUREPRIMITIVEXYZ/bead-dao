@@ -40,8 +40,8 @@ contract BEAD is ERC721, Ownable2Step {
         address recipient,
         string memory message
     ) external {
-        bytes32 messageHash = getMessageHash(recipient, blockNumber);
-        address signer = messageHash.recover(signature);
+        bytes32 _beadHash = beadHash(recipient, blockNumber);
+        address signer = _beadHash.toEthSignedMessageHash().recover(signature);
 
         bytes32 leaf = keccak256(bytes.concat(keccak256(abi.encode(signer))));
 
@@ -49,11 +49,11 @@ contract BEAD is ERC721, Ownable2Step {
 
         require(proofValid, 'Signer is not a lizard');
 
-        uint256 tokenId = uint256(messageHash);
+        uint256 tokenId = uint256(_beadHash);
         if (bytes(message).length > 0) {
             messages[tokenId] = message;
         }
-        _safeMint(recipient, uint256(messageHash));
+        _safeMint(recipient, uint256(_beadHash));
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
@@ -89,18 +89,26 @@ contract BEAD is ERC721, Ownable2Step {
     function imageURI(uint256 tokenId) public view returns (string memory) {
         _requireMinted(tokenId);
 
-        uint256 beadId = (tokenId % editionCount) + 1;
-
-        return string(abi.encodePacked(baseURI, beadId.toString()));
+        return string(abi.encodePacked(baseURI, beadId(tokenId).toString()));
     }
 
-    function getMessageHash(address recipient, uint256 blockNumber)
+    function beadId(uint256 tokenId) public view returns (uint256) {
+        return (tokenId % editionCount) + 1;
+    }
+
+    function beadId(address recipient, uint256 blockNumber)
+        public
+        view
+        returns (uint256)
+    {
+        return beadId(uint256(beadHash(recipient, blockNumber)));
+    }
+
+    function beadHash(address recipient, uint256 blockNumber)
         public
         view
         returns (bytes32)
     {
-        return
-            keccak256(abi.encodePacked(recipient, blockhash(blockNumber)))
-                .toEthSignedMessageHash();
+        return keccak256(abi.encodePacked(recipient, blockhash(blockNumber)));
     }
 }
