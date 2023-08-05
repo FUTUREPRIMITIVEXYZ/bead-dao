@@ -221,7 +221,7 @@ const Scan: NextPage = () => {
                     You minted a BEAD!
                   </Text>
                   <a
-                    href={`https://testnets.opensea.io/assets/sepolia/${tokenContract}/${blockData.tokenId}`}
+                    href={`https://opensea.io/assets/ethereum/${tokenContract}/${blockData.tokenId}`}
                     target="_blank"
                     rel="noreferrer"
                   >
