@@ -50,3 +50,21 @@
   -webkit-mask-composite: xor;
   mask-composite: exclude;
 }
+
+.aqua-button {
+  border-radius: 200px;
+  background: linear-gradient(180deg, rgba(104, 151, 211, 0.5) 0%, #bae3f6 100%);
+  box-shadow:
+    0px 6px 4px 0px rgba(14, 97, 192, 0.19),
+    0px 2px 2px 0px rgba(14, 97, 192, 0.19),
+    0px 6px 18px 0px rgba(0, 128, 161, 0.33),
+    0px 0px 24px 0px rgba(255, 255, 255, 0.21) inset;
+}
+.aqua-button-shine {
+  border-radius: 200px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}

@@ -19,6 +19,8 @@ import icon2 from 'public/icon-2.png'
 import { Button } from './components/button'
 import { Text } from '@/components/'
 
+import { AquaButton } from './components/AquaButton'
+
 const days = [
   'Sunday',
   'Monday',
@@ -172,7 +174,11 @@ const Home: NextPage = () => {
                               {item.description}
                             </Text>
                             {item.detailed && (
-                              <Button className="max-w-[200px]">Mint a Bead NFT</Button>
+                              <>
+                                <AquaButton className="max-w-[200px]">
+                                  Mint a Bead NFT
+                                </AquaButton>
+                              </>
                             )}
                           </div>
                           {item.detailed ? (

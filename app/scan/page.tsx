@@ -4,6 +4,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Background } from '../components/background'
 import { Button } from '../components/button'
+import { AquaButton } from '@/components/AquaButton'
 import { ethers } from 'ethers'
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree'
 import { useAccount, usePublicClient, useNetwork, Chain } from 'wagmi'
@@ -161,11 +162,11 @@ const Scan: NextPage = () => {
         {isConnecting && <Text>LOADING...</Text>}
 
         {keysStatic && !isConnecting && !isConnected && (
-          <Button onClick={openConnectModal} className="py-4 px-12">
-            <Text variant={'heading-md'} isInline className="text-blue-950 font-normal">
+          <AquaButton onClick={() => openConnectModal?.()} className="py-4">
+            <Text variant={'paragraph-lg'} isInline>
               Connect Wallet
             </Text>
-          </Button>
+          </AquaButton>
         )}
 
         {keysStatic && !isConnecting && isConnected && !mintLoading && (
@@ -178,15 +179,11 @@ const Scan: NextPage = () => {
                 />
               )}
               {!mintData && (
-                <Button onClick={() => triggerScan()} className="py-4">
-                  <Text
-                    variant={'paragraph-lg'}
-                    isInline
-                    className="text-blue-950 font-normal"
-                  >
+                <AquaButton onClick={() => triggerScan()} className="py-4">
+                  <Text variant={'paragraph-lg'} isInline>
                     Verify Lizard
                   </Text>
-                </Button>
+                </AquaButton>
               )}
               {!txData && mintData && blockData && address && (
                 <>
@@ -198,7 +195,7 @@ const Scan: NextPage = () => {
                       onChange={(e) => setMessage(e.target.value)}
                     />
                   </div>
-                  <Button
+                  <AquaButton
                     onClick={() =>
                       write({
                         args: [
@@ -212,14 +209,10 @@ const Scan: NextPage = () => {
                     }
                     className="py-4"
                   >
-                    <Text
-                      variant={'paragraph-lg'}
-                      isInline
-                      className="text-blue-950 font-normal"
-                    >
+                    <Text variant={'paragraph-lg'} isInline>
                       Mint Bead
                     </Text>
-                  </Button>
+                  </AquaButton>
                 </>
               )}
               {txData && blockData && isSuccess && (
@@ -232,15 +225,11 @@ const Scan: NextPage = () => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <Button className="py-4">
-                      <Text
-                        variant={'paragraph-lg'}
-                        isInline
-                        className="text-blue-950 font-normal"
-                      >
+                    <AquaButton className="py-4">
+                      <Text variant={'paragraph-lg'} isInline>
                         View on Opensea
                       </Text>
-                    </Button>
+                    </AquaButton>
                   </a>
                 </div>
               )}

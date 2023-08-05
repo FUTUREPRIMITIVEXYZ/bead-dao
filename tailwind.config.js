@@ -104,47 +104,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('tailwindcss-animate'),
-    plugin(function ({ addBase, theme }) {
-      const newBaseStyles = {
-        '.aqua-button': {
-          webkitAppearance: 'none',
-          border: '1px solid #ccc',
-          borderRadius: '125px',
-          boxShadow:
-            'inset 0 13px 25px rgba(255,255,255,0.5), 0 3px 5px rgba(0,0,0,0.2), 0 10px 13px rgba(0,0,0,0.1)',
-          cursor: 'pointer',
-          fontFamily: "'Lucida Grande', Helvetica, Arial, sans-serif",
-          fontSize: '1rem',
-          padding: '0.6rem 2rem',
-          position: 'relative',
-          transition: 'all ease .3s',
-        },
-        // '.aqua-button::before': {
-        //   background: 'linear-gradient(rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%)',
-        //   borderRadius: '125px',
-        //   content: '',
-        //   height: '125px',
-        //   left: '4%',
-        //   position: 'absolute',
-        //   top: '1px',
-        //   transition: 'all ease .3s',
-        //   width: '92%',
-        // },
-        '.aqua-button-blue': {
-          background: '#4A90E2',
-          borderColor: '#3672B6',
-          color: '#000',
-        },
-        '.aqua-button-grey': {
-          background: '#D0D0D0',
-          borderColor: '#B8B8B8',
-          color: '#6F6F6F',
-        },
-      }
-
-      addBase(newBaseStyles)
-    }),
-  ],
+  plugins: [require('tailwindcss-animate')],
 }

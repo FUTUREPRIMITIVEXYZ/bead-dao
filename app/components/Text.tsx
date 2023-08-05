@@ -3,6 +3,7 @@ import { Slot } from '@radix-ui/react-slot'
 import clsx from 'clsx'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { twMerge } from 'tailwind-merge'
+import { CSSProperties } from 'react'
 
 const text = cva('', {
   variants: {
@@ -37,6 +38,7 @@ interface TextProps extends VariantProps<typeof text> {
   children: React.ReactNode
   isInline?: boolean
   className?: string
+  style?: CSSProperties
 }
 
 export function Text({
@@ -45,6 +47,7 @@ export function Text({
   children,
   isInline, // Override + set line-height to 1
   className,
+  style,
   ...rest
 }: TextProps) {
   const Component = asChild ? Slot : 'div'
